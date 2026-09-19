@@ -347,11 +347,285 @@ body.light .date-card{
 .refresh-btn:hover svg{transform:rotate(360deg)}
 .cream-quote.fade{opacity:0}
 .form-row{display:flex;gap:8px;margin-bottom:8px}
-input[type=text],input[type=date],select,textarea.form{
+input[type=text],input[type=date],input[type=password],select,textarea.form{
   background:var(--card2);border:1px solid var(--border);border-radius:9px;color:var(--text);
   padding:9px 11px;font-size:14px;font-family:inherit;width:100%;font-size:16px;
 }
 input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--accent)}
+
+/* ---------- AI 接入配置（V0.1 M1） ---------- */
+.llm-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-top:4px}
+@media(max-width:720px){.llm-grid{grid-template-columns:1fr}}
+.llm-f{display:flex;flex-direction:column;gap:5px}
+.llm-f label{font-size:12px;color:var(--text3)}
+.llm-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.llm-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;
+  background:var(--card2);border:1px solid var(--border);cursor:pointer;
+}
+.llm-item:hover{border-color:var(--accent)}
+.llm-item.cur{border-color:var(--accent);background:var(--accent-soft)}
+.llm-item .nm{font-weight:600;font-size:13.5px}
+.llm-item .mt{font-size:11.5px;color:var(--text3);margin-left:auto;text-align:right;line-height:1.5;word-break:break-all}
+.llm-item .del{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px 4px;font-size:15px;line-height:1}
+.llm-item .del:hover{color:var(--red)}
+/* ---------- AI 记忆（V0.1 M4） ---------- */
+.mem-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:11px;
+  background:var(--card2);border:1px solid var(--border)}
+.mem-item.conflict{border-color:var(--amber, #BA7517)}
+.mem-item .mb{flex:1;min-width:0}
+.mem-item .mc{font-size:13.5px;line-height:1.65;word-break:break-word}
+.mem-item .me{font-size:11.5px;color:var(--text3);margin-top:3px;line-height:1.6}
+.mem-item .mmeta{font-size:11px;color:var(--text3);margin-top:4px;display:flex;gap:10px;flex-wrap:wrap}
+.mem-badge{font-size:10.5px;padding:1px 6px;border-radius:99px;flex:none;line-height:1.7}
+.mem-badge.stated{background:var(--green-soft);color:var(--green)}
+.mem-badge.inferred{background:var(--accent-soft);color:var(--accent)}
+.mem-badge.conflict{background:var(--red-soft);color:var(--red)}
+.mem-item .ops{display:flex;gap:6px;flex:none}
+.mem-item .ops button{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:2px 4px}
+.mem-item .ops button:hover{color:var(--accent)}
+.mem-item .ops button.del:hover{color:var(--red)}
+.mem-item.pinned{background:var(--accent-soft)}
+
+.llm-msg{
+  margin-top:12px;font-size:12.5px;line-height:1.75;padding:10px 12px;border-radius:10px;
+  background:var(--card2);color:var(--text2);white-space:pre-wrap;word-break:break-all;
+}
+.llm-msg.ok{background:var(--accent-soft);color:var(--accent)}
+.llm-msg.err{background:var(--red-soft);color:var(--red)}
+
+/* ---------- AI 对话（V0.1 M2 · M5/M7 改双栏） ---------- */
+.chat-layout{display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:16px;align-items:start}
+.chat-main{min-width:0}
+.chat-side{
+  display:flex;flex-direction:column;gap:14px;height:calc(100vh - 210px);min-height:520px;
+  overflow-y:auto;padding-right:2px;
+}
+.chat-card{padding:0;overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 210px);min-height:440px}
+@media(max-width:1180px){
+  .chat-layout{grid-template-columns:minmax(0,1fr)}
+  .chat-side{height:auto}
+  .chat-card{height:calc(100vh - 180px)}
+}
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 18px;border-bottom:1px solid var(--border)}
+.ch-title{font-weight:700;font-size:14.5px}
+.ch-sub{font-size:11.5px;color:var(--text3);margin-top:3px}
+.chat-msgs{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+/* 一行 = 头像 + 气泡（+ 时间），左右分栏构成对话框 */
+.mrow{display:flex;align-items:flex-end;gap:9px}
+.mrow.me{flex-direction:row-reverse}
+.mrow.sys{justify-content:center}
+.av{
+  flex:none;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;background:var(--card2);border:1px solid var(--border);color:var(--text3);
+}
+.mrow.ai .av{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.mrow.me .av{background:var(--accent);color:#fff;border-color:transparent}
+.mrow.err .av{background:var(--red-soft);color:var(--red);border-color:transparent}
+.av svg{width:16px;height:16px}
+.mcol{display:flex;flex-direction:column;gap:3px;max-width:76%;min-width:0}
+.mrow.me .mcol{align-items:flex-end}
+.msg{padding:10px 13px;border-radius:13px;font-size:14px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.msg.me{background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.msg.ai{background:var(--card2);border:1px solid var(--border);border-bottom-left-radius:4px}
+.msg.sys{max-width:100%;background:none;border:none;color:var(--text3);font-size:12.5px;padding:2px}
+.msg.err{background:var(--red-soft);border:1px solid rgba(255,107,107,.4);color:var(--red);font-size:13px}
+/* M3 · 工具预览卡：写操作的确认现场 */
+.msg.tool{
+  background:var(--card2);border:1px dashed var(--accent);border-radius:12px;padding:11px 13px;
+  max-width:88%;font-size:13px;line-height:1.7;
+}
+.tc-head{display:flex;align-items:center;gap:8px;font-weight:700;margin-bottom:7px}
+.tc-badge{font-size:11px;font-weight:600;padding:2px 7px;border-radius:99px;flex:none}
+.tc-badge.s-pending{background:var(--accent-soft);color:var(--accent)}
+.tc-badge.s-done{background:var(--green-soft);color:var(--green)}
+.tc-badge.s-cancel{background:var(--card2);color:var(--text3);border:1px solid var(--border)}
+.tc-badge.s-undone{background:var(--red-soft);color:var(--red)}
+.tc-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:var(--text2);font-size:12.5px}
+.tc-k{color:var(--text3)}
+.tc-f{text-decoration:line-through;opacity:.7}
+.tc-ar{color:var(--text3)}
+.tc-t{color:var(--accent);font-weight:600}
+.tc-note{margin-top:6px;font-size:12px;color:var(--text3)}
+.tc-btns{display:flex;gap:8px;margin-top:10px}
+.tc-btns .btn{padding:5px 12px;font-size:12.5px}
+.mtm{font-size:10.5px;color:var(--text3);padding:0 3px}
+/* 未配置 Key 的提示条：保留对话框本体，只是禁用输入，不把用户赶去设置页 */
+.chat-note{
+  display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:12.5px;line-height:1.6;
+  background:var(--accent-soft);color:var(--text2);border-bottom:1px solid var(--border);
+}
+.chat-note svg{width:16px;height:16px;flex:none;color:var(--accent)}
+.chat-note span{flex:1}
+.chat-input textarea:disabled{opacity:.55;cursor:not-allowed}
+.chat-input{border-top:1px solid var(--border);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.chat-input textarea{width:100%;min-height:62px;max-height:180px;resize:vertical}
+.ci-actions{display:flex;align-items:center;gap:8px}
+.ci-hint{font-size:11.5px;color:var(--text3);margin-right:auto}
+.msg.ai.typing::after{content:"▍";margin-left:2px;animation:ckBlink 1s steps(2,start) infinite}
+@keyframes ckBlink{to{visibility:hidden}}
+/* ================= V0.1 M5 · 声场感应面板（独立窗口） ================= */
+.orb-panel{padding:0;overflow:hidden;display:flex;flex-direction:column;flex:none}
+.op-head{
+  display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--border);
+  background:var(--card2);
+}
+.op-title{font-size:12.5px;font-weight:700;letter-spacing:.5px}
+.op-badge{
+  font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:99px;
+  background:var(--card2);color:var(--text3);border:1px solid var(--border);margin-left:auto;
+  display:flex;align-items:center;gap:5px;
+}
+.op-badge i{width:6px;height:6px;border-radius:50%;background:var(--text3);flex:none}
+.op-badge.listening{color:var(--green);border-color:transparent;background:var(--green-soft)}
+.op-badge.listening i{background:var(--green)}
+.op-badge.thinking{color:var(--accent);border-color:transparent;background:var(--accent-soft)}
+.op-badge.thinking i{background:var(--accent);animation:orbPulse 1.1s ease-in-out infinite}
+.op-badge.speaking{color:#ff9a3c;border-color:transparent;background:rgba(255,154,60,.14)}
+.op-badge.speaking i{background:#ff9a3c}
+.op-badge.denied{color:var(--red);border-color:transparent;background:var(--red-soft)}
+.op-badge.denied i{background:var(--red)}
+@keyframes orbPulse{0%,100%{opacity:1}50%{opacity:.32}}
+.op-fold{
+  background:none;border:none;color:var(--text3);cursor:pointer;font-size:11.5px;padding:3px 5px;
+  font-family:inherit;flex:none;
+}
+.op-fold:hover{color:var(--accent)}
+
+/* 感应台：正方形取景区 + 四角标定框 */
+.orb-stage{
+  position:relative;flex:none;width:100%;height:290px;background:var(--card2);
+  border-bottom:1px solid var(--border);overflow:hidden;
+}
+.orb-stage canvas{display:block;width:100%;height:100%}
+.orb-stage .oc{position:absolute;width:15px;height:15px;border:1.5px solid var(--accent);opacity:.34;pointer-events:none}
+.orb-stage .oc.tlc{top:9px;left:9px;border-right:none;border-bottom:none;border-radius:4px 0 0 0}
+.orb-stage .oc.trc{top:9px;right:9px;border-left:none;border-bottom:none;border-radius:0 4px 0 0}
+.orb-stage .oc.blc{bottom:9px;left:9px;border-right:none;border-top:none;border-radius:0 0 0 4px}
+.orb-stage .oc.brc{bottom:9px;right:9px;border-left:none;border-top:none;border-radius:0 0 4px 0}
+.orb-stage .scan{
+  position:absolute;left:0;right:0;height:1px;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,var(--accent),transparent);
+}
+.orb-panel.live .orb-stage .scan{opacity:.5;animation:orbScan 3.4s linear infinite}
+@keyframes orbScan{0%{top:6%}100%{top:94%}}
+
+.orb-foot{padding:10px 13px;display:flex;flex-direction:column;gap:7px}
+.of-sub{font-size:11.5px;color:var(--text3);line-height:1.6;min-height:19px}
+.of-meter{height:3px;border-radius:99px;background:var(--border);overflow:hidden}
+.of-meter i{display:block;height:100%;width:0%;background:var(--accent);transition:width .08s linear}
+.of-btns{display:flex;gap:8px}
+.of-btns .btn{flex:1;padding:5px 10px;font-size:12px}
+/* 收起：只留标题条 */
+.orb-panel.folded .orb-stage,.orb-panel.folded .orb-foot{display:none}
+
+/* ================= V0.1 M7 · 画布空间 ================= */
+.canvas-panel{padding:0;overflow:hidden;display:flex;flex-direction:column;flex:none;min-height:200px}
+.cp-head{
+  display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--border);
+  background:var(--card2);flex:none;
+}
+.cp-title{font-size:12.5px;font-weight:700;letter-spacing:.5px}
+.cp-count{font-size:11px;color:var(--text3)}
+.cp-ops{margin-left:auto;display:flex;gap:2px}
+.cp-ops button{
+  background:none;border:none;color:var(--text3);cursor:pointer;font-size:11.5px;
+  padding:3px 6px;font-family:inherit;border-radius:6px;
+}
+.cp-ops button:hover{color:var(--accent);background:var(--card)}
+.cp-body{flex:1;overflow-y:auto;padding:12px 13px;display:flex;flex-direction:column;gap:12px;max-height:460px}
+.canvas-panel.zoomed .cp-body{max-height:none}
+.cp-empty{color:var(--text3);font-size:12px;line-height:1.9;padding:14px 4px}
+.cp-empty b{display:block;color:var(--text2);font-size:12.5px;margin-bottom:6px}
+.cp-empty span{display:block;padding-left:11px;position:relative}
+.cp-empty span::before{content:"·";position:absolute;left:2px}
+/* 放大：脱离右栏，浮成大画布 */
+.canvas-panel.zoomed{
+  position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(940px,92vw);height:84vh;z-index:60;box-shadow:0 24px 70px rgba(0,0,0,.5);
+}
+.canvas-panel.zoomed .cp-body{padding:18px 20px}
+.cp-mask{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:59;display:none}
+.cp-mask.show{display:block}
+
+/* 画布卡片 */
+.cv-card{border:1px solid var(--border);border-radius:11px;background:var(--card2);overflow:hidden;flex:none}
+.cv-head{display:flex;align-items:center;gap:7px;padding:9px 12px;border-bottom:1px solid var(--border)}
+.cv-kind{
+  font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;flex:none;letter-spacing:.5px;
+  background:var(--accent-soft);color:var(--accent);
+}
+.cv-kind.plan{background:var(--green-soft);color:var(--green)}
+.cv-kind.flow{background:var(--purple-soft);color:var(--purple)}
+.cv-title{font-size:13px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cv-close{background:none;border:none;color:var(--text3);cursor:pointer;font-size:15px;line-height:1;padding:2px 4px;flex:none}
+.cv-close:hover{color:var(--red)}
+.cv-body{padding:11px 12px;display:flex;flex-direction:column;gap:10px}
+
+/* explain */
+.cv-sum{
+  font-size:12.5px;line-height:1.75;color:var(--text);background:var(--card);
+  border-left:2.5px solid var(--accent);border-radius:0 8px 8px 0;padding:8px 11px;
+}
+.cv-pts{display:flex;flex-direction:column;gap:8px}
+.cv-pt{display:flex;gap:9px}
+.cv-pn{
+  flex:none;width:17px;height:17px;border-radius:5px;background:var(--accent-soft);color:var(--accent);
+  font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.cv-pb{min-width:0}
+.cv-pt-t{font-size:12.5px;font-weight:700;margin-bottom:2px}
+.cv-pt-d{font-size:12px;color:var(--text2);line-height:1.7}
+.cv-note{
+  font-size:11.5px;line-height:1.75;color:var(--text2);background:var(--card);
+  border-radius:8px;padding:8px 11px;
+}
+.cv-note b{color:var(--text3);font-size:10.5px;letter-spacing:.5px;display:block;margin-bottom:3px;font-weight:700}
+
+/* plan */
+.cv-goal{font-size:12.5px;line-height:1.7;color:var(--text2)}
+.cv-goal b{color:var(--text);font-weight:700}
+.cv-stage{position:relative;padding-left:22px}
+.cv-stage::before{
+  content:"";position:absolute;left:6px;top:15px;bottom:-12px;width:1.5px;background:var(--border);
+}
+.cv-card .cv-stage:last-child::before{display:none}
+.cv-sdot{
+  position:absolute;left:0;top:3px;width:13px;height:13px;border-radius:50%;
+  background:var(--card2);border:2px solid var(--accent);
+}
+.cv-sname{font-size:12.5px;font-weight:700;margin-bottom:4px}
+.cv-steps{display:flex;flex-direction:column;gap:3px}
+.cv-step{font-size:12px;color:var(--text2);line-height:1.65;padding-left:12px;position:relative}
+.cv-step::before{content:"";position:absolute;left:2px;top:8px;width:4px;height:1.5px;background:var(--text3)}
+.cv-first{
+  font-size:12px;line-height:1.7;color:var(--text);background:var(--green-soft);
+  border-radius:8px;padding:8px 11px;
+}
+.cv-first b{color:var(--green);font-size:10.5px;letter-spacing:.5px;display:block;margin-bottom:3px}
+.cv-acts{display:flex;gap:8px;padding:0 12px 11px}
+.cv-acts .btn{flex:1;padding:5px 10px;font-size:12px}
+
+/* flow */
+.cv-flow{width:100%;display:block}
+.cv-flow text{font-family:inherit}
+.cv-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:10.5px;color:var(--text3);padding-top:2px}
+.cv-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+
+/* 预留槽 */
+.slot-card{
+  flex:none;border:1px dashed var(--border);background:none;box-shadow:none;
+  padding:12px 13px;display:flex;align-items:center;gap:10px;color:var(--text3);
+}
+.slot-card .sl-ic{
+  flex:none;width:28px;height:28px;border-radius:8px;border:1px dashed var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.slot-card .sl-ic svg{width:15px;height:15px}
+.slot-card .sl-t{display:block;font-size:12px;font-weight:600}
+.slot-card .sl-s{display:block;font-size:11px;margin-top:2px;line-height:1.5}
+.slot-card .sl-wrap{min-width:0}
+@media(max-width:860px){.chat-card{height:calc(100vh - 180px)}}
 .goal-item{background:var(--card2);border-radius:11px;padding:13px 14px;margin-bottom:10px;border-left:3px solid var(--accent)}
 .goal-item .g-top{display:flex;align-items:center;gap:8px}
 .goal-item .g-title{font-weight:700;font-size:14.5px;flex:1}
@@ -1409,8 +1683,92 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
     <!-- 建设中模块（动态生成） -->
     <div id="lockedPages"></div>
 
-    <!-- 数据与设置 -->
-    <section id="page-settings" style="display:none">
+    <!-- AI 对话（V0.1 M2） -->
+    <section id="page-chat" style="display:none">
+      <div class="chat-layout">
+
+        <!-- 左：对话 -->
+        <div class="chat-main">
+          <div class="card chat-card" id="chatCard">
+            <div class="chat-note" id="chatSetup" style="display:none">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v5m0 3h.01"/></svg>
+              <span>还没有配置大模型。密钥只存在本机浏览器，不会写进导出的备份文件。</span>
+              <button class="btn primary" id="chatGoSetBtn">去配置</button>
+            </div>
+            <div class="chat-head">
+              <div>
+                <div class="ch-title">今天的对话</div>
+                <div class="ch-sub" id="chatMeta"></div>
+              </div>
+              <button class="btn" id="chatClearBtn">清空今日</button>
+            </div>
+            <div id="chatMsgs" class="chat-msgs"></div>
+            <div class="chat-input">
+              <textarea id="chatInput" class="form" placeholder="说点什么…（Enter 发送，Shift+Enter 换行）"></textarea>
+              <div class="ci-actions">
+                <span class="ci-hint" id="chatHint"></span>
+                <button class="btn" id="chatStopBtn" style="display:none">停止</button>
+                <button class="btn primary" id="chatSendBtn">发送</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右：声场感应 + 画布空间 + 预留位 -->
+        <div class="chat-side">
+
+          <!-- V0.1 M5 · 声场感应（AudioEngine → Skin → OrbHost） -->
+          <div class="card orb-panel" id="orbPanel">
+            <div class="op-head">
+              <span class="op-title">声场感应</span>
+              <span class="op-badge" id="orbBadge"><i></i><span id="orbBadgeTxt">待机</span></span>
+              <button class="op-fold" id="orbFoldBtn">收起</button>
+            </div>
+            <div class="orb-stage" id="orbStage">
+              <canvas id="orbCanvas"></canvas>
+              <i class="oc tlc"></i><i class="oc trc"></i><i class="oc blc"></i><i class="oc brc"></i>
+              <i class="scan"></i>
+            </div>
+            <div class="orb-foot">
+              <div class="of-sub" id="orbSub">点击「开麦克风」，球体跟着你的声音起伏</div>
+              <div class="of-meter"><i id="orbMeter"></i></div>
+              <div class="of-btns">
+                <button class="btn" id="orbMicBtn">开麦克风</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- V0.1 M7 · 画布空间：AI 把结构化内容落到这里 -->
+          <div class="card canvas-panel" id="canvasPanel">
+            <div class="cp-head">
+              <span class="cp-title">画布空间</span>
+              <span class="cp-count" id="cpCount"></span>
+              <span class="cp-ops">
+                <button id="cpZoomBtn">放大</button>
+                <button id="cpClearBtn">清空</button>
+              </span>
+            </div>
+            <div class="cp-body" id="cpBody"></div>
+          </div>
+
+          <!-- 后续模块的预留位 -->
+          <div class="card slot-card">
+            <span class="sl-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>
+            <span class="sl-wrap">
+              <span class="sl-t">预留位</span>
+              <span class="sl-s">后面的模块会放进这一栏</span>
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 放大画布时的遮罩 -->
+    <div class="cp-mask" id="cpMask"></div>
+
+    <!-- 数据与设置（id 必须与 MODULES 的 key 对应：go() 按 "page-<key>" 查找） -->
+    <section id="page-set" style="display:none">
       <div class="setting-grid">
         <div class="card">
           <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21V7L12 3 5 7v14l7-4 7 4z"/><path d="M5 7l7 4 7-4M12 11v10"/></svg>数据备份</h2>
@@ -1445,6 +1803,50 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
             当前版本（V5）：七大板块全部上线：首页总览、今日计划、学习进度、开发工作、生活记录、今日心得、数据与设置。<br>
             每次迭代数据向后兼容，不会丢失已有记录。
           </p>
+        </div>
+
+        <div class="card">
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7v3a5 5 0 0 0 5 5h1v2h2v-2h1a5 5 0 0 0 5-5V9a7 7 0 0 0-7-7z"/><path d="M9 9h.01M15 9h.01M9 13h6"/></svg>AI 接入</h2>
+          <div class="desc">填入你自己的大模型 API（OpenAI 兼容协议）。密钥只存在本机浏览器，<b>不会写进导出的备份文件</b>。</div>
+          <div class="llm-f" style="margin-bottom:12px">
+            <label>服务商预设（选一个自动填好地址，再填 Key）</label>
+            <select id="llmPreset"></select>
+          </div>
+          <div class="llm-grid">
+            <div class="llm-f"><label>显示名</label><input type="text" id="llmName" placeholder="如 硅基流动"></div>
+            <div class="llm-f"><label>模型名</label><input type="text" id="llmModel" placeholder="如 Qwen/Qwen2.5-7B-Instruct"></div>
+            <div class="llm-f"><label>Base URL</label><input type="text" id="llmBase" placeholder="https://api.siliconflow.cn/v1"></div>
+            <div class="llm-f"><label>API Key</label><input type="password" id="llmKey" placeholder="sk-..."></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn primary" id="llmSaveBtn">保存并启用</button>
+            <button class="btn" id="llmTestBtn">测试连接</button>
+            <button class="btn" id="llmClearBtn">清除密钥</button>
+          </div>
+          <div class="llm-list" id="llmList"></div>
+          <div class="llm-msg" id="llmMsg" style="display:none"></div>
+        </div>
+
+        <div class="card">
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 0 0-7 7v3a5 5 0 0 0 5 5h1v2h2v-2h1a5 5 0 0 0 5-5V9a7 7 0 0 0-7-7z"/><path d="M9 9h.01M15 9h.01M9 13h6"/></svg>AI 记忆</h2>
+          <div class="desc">AI 记住你的方式：<b>它提议 → 你点头 → 才入库</b>。推断类的内容一律要过你这一关，敏感信息直接拒收。</div>
+          <div class="llm-f" style="margin-bottom:12px">
+            <label>我的画像（每次对话都会带给 AI，写得越具体越有用）</label>
+            <textarea id="memProfile" class="form" rows="4" placeholder="例如：&#10;称呼我 Jessica 就行，别用「亲」。&#10;在做 AI 产品经理方向的求职准备。&#10;回答要直接给结论，不要先铺垫三段背景。"></textarea>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+            <button class="btn primary" id="memProfileSave">保存画像</button>
+            <span class="llm-msg" id="memMsg" style="display:none"></span>
+          </div>
+          <div class="llm-f" style="margin-bottom:12px">
+            <label>手动加一条记忆（可选填触发词，用空格分隔）</label>
+            <div style="display:flex;gap:8px">
+              <input type="text" id="memAddText" placeholder="如 每天晚上 10 点后不喝咖啡">
+              <input type="text" id="memAddKw" placeholder="触发词 咖啡" style="max-width:150px">
+              <button class="btn" id="memAddBtn">添加</button>
+            </div>
+          </div>
+          <div class="llm-list" id="memList"></div>
         </div>
 
         <div class="card danger-zone span2" style="grid-column:span 2">
@@ -1779,7 +2181,8 @@ var ICONS = {
   build: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
   star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.2l-6.1 3.2 1.5-6.8L2.2 9l6.9-.7z"/></svg>',
   trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>',
-  chevron: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>'
+  chevron: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>',
+  chat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg>'
 };
 
 var MODULES = [
@@ -1790,7 +2193,9 @@ var MODULES = [
   { key: "life",  name: "生活记录", icon: "life",  locked: false, sub: "健身 · 饮食 · 游戏娱乐" },
   { key: "note",  name: "今日心得", icon: "note",  locked: false, sub: "复盘提炼：关键词 / 一句话 / 心法 / 行动" },
   { key: "build", name: "建设打卡", icon: "build", locked: false, sub: "习惯打卡 · 每日正反馈 · Make a difference · 神经回路自塑" },
-  { key: "set",   name: "数据与设置", icon: "set", locked: false, hide: true, sub: "备份恢复 · 外观 · 数据管理" }
+  /* noCheck：对话板块不参与首页打卡墙与本周概览（它不是"打卡"型模块） */
+  { key: "chat",  name: "AI 对话", icon: "chat",  locked: false, noCheck: true, sub: "用自然语言交代它做事 · 当前为文本对话（V0.1）" },
+  { key: "set",   name: "数据与设置", icon: "set", locked: false, hide: true, sub: "备份恢复 · 外观 · AI 接入 · 数据管理" }
 ];
 
 var currentKey = "home";
@@ -1818,6 +2223,8 @@ function buildLockedPages(){
 function go(key){
   var m = MODULES.find(function(x){ return x.key === key; });
   if(!m) return;
+  /* M5 · 离开对话板块必须彻底收摊（停 rAF + 停音轨 + 关 AudioContext） */
+  if(currentKey === "chat" && key !== "chat") OrbHost.leave();
   currentKey = key;
   MODULES.forEach(function(x){
     var el = document.getElementById("page-" + x.key);
@@ -1835,6 +2242,7 @@ function go(key){
   if(key === "life") renderLife();
   if(key === "note") renderNote();
   if(key === "build") renderBuild();
+  if(key === "chat"){ renderChat(); OrbHost.enter(); cvRender(); }
   if(key === "set") renderSettings();
 }
 
@@ -1904,7 +2312,7 @@ function renderHome(){
   /* --- 打卡墙 --- */
   var grid = document.getElementById("checkinGrid");
   var ck = planCheckin();
-  var cells = MODULES.filter(function(m){ return m.key !== "set"; }).map(function(m){
+  var cells = MODULES.filter(function(m){ return m.key !== "set" && !m.noCheck; }).map(function(m){
     if(m.key === "home"){
       var memoToday = memos.filter(function(x){
         var d = new Date(x.createdAt);
@@ -3785,6 +4193,1049 @@ function renderSettings(){
   document.getElementById("stBody").textContent = lifeBody.length + " 天";
   document.getElementById("stInsight").textContent = Object.keys(insightMap).length + " 天";
   document.getElementById("stMemos").textContent = memos.length + " 条";
+  llmRenderList();
+  /* V0.1 M4 · 记忆 */
+  var mp = document.getElementById("memProfile");
+  if(mp && document.activeElement !== mp) mp.value = memProfile();
+  memRenderList();
+}
+
+/* ==================== V0.1 M1 · LLM 接入层 ==================== */
+/* 设计要点：
+   1) 所有主流厂商都兼容 OpenAI 的 /v1/chat/completions，故只需 基地址+模型名+Key 三件套
+   2) 已实测 CORS：DeepSeek / 百炼 / 火山 / 智谱 / Moonshot / 硅基流动 均允许浏览器直连（2026-09-18）
+   3) 密钥存 llm_configs，且 exportJSON() 显式排除（见下方安全守卫）                       */
+var LLM_PRESETS = [
+  { name: "DeepSeek",   base: "https://api.deepseek.com/v1",                       model: "deepseek-chat" },
+  { name: "阿里云百炼", base: "https://dashscope.aliyuncs.com/compatible-mode/v1", model: "qwen-plus" },
+  { name: "火山方舟",   base: "https://ark.cn-beijing.volces.com/api/v3",          model: "doubao-pro-32k" },
+  { name: "智谱 GLM",   base: "https://open.bigmodel.cn/api/paas/v4",              model: "glm-4-flash" },
+  { name: "Moonshot",   base: "https://api.moonshot.cn/v1",                        model: "moonshot-v1-8k" },
+  { name: "硅基流动",   base: "https://api.siliconflow.cn/v1",                     model: "Qwen/Qwen2.5-7B-Instruct" },
+  { name: "OpenAI",     base: "https://api.openai.com/v1",                         model: "gpt-4o-mini" },
+  { name: "自定义",     base: "",                                                  model: "" }
+];
+var llmConfigs = [];   // [{id, name, base, model, key}]
+var llmActive  = null; // 当前启用的配置 id
+
+function llmLoad(){
+  llmConfigs = store.get("llm_configs", []);
+  if(!Array.isArray(llmConfigs)) llmConfigs = [];
+  llmActive = store.get("llm_active", null);
+}
+function llmPersist(){ store.set("llm_configs", llmConfigs); store.set("llm_active", llmActive); }
+function llmCur(){ return llmConfigs.find(function(c){ return c.id === llmActive; }) || null; }
+function llmNormBase(b){ return String(b == null ? "" : b).trim().replace(/\/+$/, ""); }
+function llmEndpoint(base){
+  var b = llmNormBase(base);
+  if(!b) return "";
+  return /\/chat\/completions$/.test(b) ? b : b + "/chat/completions";
+}
+function llmErrText(txt){
+  try{ var j = JSON.parse(txt); if(j && j.error) return j.error.message || j.error.code || txt; }catch(e){}
+  return txt;
+}
+function llmMsg(text, kind){
+  var el = document.getElementById("llmMsg");
+  if(!el) return;
+  el.style.display = text ? "" : "none";
+  el.className = "llm-msg" + (kind ? " " + kind : "");
+  el.textContent = text || "";
+}
+function llmFillFrom(c){
+  document.getElementById("llmName").value  = c ? c.name  : "";
+  document.getElementById("llmBase").value  = c ? c.base  : "";
+  document.getElementById("llmModel").value = c ? c.model : "";
+  document.getElementById("llmKey").value   = "";
+}
+function llmRenderList(){
+  var box = document.getElementById("llmList");
+  if(!box) return;
+  if(!llmConfigs.length){
+    box.innerHTML = '<div style="font-size:12.5px;color:var(--text3)">还没有保存任何配置。</div>';
+    return;
+  }
+  box.innerHTML = llmConfigs.map(function(c){
+    return '<div class="llm-item' + (c.id === llmActive ? " cur" : "") + '" data-id="' + c.id + '">' +
+      '<div><div class="nm">' + esc(c.name) + '</div>' +
+      '<div style="font-size:11.5px;color:var(--text3);margin-top:3px">' + esc(c.model || "未填模型") +
+      (c.key ? "" : ' · <span style="color:var(--red)">缺 Key</span>') + '</div></div>' +
+      '<div class="mt">' + esc(llmNormBase(c.base)) + '</div>' +
+      '<button class="del" data-del="' + c.id + '" title="删除">×</button></div>';
+  }).join("");
+  box.querySelectorAll(".llm-item").forEach(function(el){
+    el.addEventListener("click", function(e){
+      if(e.target && e.target.dataset && e.target.dataset.del) return;
+      llmActive = el.dataset.id; llmPersist(); llmFillFrom(llmCur()); llmRenderList();
+    });
+  });
+  box.querySelectorAll("[data-del]").forEach(function(b){
+    b.addEventListener("click", function(e){
+      e.stopPropagation();
+      var id = b.dataset.del;
+      var one = llmConfigs.find(function(c){ return c.id === id; });
+      confirmModal("删除配置", "确定删除「" + (one ? one.name : "") + "」吗？密钥会一并移除。", function(){
+        llmConfigs = llmConfigs.filter(function(c){ return c.id !== id; });
+        if(llmActive === id) llmActive = llmConfigs.length ? llmConfigs[0].id : null;
+        llmPersist(); llmFillFrom(llmCur()); llmRenderList(); toast("已删除配置");
+      });
+    });
+  });
+}
+function llmSaveFromForm(){
+  var name  = (document.getElementById("llmName").value  || "").trim();
+  var base  = (document.getElementById("llmBase").value  || "").trim();
+  var model = (document.getElementById("llmModel").value || "").trim();
+  var key   = (document.getElementById("llmKey").value   || "").trim();
+  if(!base){  llmMsg("请填 Base URL。", "err"); return; }
+  if(!model){ llmMsg("请填模型名。", "err"); return; }
+  var exist = llmConfigs.find(function(c){
+    return llmNormBase(c.base) === llmNormBase(base) && c.model === model;
+  });
+  var item;
+  if(exist){
+    exist.name = name || exist.name;
+    if(key) exist.key = key;
+    llmActive = exist.id; item = exist;
+  }else{
+    item = { id: uid(), name: name || "我的模型", base: base, model: model, key: key };
+    llmConfigs.push(item); llmActive = item.id;
+  }
+  llmPersist(); llmRenderList();
+  llmMsg("已保存并启用「" + item.name + "」。\n密钥不会写入导出的备份文件。" +
+         (item.key ? "" : "\n注意：还没填 API Key，调用会失败。"), item.key ? "ok" : "");
+}
+function llmTest(){
+  var c = llmCur();
+  if(!c){ llmMsg("请先在上方保存并启用一个配置。", "err"); return; }
+  if(!c.key){ llmMsg("这个配置还没填 API Key。", "err"); return; }
+  var url = llmEndpoint(c.base);
+  if(!url){ llmMsg("Base URL 为空。", "err"); return; }
+  var btn = document.getElementById("llmTestBtn");
+  btn.disabled = true; btn.textContent = "测试中…";
+  llmMsg("正在连接…\n" + url);
+  var t0 = Date.now();
+  var ctrl = ("AbortController" in window) ? new AbortController() : null;
+  var timer = setTimeout(function(){ if(ctrl) ctrl.abort(); }, 20000);
+  fetch(url, {
+    method: "POST",
+    signal: ctrl ? ctrl.signal : undefined,
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + c.key },
+    body: JSON.stringify({
+      model: c.model, stream: false, max_tokens: 16,
+      messages: [{ role: "user", content: "请只回复两个字：收到" }]
+    })
+  }).then(function(r){
+    return r.text().then(function(txt){
+      if(!r.ok){
+        var why = llmErrText(txt);
+        if(r.status === 401)      llmMsg("401 未授权：API Key 不正确或已失效。", "err");
+        else if(r.status === 404) llmMsg("404 找不到：模型名或 Base URL 不对。\n" + String(why).slice(0,200), "err");
+        else if(r.status === 429) llmMsg("429 限流：额度用尽或请求太快。", "err");
+        else                      llmMsg("HTTP " + r.status + "\n" + String(why).slice(0,300), "err");
+        return;
+      }
+      var reply = "";
+      try{
+        var j = JSON.parse(txt);
+        reply = (j.choices && j.choices[0] && j.choices[0].message && j.choices[0].message.content) || "";
+      }catch(e){}
+      llmMsg("连接成功（" + ((Date.now() - t0) / 1000).toFixed(1) + " 秒）\n模型回复：" + (reply || "(空)"), "ok");
+    });
+  }).catch(function(e){
+    if(e && e.name === "AbortError") llmMsg("请求超时（20 秒）。可能网络不通，或该服务在国内不可达。", "err");
+    else llmMsg("请求失败：" + (e && e.message ? e.message : e) +
+                "\n常见原因：CORS 被拒、网络不通、Base URL 写错。", "err");
+  }).then(function(){
+    clearTimeout(timer);
+    btn.disabled = false; btn.textContent = "测试连接";
+  });
+}
+
+/* 统一适配层 · 非流式 */
+function llmChat(messages, opts){
+  opts = opts || {};
+  return new Promise(function(resolve, reject){
+    var c = opts.config || llmCur();
+    if(!c){ reject(new Error("未配置大模型")); return; }
+    var url = llmEndpoint(c.base);
+    if(!url){ reject(new Error("Base URL 为空")); return; }
+    var body = { model: c.model, messages: messages, stream: false };
+    if(opts.tools) body.tools = opts.tools;
+    if(opts.temperature != null) body.temperature = opts.temperature;
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": "Bearer " + c.key },
+      body: JSON.stringify(body)
+    }).then(function(r){
+      return r.text().then(function(txt){
+        if(!r.ok){ reject(new Error("HTTP " + r.status + " " + String(llmErrText(txt)).slice(0, 200))); return; }
+        try{ resolve(JSON.parse(txt)); }
+        catch(e){ reject(new Error("返回不是合法 JSON")); }
+      });
+    }).catch(reject);
+  });
+}
+
+/* 统一适配层 · 流式（SSE）。返回 { cancel } */
+function llmChatStream(messages, opts, onDelta, onDone, onError){
+  opts = opts || {};
+  var c = opts.config || llmCur();
+  if(!c){ onError && onError(new Error("未配置大模型")); return { cancel: function(){} }; }
+  var url = llmEndpoint(c.base);
+  var ctrl = new AbortController();
+  var body = { model: c.model, messages: messages, stream: true };
+  if(opts.tools) body.tools = opts.tools;
+  fetch(url, {
+    method: "POST", signal: ctrl.signal,
+    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + c.key },
+    body: JSON.stringify(body)
+  }).then(function(r){
+    if(!r.ok){
+      return r.text().then(function(txt){
+        throw new Error("HTTP " + r.status + " " + String(llmErrText(txt)).slice(0, 200));
+      });
+    }
+    var reader = r.body.getReader(), dec = new TextDecoder("utf-8"), buf = "";
+    /* M3：流式分片累积工具调用（index 分片 → 合并成一个完整的 tool_call） */
+    var tc = [];
+    function feedToolCalls(delta){
+      if(!Array.isArray(delta.tool_calls)) return;
+      delta.tool_calls.forEach(function(t){
+        var i = (t && t.index != null) ? t.index : 0;
+        if(!tc[i]) tc[i] = { id: "", type: "function", function: { name: "", arguments: "" } };
+        if(t.id) tc[i].id = t.id;
+        if(t.function){
+          if(t.function.name) tc[i].function.name += t.function.name;
+          if(t.function.arguments) tc[i].function.arguments += t.function.arguments;
+        }
+      });
+    }
+    function pump(){
+      return reader.read().then(function(res){
+        if(res.done){
+          if(tc.length && opts.onToolCalls) opts.onToolCalls(tc.filter(Boolean));
+          onDone && onDone();
+          return;
+        }
+        buf += dec.decode(res.value, { stream: true });
+        var lines = buf.split("\n");
+        buf = lines.pop();
+        lines.forEach(function(line){
+          line = line.trim();
+          if(line.indexOf("data:") !== 0) return;
+          var d = line.slice(5).trim();
+          if(!d || d === "[DONE]") return;
+          try{
+            var j = JSON.parse(d), ch = j.choices && j.choices[0];
+            if(ch && ch.delta && typeof ch.delta.content === "string" && ch.delta.content){
+              onDelta && onDelta(ch.delta.content);
+            }
+            if(ch && ch.delta) feedToolCalls(ch.delta);
+          }catch(e){}
+        });
+        return pump();
+      });
+    }
+    return pump();
+  }).catch(function(e){
+    if(e && e.name === "AbortError"){ onDone && onDone("cancel"); return; }
+    onError && onError(e);
+  });
+  return { cancel: function(){ ctrl.abort(); } };
+}
+
+/* ==================== V0.1 M2 · 对话模块 ==================== */
+/* 架构约束：renderChat() 只渲染本板块，不调用任何其他 render 函数（单向调用铁律）。
+   流式生成期间不重绘整个列表，只操作当前气泡，避免打断输入与滚动位置。 */
+var chatSessions = {};   // { "YYYY-MM-DD": [ {role, content, ts} ] }
+var chatBusy = false;
+var chatStream = null;
+var CHAT_CTX_TURNS = 12; // 送进上下文的最近消息条数，防止窗口膨胀
+
+function chatLoad(){
+  chatSessions = store.get("chat_sessions", {}) || {};
+  if(typeof chatSessions !== "object" || !chatSessions) chatSessions = {};
+}
+function chatPersist(){ store.set("chat_sessions", chatSessions); }
+function chatToday(){
+  var d = todayStr();
+  if(!Array.isArray(chatSessions[d])) chatSessions[d] = [];
+  return chatSessions[d];
+}
+/* 系统提示四段式：身份语气 / 用户画像 / 记忆规则 / 工具规则 */
+function chatSystemPrompt(){
+  var p = [];
+  p.push("你是「我的生活台」里的助手。语气积极、直白、催行动，不说空话套话。");
+  p.push("回答用中文，控制在 200 字以内；超出会被截断，半截回答比写得短更糟。");
+  /* M4：画像 + 已确认的记忆（top 12）一并注入 */
+  p.push(memInject());
+  p.push("【工具】用户让你记录、添加、完成、打卡时，必须调用对应工具，不要只在文字里答应。"
+       + "要写入的数据缺关键参数时，直接问用户，不要自己编一个值。"
+       + "记住事实必须用 save_memory，且 evidence 要填用户原话；自己推断的要标 inferred。"
+       + "工具执行完只回一句结果，不要复述参数。");
+  p.push("【画布】下面这些情况必须调用 render_canvas，把结果画到右侧画布，正文只留一两句概括："
+       + "① 需要展开解释的「为什么 / 是什么 / 原理」→ type=explain，给 summary（一句话结论）+ 2 到 4 个 points，"
+       + "analogy（一个类比）和 pitfall（一个常见误解）可选；"
+       + "② 「我想达成 X，怎么拆 / 该怎么做」→ type=plan，给 goal + 2 到 4 个 stages（每个带 2 到 5 个 steps）+ firstMove（今天就能做的一步）；"
+       + "③ 讲流程、逻辑、因果、A 与 B 的关系 → type=flow，只给 nodes（id / label / kind）和 edges（from / to / label），"
+       + "**绝对不要给坐标**，排版由前端自动算；节点 2 到 10 个，label 不超过 12 字，判断节点用 decision。"
+       + "简单问候、一句话能答完的、用户让你记录数据的，一律不要用画布。画布画不出来时改用文字回答，不要反复重试。");
+  p.push("不要编造用户没说过的事实；不确定就说不确定。");
+  return p.join("\n");
+}
+function chatCtxMessages(){
+  /* 只把 user / assistant 的正文送进上下文；工具卡与系统行不进上下文，避免污染窗口 */
+  var list = chatToday().filter(function(m){ return m.role === "user" || (m.role === "assistant" && m.content); });
+  var out = [{ role: "system", content: chatSystemPrompt() }];
+  list.slice(-CHAT_CTX_TURNS).forEach(function(m){
+    out.push({ role: m.role === "user" ? "user" : "assistant", content: m.content });
+  });
+  return out;
+}
+/* 一行消息 = 头像 + 气泡 + 时间。我 在右、AI 在左，构成对话框。 */
+function chatTime(ts){
+  var d = new Date(ts || Date.now());
+  return ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+}
+/* M3 · 工具预览卡：写明"要做什么 / 从什么改成什么"，写操作在这里等人点确认 */
+var TOOL_STATE_TXT = { pending:"待你确认", done:"已执行", cancel:"已取消", undone:"已撤销" };
+function chatToolRow(m){
+  var t = m.tool || {};
+  var rows = (t.rows || []).map(function(r){
+    return '<div class="tc-row"><span class="tc-k">' + esc(r.k) + "</span>" +
+      '<span class="tc-f">' + esc(r.from) + '</span><span class="tc-ar">→</span>' +
+      '<span class="tc-t">' + esc(r.to) + "</span></div>";
+  }).join("");
+  var btns = "";
+  if(t.state === "pending"){
+    btns = '<button class="btn primary" data-act="ok" data-id="' + m.id + '">确认执行</button>' +
+           '<button class="btn" data-act="no" data-id="' + m.id + '">取消</button>';
+  } else if(t.state === "done" && t.undoId){
+    btns = '<button class="btn" data-act="undo" data-id="' + m.id + '">撤销</button>';
+  }
+  return '<div class="mrow sys"><div class="msg tool">' +
+    '<div class="tc-head"><span class="tc-badge s-' + t.state + '">' + (TOOL_STATE_TXT[t.state] || "") + "</span>" +
+      esc(t.label || "操作") + "</div>" + rows +
+    (t.note ? '<div class="tc-note">' + esc(t.note) + "</div>" : "") +
+    (btns ? '<div class="tc-btns">' + btns + "</div>" : "") +
+    "</div></div>";
+}
+function chatRowHTML(m){
+  if(m.role === "tool") return chatToolRow(m);
+  if(m.role === "sys") return '<div class="mrow sys"><div class="msg sys">' + esc(m.content) + "</div></div>";
+  if(m.role === "err") return '<div class="mrow err"><div class="av">!</div><div class="mcol"><div class="msg err">' + esc(m.content) + "</div></div></div>";
+  var me = m.role === "user";
+  return '<div class="mrow ' + (me ? "me" : "ai") + '">' +
+    '<div class="av">' + (me ? "我" : ICONS.chat) + "</div>" +
+    '<div class="mcol"><div class="msg ' + (me ? "me" : "ai") + '">' + esc(m.content) + "</div>" +
+    '<div class="mtm">' + chatTime(m.ts) + "</div></div></div>";
+}
+function renderChat(){
+  var c = llmCur();
+  var ready = !!(c && c.key);
+
+  /* 未配置 Key：保留整个对话框，只是禁用输入 + 顶部挂提示条（不把用户赶去设置页） */
+  var setup = document.getElementById("chatSetup");
+  if(setup) setup.style.display = ready ? "none" : "";
+  var ta = document.getElementById("chatInput");
+  if(ta){
+    ta.disabled = !ready;
+    ta.placeholder = ready
+      ? "说点什么…（Enter 发送，Shift+Enter 换行）"
+      : "请先在「数据与设置 → AI 接入」配置大模型，才能开始对话";
+  }
+  var sd = document.getElementById("chatSendBtn");
+  if(sd) sd.disabled = !ready;
+  document.getElementById("chatMeta").textContent = ready
+    ? (chatToday().length + " 条 · " + (c.name || "") + (c.model ? " / " + c.model : ""))
+    : "未配置模型";
+
+  var list = chatToday();
+  var box = document.getElementById("chatMsgs");
+  box.innerHTML = list.length
+    ? list.map(chatRowHTML).join("")
+    : '<div class="mrow sys"><div class="msg sys">' +
+      (ready ? "今天还没有对话。在下面说点什么吧。" : "配置好大模型后，这里会显示你和 AI 的对话记录。") +
+      "</div></div>";
+  box.scrollTop = box.scrollHeight;
+}
+function chatBusyUI(on, hint){
+  chatBusy = on;
+  if(!on) chatStreaming = false;   /* M5 · 收尾即退出 speaking 态 */
+  var send = document.getElementById("chatSendBtn");
+  var stop = document.getElementById("chatStopBtn");
+  if(send) send.disabled = on;
+  if(stop) stop.style.display = on ? "" : "none";
+  document.getElementById("chatHint").textContent = hint || "";
+}
+var chatThread = null;   // 本轮工具调用的工作线程（含 tool 消息，不进历史上下文）
+var chatResume = null;   // 写操作等待确认时的续跑函数
+var chatRoundN = 0;
+var TOOL_MAX_ROUNDS = 3; // 防模型陷入调用循环
+
+function chatFindMsg(id){
+  var hit = null;
+  chatToday().forEach(function(m){ if(m.id === id) hit = m; });
+  return hit;
+}
+function chatSysLine(text){
+  chatToday().push({ id: uid(), role: "sys", content: text, ts: Date.now() });
+  chatPersist(); renderChat();
+}
+function chatNewBubble(){
+  var box = document.getElementById("chatMsgs");
+  var row = document.createElement("div");
+  row.className = "mrow ai";
+  row.innerHTML = '<div class="av">' + ICONS.chat + '</div>' +
+    '<div class="mcol"><div class="msg ai typing"></div><div class="mtm">' + chatTime() + "</div></div>";
+  box.appendChild(row);
+  box.scrollTop = box.scrollHeight;
+  return { row: row, bubble: row.querySelector(".msg") };
+}
+function chatFinish(bubble, full, cancelled){
+  if(bubble) bubble.classList.remove("typing");
+  if(full){
+    chatToday().push({ id: uid(), role: "assistant", content: cancelled ? full + "\n（已中断）" : full, ts: Date.now() });
+  }
+  chatPersist();
+  chatBusyUI(false, cancelled ? "已中断" : "");
+  renderChat();
+}
+function chatSend(){
+  if(chatBusy) return;
+  var el = document.getElementById("chatInput");
+  var text = String((el && el.value) || "").trim();
+  if(!text){ return; }
+  var c = llmCur();
+  if(!c || !c.key){ toast("请先在「数据与设置 → AI 接入」配置大模型"); return; }
+  if(chatResume){ toast("先处理上面待确认的修改"); return; }
+  el.value = "";
+
+  chatToday().push({ id: uid(), role: "user", content: text, ts: Date.now() });
+  memHitScan(text);          /* M4：命中记忆，影响日后排序 */
+  chatPersist();
+  renderChat();
+
+  chatThread = chatCtxMessages();
+  chatRoundN = 0;
+  chatRound();
+}
+/* 一轮 = 调一次模型。返回工具调用就先执行工具，再进入下一轮；没有工具调用就收尾。 */
+function chatRound(){
+  chatRoundN++;
+  if(chatRoundN > TOOL_MAX_ROUNDS){ chatSysLine("（工具调用轮次过多，已停止）"); return; }
+  if(!chatThread) chatThread = chatCtxMessages();
+
+  var ui = chatNewBubble();
+  var box = document.getElementById("chatMsgs");
+  var full = "", calls = null;
+  chatBusyUI(true, chatRoundN > 1 ? "整理结果…" : "思考中…");
+
+  function onDone(reason){
+    ui.bubble.classList.remove("typing");
+    if(reason === "cancel"){ chatFinish(ui.bubble, full, true); return; }
+    if(calls && calls.length){
+      if(full) chatToday().push({ id: uid(), role: "assistant", content: full, ts: Date.now() });
+      chatThread.push({ role: "assistant", content: full || "", tool_calls: calls });
+      chatPersist(); renderChat();
+      chatRunTools(calls, 0, ui.bubble);
+      return;
+    }
+    chatFinish(ui.bubble, full, false);
+  }
+  function onErr(err){
+    /* 流式失败 → 回退到非流式再试一次（部分厂商 stream 支持不完整） */
+    full = "";
+    llmChat(chatThread, { tools: TOOLS }).then(function(j){
+      var msg = (j.choices && j.choices[0] && j.choices[0].message) || {};
+      var txt = msg.content || "";
+      if(msg.tool_calls && msg.tool_calls.length){
+        calls = msg.tool_calls;
+        if(txt) chatToday().push({ id: uid(), role: "assistant", content: txt, ts: Date.now() });
+        chatThread.push({ role: "assistant", content: txt, tool_calls: calls });
+        chatPersist(); renderChat();
+        chatRunTools(calls, 0, ui.bubble);
+        return;
+      }
+      ui.bubble.textContent = txt || "(没有返回内容)";
+      chatFinish(ui.bubble, txt, false);
+    }).catch(function(e2){
+      ui.row.className = "mrow err";
+      ui.row.querySelector(".av").textContent = "!";
+      ui.bubble.className = "msg err";
+      ui.bubble.textContent = "调用失败：" + (e2 && e2.message ? e2.message : e2);
+      chatBusyUI(false, "调用失败");
+    });
+  }
+  chatStream = llmChatStream(chatThread, { tools: TOOLS, onToolCalls: function(c){ calls = c; } },
+    function(delta){ full += delta; chatStreaming = true; ui.bubble.textContent = full; box.scrollTop = box.scrollHeight; },
+    onDone, onErr);
+}
+/* 逐个执行工具调用：读操作直接跑；写操作插一张预览卡，暂停等人确认 */
+function chatRunTools(calls, idx, bubble){
+  if(idx >= calls.length){ chatRound(); return; }
+  var call = calls[idx] || {};
+  var fn = call.function || {};
+  var name = chatNormTool(fn.name);
+  var impl = TOOL_IMPL[name];
+  var args = chatParseArgs(fn.arguments);
+
+  function pushResult(txt, next){
+    chatThread.push({ role: "tool", tool_call_id: call.id, content: txt });
+    if(next) chatRunTools(calls, idx + 1, bubble);
+  }
+  if(!impl){ pushResult("没有这个工具：" + name, true); return; }
+
+  if(impl.read){
+    var txt = "";
+    try{ txt = impl.run(args); }catch(e){ txt = "读取失败：" + (e && e.message ? e.message : e); }
+    pushResult(txt, true);
+    return;
+  }
+
+  /* M7 · 展示类：直接画到右侧画布，不打断对话、不需要用户确认 */
+  if(impl.show){
+    var r = null;
+    try{ r = impl.run(args); }catch(e){ r = { error: (e && e.message) || "渲染异常" }; }
+    if(!r || r.error || !r.ok){
+      pushResult("这次没能画到画布上：" + ((r && r.error) || "参数不合法") +
+                 "。不要重试画布，直接用文字把答案说清楚。", true);
+      return;
+    }
+    cvRender();
+    pushResult("已经把「" + r.title + "」画到右侧画布（" + (CV_KIND_TXT[r.type] || "") +
+               "）。正文只写一两句概括，不要把画布上已有的内容再复述一遍。", true);
+    return;
+  }
+
+  /* 写操作：先算 plan（含变更前后值），把预览卡写进历史，然后暂停 */
+  var plan = null;
+  try{ plan = impl.plan(args); }catch(e){ plan = { error: (e && e.message) || "未知错误" }; }
+  if(!plan || plan.error){
+    pushResult("这次修改没法执行：" + (plan && plan.error ? plan.error : "参数不合法") + "。请修正参数重试，或先问用户。", true);
+    return;
+  }
+  var msg = { id: uid(), role: "tool", ts: Date.now(),
+    tool: { name: name, label: plan.label, rows: plan.rows || [], state: "pending", note: "", undoId: "", args: args } };
+  chatToday().push(msg);
+  chatPersist(); renderChat();
+  chatBusyUI(false, "等你确认…");
+
+  chatResume = function(){
+    chatResume = null;
+    var m = chatFindMsg(msg.id) || msg;
+    var res = m.tool.state === "done"
+      ? (m.tool.note || "已执行")
+      : "用户取消了这次修改。不要自动重试，先说明你原本打算改什么。";
+    chatThread.push({ role: "tool", tool_call_id: call.id, content: res });
+    chatRunTools(calls, idx + 1, bubble);
+  };
+}
+/* 预览卡按钮：确认 / 取消 / 撤销 */
+function chatToolConfirm(id){
+  var m = chatFindMsg(id);
+  if(!m || !m.tool || m.tool.state !== "pending") return;
+  var impl = TOOL_IMPL[m.tool.name];
+  if(!impl){ m.tool.state = "cancel"; m.tool.note = "工具已失效"; chatPersist(); renderChat(); return; }
+  var plan = null;
+  try{ plan = impl.plan(m.tool.args || {}); }catch(e){ plan = { error: (e && e.message) || "未知错误" }; }
+  if(!plan || plan.error){ toast("没法执行：" + plan.error); return; }
+
+  /* 保险 2：执行前先快照 */
+  var uidUndo = uid();
+  chatUndo.push({ id: uidUndo, label: plan.label, ts: Date.now(), snap: chatSnapshot() });
+  while(chatUndo.length > UNDO_MAX) chatUndo.shift();
+  chatUndoPersist();
+
+  var res = "";
+  try{ res = plan.apply(); }catch(e){ res = "执行失败：" + ((e && e.message) || e); }
+  m.tool.state = "done";
+  m.tool.undoId = uidUndo;
+  m.tool.note = res || "已执行";
+  chatPersist(); renderChat();
+  toast("已执行：" + plan.label);
+
+  if(chatResume) chatResume();
+  else chatSysLine("已执行：" + plan.label + "（本轮对话已结束，未生成回复）");
+}
+function chatToolCancel(id){
+  var m = chatFindMsg(id);
+  if(!m || !m.tool || m.tool.state !== "pending") return;
+  m.tool.state = "cancel";
+  chatPersist(); renderChat();
+  if(chatResume) chatResume();
+  else chatSysLine("已取消这次修改。");
+}
+function chatToolUndo(id){
+  var m = chatFindMsg(id);
+  if(!m || !m.tool || m.tool.state !== "done") return;
+  var u = null;
+  chatUndo.forEach(function(x){ if(x.id === m.tool.undoId) u = x; });
+  if(!u){ toast("这条修改太久了，撤销记录已不在"); return; }
+  chatRestore(u.snap);
+  m.tool.state = "undone";
+  m.tool.note = (m.tool.note || "") + " · 已撤销";
+  chatUndo = chatUndo.filter(function(x){ return x.id !== u.id; });
+  chatUndoPersist(); chatPersist(); renderChat();
+  toast("已撤销：" + (u.label || "这次修改"));
+}
+function chatStop(){
+  if(chatStream && chatStream.cancel) chatStream.cancel();
+}
+function chatClear(){
+  confirmModal("清空今日对话", "将删除今天的全部对话记录（其他日期不受影响）。确定吗？", function(){
+    chatSessions[todayStr()] = [];
+    chatPersist(); renderChat(); toast("已清空今日对话");
+  });
+}
+
+/* ==================== V0.1 M4 · 记忆层（L0 画像 + 三道闸门） ====================
+   闸门 1 提示词（软）：系统提示里写清什么该记、什么不该记
+   闸门 2 结构化（中）：模型只能填 content / evidence / source / keywords 四个字段
+   闸门 3 代码（硬）  ：无证据拒收、推断类必须过人、敏感词直接 deny、冲突不覆盖
+   核心不是"让模型别瞎编"，而是"瞎编的进不了库"。
+============================================================================= */
+var memories = [];
+var MEM_TOP = 12;
+/* 敏感黑名单：命中即拒收，连确认卡都不弹 */
+var MEM_DENY = ["病情","病历","诊断","用药","药物","病史","抑郁","焦虑症",
+  "工资","月薪","年薪","收入","存款","欠款","银行卡","卡号","密码","密钥","apikey","token",
+  "住址","家庭住址","身份证","护照","定位","经纬度"];
+var MEM_SRC_STATED   = ["stated","明确","明说","用户说","用户明确","亲口","原话","explicit"];
+var MEM_SRC_INFERRED = ["inferred","推断","推测","猜测","可能","感觉","大概","guess","maybe"];
+
+function memLoad(){ memories = store.get("memories", []) || []; if(!Array.isArray(memories)) memories = []; }
+function memPersist(){ store.set("memories", memories); }
+function memProfile(){ return String(store.get("user_profile", "") || "").trim(); }
+function memNormSrc(v){
+  var s = String(v == null ? "" : v).toLowerCase();
+  if(!s) return "";
+  var hit = "";
+  MEM_SRC_STATED.forEach(function(k){ if(!hit && s.indexOf(k) >= 0) hit = "stated"; });
+  MEM_SRC_INFERRED.forEach(function(k){ if(!hit && s.indexOf(k) >= 0) hit = "inferred"; });
+  return hit || (s === "stated" || s === "inferred" ? s : "");
+}
+function memDenyHit(text){
+  var s = String(text || "").toLowerCase(), hit = "";
+  MEM_DENY.forEach(function(w){ if(!hit && s.indexOf(w.toLowerCase()) >= 0) hit = w; });
+  return hit;
+}
+function memKwList(v){
+  var arr = [];
+  if(Array.isArray(v)) arr = v;
+  else if(typeof v === "string") arr = v.split(/[\s,，、;；]+/);
+  return arr.map(function(s){ return String(s == null ? "" : s).trim(); }).filter(Boolean).slice(0, 5);
+}
+function memBigrams(s){
+  var t = String(s || "").replace(/[\s，。、；：？！,.!?;:"'“”()（）【】]/g, "");
+  var set = {};
+  for(var i = 0; i + 2 <= t.length; i++) set[t.slice(i, i + 2)] = 1;
+  return set;
+}
+/* 二元组 Jaccard 相似度：用来判断"是不是在说同一件事" */
+function memSimilar(a, b){
+  var A = memBigrams(a), B = memBigrams(b);
+  var ka = Object.keys(A), kb = Object.keys(B);
+  if(!ka.length || !kb.length) return 0;
+  var inter = 0;
+  ka.forEach(function(k){ if(B[k]) inter++; });
+  return inter / (ka.length + kb.length - inter);
+}
+/* 冲突：很像但不是同一句 → 并列存着，绝不覆盖旧的 */
+function memConflictOf(content){
+  var hit = null;
+  memories.forEach(function(m){
+    if(hit || m.state === "denied") return;
+    /* 0.4 是实测标定的：中文短句里「喜欢早上跑步 / 喜欢晚上跑步」这种真冲突约 0.43，
+       而完全不相干的两句话通常在 0.2 以下。宁可多标一次冲突，也不要静默覆盖。 */
+    if(m.content !== content && memSimilar(m.content, content) >= 0.4) hit = m;
+  });
+  return hit;
+}
+/* 打分：置顶 > 命中次数（对数，防刷） > 时间衰减（30 天半衰） */
+function memScore(m){
+  var last = m.lastHit || m.createdAt || 0;
+  var days = Math.max(0, (Date.now() - last) / 86400000);
+  return (m.pin ? 100 : 0) + Math.log(1 + (m.hit || 0)) * 10 + (1 / (1 + days / 30)) * 20;
+}
+function memTop(){
+  return memories.filter(function(m){ return m.state !== "denied"; })
+    .slice().sort(function(a, b){ return memScore(b) - memScore(a); }).slice(0, MEM_TOP);
+}
+function memInject(){
+  var p = [];
+  var prof = memProfile();
+  p.push(prof ? ("【关于用户】\n" + prof) : "【关于用户】暂无画像。");
+  var top = memTop();
+  if(top.length){
+    p.push("【已知事实】以下每条都经用户确认或本人明确说过，可直接采信，不要再问一遍：\n" +
+      top.map(function(m){
+        return "- " + m.content + (m.source === "inferred" ? "（推断）" : "") +
+          (m.state === "conflict" ? "（与另一条冲突，未定）" : "");
+      }).join("\n"));
+  }
+  return p.join("\n");
+}
+/* 命中：用户话里出现触发词就 +1，决定这条记忆日后排多前 */
+function memHitScan(text){
+  var s = String(text || "");
+  if(!s) return;
+  var changed = false;
+  memories.forEach(function(m){
+    var hit = false;
+    (m.keywords || []).forEach(function(k){ if(k && s.indexOf(k) >= 0) hit = true; });
+    if(!hit && m.content && m.content.length >= 4 && s.indexOf(m.content.slice(0, 4)) >= 0) hit = true;
+    if(hit){ m.hit = (m.hit || 0) + 1; m.lastHit = Date.now(); changed = true; }
+  });
+  if(changed) memPersist();
+}
+function memRenderList(){
+  var box = document.getElementById("memList");
+  if(!box) return;
+  if(!memories.length){
+    box.innerHTML = '<div class="llm-msg">还没有记忆。聊天时说「记住：…」，AI 会提议一条，你确认后才入库。</div>';
+    return;
+  }
+  var list = memories.slice().sort(function(a, b){ return memScore(b) - memScore(a); });
+  box.innerHTML = list.map(function(m){
+    var badge = m.state === "conflict"
+      ? '<span class="mem-badge conflict">冲突</span>'
+      : '<span class="mem-badge ' + (m.source === "inferred" ? "inferred" : "stated") + '">' +
+        (m.source === "inferred" ? "推断" : "本人说的") + "</span>";
+    return '<div class="mem-item' + (m.pin ? " pinned" : "") + (m.state === "conflict" ? " conflict" : "") + '">' +
+      '<div class="mb"><div class="mc">' + esc(m.content) + "</div>" +
+      (m.evidence ? '<div class="me">依据：' + esc(m.evidence) + "</div>" : "") +
+      '<div class="mmeta">' + badge +
+      (m.keywords && m.keywords.length ? "<span>触发词 " + esc(m.keywords.join(" / ")) + "</span>" : "") +
+      "<span>命中 " + (m.hit || 0) + " 次</span>" + (m.pin ? "<span>已置顶</span>" : "") +
+      "</div></div>" +
+      '<div class="ops"><button data-mact="pin" data-mid="' + m.id + '">' + (m.pin ? "取消置顶" : "置顶") + "</button>" +
+      '<button class="del" data-mact="del" data-mid="' + m.id + '">删除</button></div>' +
+      "</div>";
+  }).join("");
+}
+function memSaveProfile(){
+  var el = document.getElementById("memProfile");
+  store.set("user_profile", String((el && el.value) || "").trim());
+  var msg = document.getElementById("memMsg");
+  if(msg){ msg.style.display = ""; msg.className = "llm-msg ok"; msg.textContent = "已保存，下次对话生效。"; }
+  toast("画像已保存");
+}
+function memAddManually(){
+  var tEl = document.getElementById("memAddText"), kEl = document.getElementById("memAddKw");
+  var c = String((tEl && tEl.value) || "").trim();
+  if(!c){ toast("先写点内容"); return; }
+  var deny = memDenyHit(c);
+  if(deny){ toast("含敏感词「" + deny + "」，不记录"); return; }
+  memories.push({ id: uid(), content: c, evidence: "用户在设置页手动添加",
+    source: "stated", keywords: memKwList(kEl ? kEl.value : ""), state: "active",
+    pin: false, hit: 0, lastHit: 0, createdAt: Date.now() });
+  memPersist(); memRenderList();
+  tEl.value = ""; kEl.value = "";
+  toast("已加入记忆");
+}
+
+/* ==================== V0.1 M3 · 工具调用（写操作三道保险） ====================
+   保险 1 预览卡：写操作不直接落库，先显示"要做什么 / 从什么改成什么"，由人点确认
+   保险 2 快照  ：执行前把全部数据快照进撤销栈（最近 5 次），随时可回滚
+   保险 3 校验  ：工具名归一化 + 参数必填校验，不合法直接退回模型，绝不落到数据层
+   架构约束：本区块只读写数据层（各全局数组）与 store，不调用任何 render 函数。
+============================================================================= */
+
+/* 给模型看的工具声明（OpenAI function calling 格式，各家兼容） */
+var TOOLS = [
+  { type:"function", function:{ name:"get_today", description:"读取今天的状态：今日待办完成情况、各项建设打卡的当前值/目标、今日备忘条数、体重。只读取，不修改。",
+    parameters:{ type:"object", properties:{}, required:[] } } },
+  { type:"function", function:{ name:"get_board", description:"读取某个板块的近期内容。只读取，不修改。",
+    parameters:{ type:"object", properties:{ board:{ type:"string", enum:["todo","goal","short","memo","build","study","dev"], description:"板块名" } }, required:["board"] } } },
+  { type:"function", function:{ name:"add_todo", description:"添加一条今日待办。",
+    parameters:{ type:"object", properties:{ title:{ type:"string", description:"待办内容，简短明确" } }, required:["title"] } } },
+  { type:"function", function:{ name:"done_todo", description:"把今日清单里已存在的某条待办标记为完成。",
+    parameters:{ type:"object", properties:{ title:{ type:"string", description:"待办内容，支持部分匹配" } }, required:["title"] } } },
+  { type:"function", function:{ name:"add_memo", description:"记一条备忘（随手记）。",
+    parameters:{ type:"object", properties:{ text:{ type:"string", description:"备忘内容" } }, required:["text"] } } },
+  { type:"function", function:{ name:"save_memory", description:"记一条关于用户的长期事实。必须给出证据原话、来源类型与触发词。",
+    parameters:{ type:"object", properties:{
+      content:{ type:"string", description:"要记住的事实，一句话，不超过 50 字" },
+      evidence:{ type:"string", description:"用户原话或可观察依据；没有就写没有" },
+      source:{ type:"string", enum:["stated","inferred"], description:"stated=用户明确说过；inferred=你推断的" },
+      keywords:{ type:"array", items:{ type:"string" }, description:"2 到 4 个触发词，日后靠它匹配" } },
+      required:["content","evidence","source","keywords"] } } },
+  { type:"function", function:{ name:"get_memory", description:"读取已经记住的关于用户的事实。只读取，不修改。",
+    parameters:{ type:"object", properties:{}, required:[] } } },
+  { type:"function", function:{ name:"render_canvas", description:"把结构化的解释、目标规划或流程图画到右侧画布。只展示，不修改任何数据。适合需要展开说明的问题；一句话能答完的不要用。",
+    parameters:{ type:"object", properties:{
+      type:{ type:"string", enum:["explain","plan","flow"], description:"explain=结构化解释；plan=目标拆解规划；flow=流程或逻辑关系图" },
+      title:{ type:"string", description:"画布标题，不超过 20 字" },
+      summary:{ type:"string", description:"explain 用：一句话结论，不超过 90 字" },
+      points:{ type:"array", items:{ type:"object", properties:{ t:{ type:"string" }, d:{ type:"string" } } }, description:"explain 用：2 到 4 个要点，t 是小标题（12 字内），d 是说明（60 字内）" },
+      analogy:{ type:"string", description:"explain 用：一个类比或例子，80 字内，可选" },
+      pitfall:{ type:"string", description:"explain 用：一个常见误解，80 字内，可选" },
+      goal:{ type:"string", description:"plan 用：要达成的目标，60 字内" },
+      horizon:{ type:"string", description:"plan 用：周期，如「3 个月」，可选" },
+      stages:{ type:"array", items:{ type:"object", properties:{ name:{ type:"string" }, steps:{ type:"array", items:{ type:"string" } } } }, description:"plan 用：2 到 4 个阶段，每个阶段带 2 到 5 个具体步骤" },
+      firstMove:{ type:"string", description:"plan 用：今天就能做的第一步，50 字内" },
+      nodes:{ type:"array", items:{ type:"object", properties:{ id:{ type:"string" }, label:{ type:"string" }, kind:{ type:"string", enum:["start","step","decision","end"] } } }, description:"flow 用：2 到 10 个节点。label 不超过 12 字。**不要给坐标**，排版由前端自动算" },
+      edges:{ type:"array", items:{ type:"object", properties:{ from:{ type:"string" }, to:{ type:"string" }, label:{ type:"string" } } }, description:"flow 用：连线，from/to 填节点 id。label 可选（如「是」「否」），不超过 6 字" }
+    }, required:["type"] } } }
+];
+
+function chatStr(v){ return String(v == null ? "" : v).trim(); }
+function chatDayOf(ts){
+  var d = new Date(ts || Date.now());
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+/* 模糊匹配：先全等，再包含，都不中返回 null（宁可让用户改，也不猜错数据） */
+function chatBestMatch(list, q, getter){
+  if(!list || !list.length) return null;
+  var s = chatStr(q);
+  if(!s) return null;
+  var hit = null;
+  list.forEach(function(x){ if(getter(x) === s) hit = x; });
+  if(hit) return hit;
+  list.forEach(function(x){ if(!hit && getter(x).indexOf(s) >= 0) hit = x; });
+  if(hit) return hit;
+  list.forEach(function(x){ if(!hit && s.indexOf(getter(x)) >= 0) hit = x; });
+  return hit;
+}
+var BOARD_ALIAS = {
+  todo:["todo","待办","今日","今日待办","清单"], goal:["goal","目标","长期"], short:["short","短期","计划"],
+  memo:["memo","备忘","随手记"], build:["build","建设","打卡","习惯"],
+  study:["study","学习"], dev:["dev","开发","项目"]
+};
+
+/* 工具实现：read 类直接返回结果；write 类只产出 plan（含 apply），落库由确认流程执行 */
+var TOOL_IMPL = {
+  get_today: { read:true, run:function(){
+    var t = todayStr(), d = bdToday();
+    var todo = todays.filter(function(x){ return x.date === t; });
+    var doneN = todo.filter(function(x){ return x.done; }).length;
+    var lines = [];
+    lines.push("今日待办 " + doneN + "/" + todo.length +
+      (todo.length ? "：" + todo.map(function(x){ return (x.done ? "[已完成]" : "[未完成]") + x.title; }).join("；") : "（空）"));
+    lines.push("建设打卡（" + d + "）：" + buildItems.map(function(it){
+      return it.name + " " + bdCount(d, it.id) + "/" + it.target; }).join("，"));
+    lines.push("今日备忘 " + memos.filter(function(x){ return chatDayOf(x.createdAt) === t; }).length + " 条");
+    var w = lifeBody.filter(function(x){ return x.date === t && x.weight; });
+    lines.push(w.length ? ("今日体重 " + w[w.length-1].weight + " kg") : "今日无体重记录");
+    return lines.join("\n");
+  }},
+  get_board: { read:true, run:function(a){
+    var q = chatStr(a.board).toLowerCase(), board = q;
+    Object.keys(BOARD_ALIAS).forEach(function(k){
+      if(BOARD_ALIAS[k].indexOf(q) >= 0) board = k;
+    });
+    var out = [];
+    if(board === "todo"){
+      out = todays.filter(function(x){ return x.date === todayStr(); })
+        .map(function(x){ return (x.done ? "[已完成]" : "[未完成]") + x.title; });
+    } else if(board === "goal"){
+      out = goals.map(function(x){ return (x.done ? "[已完成]" : "[进行中]") + x.title + (x.deadline ? "（截止 " + x.deadline + "）" : ""); });
+    } else if(board === "short"){
+      out = shorts.map(function(x){ return "[" + (x.status || "open") + "]" + x.title; });
+    } else if(board === "memo"){
+      out = memos.slice().sort(function(a,b){ return b.createdAt - a.createdAt; })
+        .map(function(x){ return chatDayOf(x.createdAt) + " " + x.text; });
+    } else if(board === "build"){
+      var d = bdToday();
+      out = buildItems.map(function(it){ return it.name + " " + bdCount(d, it.id) + "/" + it.target; });
+      out.push("连续达标 " + bdOverallStreak(d) + " 天");
+    } else if(board === "study"){
+      out = studyItems.map(function(x){ return x.title; });
+    } else if(board === "dev"){
+      out = devProjects.map(function(x){ return x.title; });
+    } else {
+      return "未知板块：" + chatStr(a.board);
+    }
+    return out.length ? out.slice(0, 15).join("\n") : "（这个板块还没有内容）";
+  }},
+
+  get_memory: { read:true, run:function(){
+    var top = memTop();
+    if(!top.length) return "（还没有记住任何关于用户的事实）";
+    return top.map(function(m){
+      return "- " + m.content + "（" + (m.source === "inferred" ? "推断" : "本人说的") +
+        (m.state === "conflict" ? "，与另一条冲突" : "") + "）";
+    }).join("\n");
+  }},
+  /* 记忆写入：闸门全在 plan() 里，过不了就没有卡片，模型只会收到一句拒收原因 */
+  save_memory: { write:true, plan:function(a){
+    var content = chatStr(a.content);
+    var evidence = chatStr(a.evidence);
+    var source = memNormSrc(a.source);
+    var kws = memKwList(a.keywords);
+    if(!content) return { error:"content 为空" };
+    if(content.length > 80) content = content.slice(0, 80);
+    if(!evidence) return { error:"没写依据。没有证据的事实不入库，先向用户确认原话。" };
+    if(evidence === "没有" || evidence === "无") return { error:"依据写的是「没有」，等于没有证据，不入库。" };
+    if(!source) return { error:"source 必须是 stated（用户明确说过）或 inferred（你推断的）" };
+    if(!kws.length) return { error:"keywords 至少要 1 个触发词" };
+    var deny = memDenyHit(content + " " + evidence);
+    if(deny) return { error:"涉及敏感信息（命中「" + deny + "」），这类内容一律不记录。" };
+
+    var cf = memConflictOf(content);
+    var rows = [
+      { k:"要记住", from:"（无）", to:content },
+      { k:"依据", from:"—", to:evidence },
+      { k:"来源", from:"—", to:(source === "inferred" ? "推断，需你确认" : "你明确说过") }
+    ];
+    if(cf) rows.push({ k:"与已有记忆冲突", from:cf.content, to:"两条并存，不覆盖旧的" });
+    return { label:"记住一条" + (cf ? "（冲突）" : ""), rows:rows, apply:function(){
+      memories.push({ id:uid(), content:content, evidence:evidence, source:source, keywords:kws,
+        state: cf ? "conflict" : "active", pin:false, hit:0, lastHit:0, createdAt:Date.now() });
+      memPersist(); memRenderList();
+      return "已记住：" + content + (cf ? "（与已有记忆冲突，已并列保存）" : "");
+    }};
+  }},
+
+  add_todo: { write:true, plan:function(a){
+    var title = chatStr(a.title);
+    if(!title) return { error:"title 为空" };
+    return { label:"添加今日待办", rows:[{ k:"事项", from:"（无）", to:title }], apply:function(){
+      todays.push({ id:uid(), title:title, date:todayStr(), done:false, createdAt:Date.now() });
+      chatSaveAll();
+      return "已添加今日待办：" + title;
+    }};
+  }},
+  done_todo: { write:true, plan:function(a){
+    var q = chatStr(a.title);
+    if(!q) return { error:"title 为空" };
+    var t = todayStr();
+    var pool = todays.filter(function(x){ return x.date === t && !x.done; });
+    var hit = chatBestMatch(pool, q, function(x){ return x.title; });
+    if(!hit) return { error:"今日清单里没有未完成的「" + q + "」" };
+    return { label:"完成今日待办", rows:[{ k:hit.title, from:"未完成", to:"已完成" }], apply:function(){
+      hit.done = true; chatSaveAll();
+      return "已完成待办：" + hit.title;
+    }};
+  }},
+  add_memo: { write:true, plan:function(a){
+    var text = chatStr(a.text);
+    if(!text) return { error:"text 为空" };
+    return { label:"记一条备忘", rows:[{ k:"备忘", from:"（无）", to:text }], apply:function(){
+      memos.push({ id:uid(), text:text, createdAt:Date.now() });
+      chatSaveAll();
+      return "备忘已保存：" + text;
+    }};
+  }},
+  /* M7 · 画布：只渲染，不写库、不需要确认。参数不合法就返回 error，让模型改用文字回答 */
+  render_canvas: { show:true, run:function(a){
+    var type = cvNormType(a.type);
+    if(!type) return { error:"type 必须是 explain / plan / flow 之一" };
+    var body = null, fbTitle = "";
+
+    if(type === "explain"){
+      var summary = cvClip(chatStr(a.summary || a.conclusion || a.answer || a.gist), 90);
+      var pts = cvPairs(a.points || a.point || a.key_points || a.items, 4, 14, 62);
+      if(!summary && !pts.length) return { error:"explain 至少要给 summary（一句话结论）或 points（要点）" };
+      if(!summary) summary = pts[0].d;
+      fbTitle = summary;
+      body = { summary: summary, points: pts,
+               analogy: cvClip(chatStr(a.analogy || a.metaphor || a.example || a.eg), 78),
+               pitfall: cvClip(chatStr(a.pitfall || a.misconception || a.caveat || a.warn), 78) };
+
+    } else if(type === "plan"){
+      var goal = cvClip(chatStr(a.goal || a.target || a.objective || a.aim), 60);
+      var stages = [];
+      cvArr(a.stages || a.stage || a.phases || a.phase).slice(0, 4).forEach(function(x){
+        if(typeof x === "string"){ stages.push({ name: cvClip(x, 16), steps: [] }); return; }
+        if(!x || typeof x !== "object") return;
+        var nm = cvClip(chatStr(x.name || x.title || x.stage || x.phase || ""), 16);
+        var st = cvStrs(x.steps || x.step || x.actions || x.todos || x.items, 5, 40);
+        if(!nm && !st.length) return;
+        stages.push({ name: nm || ("阶段 " + (stages.length + 1)), steps: st });
+      });
+      if(!goal && !stages.length) return { error:"plan 至少要给 goal（目标）或 stages（阶段）" };
+      if(!goal) goal = stages.length ? stages[0].name : "";
+      fbTitle = goal;
+      body = { goal: goal, horizon: cvClip(chatStr(a.horizon || a.period || a.duration || a.timeline), 20),
+               stages: stages, firstMove: cvClip(chatStr(a.firstMove || a.first_move || a.next || a.today || a.first), 50) };
+
+    } else {
+      var fl = cvNormFlow(a);
+      if(fl.nodes.length < 2) return { error:"flow 至少要 2 个有效节点（每个节点要有 label）" };
+      fbTitle = fl.nodes[0].label;
+      body = fl;
+    }
+
+    var title = cvClip(chatStr(a.title), 22) || cvClip(fbTitle, 20) || "画布";
+    canvasDocs.push({ id: uid(), ts: Date.now(), type: type, title: title, body: body });
+    while(canvasDocs.length > CV_MAX) canvasDocs.shift();
+    cvPersist();
+    return { ok: true, type: type, title: title };
+  }},
+  /* M7 · 只给画布的「存成长期目标」按钮用；不放进 TOOLS，模型看不到，避免误用 */
+  add_goal: { write:true, plan:function(a){
+    var t = chatStr(a.title);
+    if(!t) return { error:"目标标题为空" };
+    var desc = chatStr(a.desc);
+    return { label:"存成长期目标", rows:[{ k:"目标", from:"（无）", to:t }], apply:function(){
+      goals.push({ id: uid(), title: t, desc: desc, deadline: "", createdAt: Date.now(), done: false });
+      chatSaveAll();
+      return "已存成长期目标：" + t;
+    }};
+  }},
+  build_checkin: { write:true, plan:function(a){
+    var nm = chatStr(a.item);
+    var n = parseInt(a.delta, 10);
+    if(!isFinite(n)) return { error:"delta 不是数字" };
+    var d = bdToday();
+    var it = chatBestMatch(buildItems, nm, function(x){ return x.name; });
+    if(!it) return { error:"没有这个打卡项：" + nm };
+    var from = bdCount(d, it.id);
+    var to = Math.max(0, from + n);
+    return { label:"建设打卡 · " + it.name, rows:[{ k:it.name + "（目标 " + it.target + "）", from:String(from), to:String(to) }], apply:function(){
+      var log = bdDayLog(d);
+      if(!log[it.id]) log[it.id] = { count:0, note:"" };
+      log[it.id].count = to;
+      chatSaveAll();
+      return it.name + " " + from + " → " + to + "（目标 " + it.target + "）";
+    }};
+  }}
+};
+
+/* ---------- 撤销栈（保险 2） ---------- */
+var DATA_KEYS = ["goals","shorts","todays","memos","studyItems","studyLogs","devProjects","devNotes",
+  "lifeFitness","lifeDiet","lifeFun","lifeBody","insightMap",
+  "buildItems","buildLogs","buildFeedback","buildDiff","buildNeuro","buildBuilds"];
+var chatUndo = [];
+var UNDO_MAX = 5;
+function chatUndoLoad(){ chatUndo = store.get("chat_undo", []) || []; }
+function chatUndoPersist(){
+  try{ store.set("chat_undo", chatUndo); }
+  catch(e){ /* 配额溢出：丢最旧的，直到能写进去 */
+    while(chatUndo.length){
+      chatUndo.shift();
+      try{ store.set("chat_undo", chatUndo); break; }catch(e2){}
+    }
+  }
+}
+function chatSnapshot(){
+  var o = {};
+  DATA_KEYS.forEach(function(k){ try{ o[k] = JSON.parse(JSON.stringify(window[k])); }catch(e){ o[k] = window[k]; } });
+  return o;
+}
+function chatRestore(snap){
+  Object.keys(snap || {}).forEach(function(k){ window[k] = snap[k]; });
+  chatSaveAll();
+}
+/* saveAll() 不含建设打卡，这里补齐，保证 AI 改动一定落盘 */
+function chatSaveAll(){ saveAll(); bdSave(); store.set("buildBuilds", buildBuilds); }
+
+/* ---------- 工具名归一化 + 参数解析（保险 3） ---------- */
+function chatNormTool(n){
+  return String(n == null ? "" : n).toLowerCase().replace(/[^a-z0-9_]/g, "");
+}
+function chatParseArgs(raw){
+  if(raw == null) return {};
+  if(typeof raw === "object") return raw;
+  try{ return JSON.parse(raw) || {}; }
+  catch(e){
+    var m = String(raw).match(/\{[\s\S]*\}/);
+    if(m){ try{ return JSON.parse(m[0]) || {}; }catch(e2){} }
+    return {};
+  }
 }
 
 /* ==================== 导出 / 导入 / 清空 ==================== */
@@ -3797,8 +5248,14 @@ function exportJSON(){
     lifeFitness: lifeFitness, lifeDiet: lifeDiet, lifeFun: lifeFun,
     lifeBody: lifeBody, insightMap: insightMap, settings: settings,
     buildItems: buildItems, buildLogs: buildLogs,
-    buildFeedback: buildFeedback, buildDiff: buildDiff, buildNeuro: buildNeuro
+    buildFeedback: buildFeedback, buildDiff: buildDiff,
+    buildNeuro: buildNeuro, buildBuilds: buildBuilds,
+    userProfile: memProfile(), memories: memories,
+    canvasDocs: canvasDocs
   };
+  /* 安全守卫（V0.1 M1 硬性验收点）：任何密钥类字段一律不得写入导出的备份文件。
+     即便将来有人误把 llmConfigs 加进 data，也会被这里拦掉。 */
+  Object.keys(data).forEach(function(k){ if(/key|token|secret/i.test(k)) delete data[k]; });
   var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
   var a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
@@ -3834,6 +5291,13 @@ function importJSON(file){
         buildBuilds = Array.isArray(d.buildBuilds) ? d.buildBuilds : [];
         normalizeInsight();
         if(d.settings) settings = d.settings;
+        /* M4：画像与记忆也随备份恢复（密钥不参与） */
+        store.set("user_profile", String(d.userProfile || "").trim());
+        memories = Array.isArray(d.memories) ? d.memories : memories;
+        memPersist();
+        /* M7：画布内容随备份恢复 */
+        canvasDocs = Array.isArray(d.canvasDocs) ? d.canvasDocs : canvasDocs;
+        cvPersist();
         saveAll(); store.set("settings", settings);
         carryover(); go(currentKey); toast("导入成功，已恢复 " + (goals.length + shorts.length + todays.length + memos.length + studyItems.length + studyLogCount(studyLogs) + devProjects.length + devNotes.length + lifeFitness.length + lifeDiet.length + lifeFun.length + lifeBody.length + Object.keys(insightMap).length + buildFeedback.length + buildDiff.length + buildNeuro.length + buildBuilds.length + Object.keys(buildLogs).length) + " 条数据");
       });
@@ -3854,7 +5318,7 @@ function clearSample(){
   });
 }
 function clearAll(){
-  confirmModal("清空全部数据", "此操作不可恢复！所有长期计划、短期计划、今日清单、学习进度、开发工作、生活记录、今日心得和备忘将被永久删除。建议先导出备份。确定要清空吗？", function(){
+  confirmModal("清空全部数据", "此操作不可恢复！所有长期计划、短期计划、今日清单、学习进度、开发工作、生活记录、今日心得、备忘、AI 记忆与画布内容将被永久删除。建议先导出备份。确定要清空吗？", function(){
     [ "goals", "shorts", "todays", "memos", "studyItems", "studyLogs", "devProjects", "devNotes", "lifeFitness", "lifeDiet", "lifeFun", "lifeBody", "insightMap", "settings", "sampleLoaded" ].forEach(store.del);
     goals = []; shorts = []; todays = []; memos = [];
     studyItems = []; studyLogs = [];
@@ -3862,11 +5326,13 @@ function clearAll(){
     lifeFitness = []; lifeDiet = []; lifeFun = [];
     lifeBody = [];
     insightMap = {};
+    canvasDocs = []; cvPersist();   /* M7 · 画布一并清空 */
+    /* M4 · AI 记忆是最私密的一类数据（画像 + 记住的事实），清空必须一起走，
+       否则「清空全部」会留下一个说不清的口子 */
+    memories = []; memPersist(); store.set("user_profile", "");
     saveAll(); go(currentKey); toast("已清空全部数据");
   });
 }
-
-/* ==================== 弹窗 / toast / 主题 ==================== */
 var modalCb = null;
 function confirmModal(title, text, cb){
   document.getElementById("modalTitle").textContent = title;
@@ -3883,10 +5349,1155 @@ function applyTheme(){
   var light = settings.theme === "light";
   document.body.classList.toggle("light", light);
   document.getElementById("themeTxt").textContent = light ? "切换深色模式" : "切换浅色模式";
+  OrbHost.repalette();   /* M5 · 球体配色跟随主题 */
 }
 function toggleTheme(){
   settings.theme = settings.theme === "light" ? "dark" : "light";
   store.set("settings", settings); applyTheme();
+}
+
+/* ==================== V0.1 M5 · 声场球 ====================
+   三层：AudioEngine（只产数据帧）→ Skin（只管画）→ OrbHost（生命周期 + 状态机）
+   皮肤接口：create(canvas, opts) → { resize, frame(af, mode, t), setTheme, setPalette, dispose }
+   四态：idle / listening / thinking / speaking
+   ==================================================================== */
+var chatStreaming = false;   // 模型开始吐字 → 球体切到 speaking
+
+/* ---------- 常量（几何与音频映射移植自 3D_soundfield） ---------- */
+var ORB_TAU = Math.PI * 2;
+var ORB_GOLDEN = 2.39996322972865332;
+var ORB_PERSPECTIVE = 2.2;
+var ORB_REST_PITCH  = 0.35;
+var ORB_PERIOD_MS   = 5000;
+var ORB_GAP_PX = 30, ORB_N_MIN = 140, ORB_N_MAX = 560, ORB_OUTER_SHARE = 0.63;
+var ORB_DOT_RATIO = 0.055, ORB_SUBPIXEL_MIN = 0.6;
+var ORB_OUTER_N = 288, ORB_INNER_N = 168;
+
+var ORB_BANDS = 32, ORB_F_MIN = 55, ORB_F_MAX = 12000, ORB_FFT_SIZE = 2048, ORB_SMOOTHING = 0.72;
+var ORB_ATTACK_MS = 22, ORB_RELEASE_MS = 170;
+var ORB_AGC_FLOOR = 0.08, ORB_AGC_DECAY = 0.995, ORB_BASS_BANDS = 5;
+var ORB_AMP_TERR = 0.30, ORB_WAVE_K = 1.6, ORB_WAVE_AMP = 0.16, ORB_WAVE_HZ = 0.55;
+var ORB_PULSE_R = 0.13, ORB_HEART_AMP = 0.22, ORB_ENERGY_LUT = 0.42;
+var ORB_FLUX_SMOOTH_MS = 45, ORB_FLUX_REF = 0.055;
+var ORB_ONSET_ATTACK = 12, ORB_ONSET_RELEASE = 260, ORB_ONSET_TRIG = 0.34, ORB_ONSET_RESET = 0.20;
+var ORB_RAYS_N = 14, ORB_RAYS_SPIN = 0.055, ORB_RAYS_INNER = 0.10;
+var ORB_RAYS_BASE = 0.52, ORB_RAYS_ONSET = 1.15, ORB_RAYS_HALFW = 0.050, ORB_RAYS_HALFW_O = 0.048;
+var ORB_SHOCK_LIFE = 620, ORB_SHOCK_MAX = 3, ORB_SHOCK_R0 = 0.28, ORB_SHOCK_R1 = 1.85;
+var ORB_LUT_N = 24;
+
+/* 人声活动检测（VAD）：自适应底噪 + 双门限滞回 + hangover */
+var ORB_CALIB_MS = 1200;                 // 底噪采样窗口
+var ORB_VAD_OPEN_K = 2.5,  ORB_VAD_OPEN_B = 0.02;    // 起音门限（高）
+var ORB_VAD_CLOSE_K = 1.5, ORB_VAD_CLOSE_B = 0.012;  // 收音门限（低）→ 形成滞回
+var ORB_VAD_HANGOVER = 500;              // 掉到门限下还撑 500ms，避免字间断裂
+var ORB_VOICE_F0 = 300, ORB_VOICE_F1 = 3000;  // 人声频段加权
+
+/* ---------- 几何：纯函数，无 DOM 依赖 ---------- */
+function orbFib(i, n){
+  var y = 1 - (i / (n - 1)) * 2;
+  var r = Math.sqrt(Math.max(0, 1 - y * y));
+  var t = ORB_GOLDEN * i;
+  return [Math.cos(t) * r, y, Math.sin(t) * r];
+}
+function orbSpinPre(p, cy, sy, cp, sp){
+  var x = p[0], y = p[1], z = p[2];
+  var x1 =  x * cy + z * sy;
+  var z1 = -x * sy + z * cy;
+  return [x1, y * cp - z1 * sp, y * sp + z1 * cp];
+}
+function orbSpin(p, yaw, pitch){
+  return orbSpinPre(p, Math.cos(yaw), Math.sin(yaw), Math.cos(pitch), Math.sin(pitch));
+}
+function orbTilt(p, ax, az){
+  var cx = Math.cos(ax), sx = Math.sin(ax), cz = Math.cos(az), sz = Math.sin(az);
+  var x = p[0], y = p[1], z = p[2];
+  var x1 = x * cz - y * sz, y1 = x * sz + y * cz;
+  return [x1, y1 * cx - z * sx, y1 * sx + z * cx];
+}
+function orbProject(p, pv){
+  var z = p[2], s = pv / (pv - z);
+  return { x: p[0] * s, y: p[1] * s, s: s, f: Math.max(0, Math.min(1, (z + 1.1) / 2.2)), z: z };
+}
+function orbBandOfY(y){
+  var b = Math.floor((y + 1) * 0.5 * ORB_BANDS);
+  return b < 0 ? 0 : (b >= ORB_BANDS ? ORB_BANDS - 1 : b);
+}
+function orbWavePhase(y){ return (y + 1) * 0.5 * ORB_WAVE_K * ORB_TAU; }
+/* 行波用和角公式展开：sin(φ−ωt) = sinφ·cosωt − cosφ·sinωt，每点只需 2 乘 1 减 */
+function orbDisplace(e, sinP, cosP, cosT, sinT){
+  var travel = sinP * cosT - cosP * sinT;
+  return e * ORB_AMP_TERR + travel * e * ORB_WAVE_AMP;
+}
+function orbCoef(dtMs, tauMs){ return tauMs <= 0 ? 1 : 1 - Math.exp(-dtMs / tauMs); }
+function orbFluxOf(prev, cur){
+  var s = 0;
+  for(var i = 0; i < cur.length; i++){ var d = cur[i] - prev[i]; if(d > 0) s += d; }
+  return s / cur.length;
+}
+function orbSmoothTo(cur, target, dtMs, tauMs){ return cur + (target - cur) * orbCoef(dtMs, tauMs); }
+function orbShockTrigger(armed, onset){
+  if(armed && onset >= ORB_ONSET_TRIG)  return { fire: true,  armed: false };
+  if(!armed && onset <= ORB_ONSET_RESET) return { fire: false, armed: true  };
+  return { fire: false, armed: armed };
+}
+function orbBandEdges(bands, fMin, fMax){
+  var out = new Array(bands);
+  for(var i = 0; i < bands; i++){
+    out[i] = [fMin * Math.pow(fMax / fMin, i / bands), fMin * Math.pow(fMax / fMin, (i + 1) / bands)];
+  }
+  return out;
+}
+function orbBandToBins(bands, fMin, fMax, sampleRate, binCount){
+  var nyq = sampleRate / 2, edges = orbBandEdges(bands, fMin, fMax);
+  return edges.map(function(e){
+    var a = Math.floor(e[0] / nyq * binCount), b = Math.ceil(e[1] / nyq * binCount);
+    a = Math.max(0, Math.min(binCount - 1, a));
+    b = Math.max(a + 1, Math.min(binCount, b));
+    return [a, b];
+  });
+}
+function orbExtractBands(freq, map, out){
+  for(var i = 0; i < map.length; i++){
+    var a = map[i][0], b = map[i][1], m = 0;
+    for(var j = a; j < b; j++) if(freq[j] > m) m = freq[j];
+    out[i] = m / 255;
+  }
+  return out;
+}
+function orbBuildUnit(n){
+  var a = new Array(n);
+  for(var i = 0; i < n; i++) a[i] = orbFib(i, n);
+  return a;
+}
+function orbBuildAudioMap(unit){
+  var n = unit.length, band = new Uint8Array(n), trig = new Float32Array(n * 2);
+  for(var i = 0; i < n; i++){
+    var y = unit[i][1], ph = orbWavePhase(y);
+    band[i] = orbBandOfY(y);
+    trig[i * 2] = Math.sin(ph); trig[i * 2 + 1] = Math.cos(ph);
+  }
+  return { band: band, trig: trig };
+}
+function orbBuildGeo(nOut, nIn){
+  var uO = orbBuildUnit(nOut), uI = orbBuildUnit(nIn);
+  return { nOut: nOut, nIn: nIn, uOut: uO, uIn: uI, aOut: orbBuildAudioMap(uO), aIn: orbBuildAudioMap(uI) };
+}
+function orbSpacingFor(R, total){ return Math.sqrt((Math.PI * R * R) / Math.max(1, total / 2)); }
+function orbDotRadius(spacing, dpr){ return spacing * ORB_DOT_RATIO * dpr; }
+
+/* ---------- 配色：把 hex 色带转成按深度采样的 LUT ---------- */
+function orbHexToRgb(h){
+  var v = parseInt(h.slice(1), 16);
+  return [(v >> 16) & 255, (v >> 8) & 255, v & 255];
+}
+function orbRamp(stops, t){
+  var seg = stops.length - 1;
+  var x = Math.min(0.999999, Math.max(0, t)) * seg;
+  var i = Math.floor(x), u = x - i, a = stops[i], b = stops[i + 1];
+  return [Math.round(a[0] + (b[0] - a[0]) * u), Math.round(a[1] + (b[1] - a[1]) * u), Math.round(a[2] + (b[2] - a[2]) * u)];
+}
+/* 色相旋转：让 speaking / thinking 与 listening 在色相上明确分开 */
+function orbHueShift(hexes, deg){
+  return hexes.map(function(h){
+    var c = orbHexToRgb(h), r = c[0] / 255, g = c[1] / 255, b = c[2] / 255;
+    var mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn, hh = 0;
+    if(d){
+      if(mx === r) hh = ((g - b) / d) % 6;
+      else if(mx === g) hh = (b - r) / d + 2;
+      else hh = (r - g) / d + 4;
+    }
+    hh = (hh * 60 + deg) % 360; if(hh < 0) hh += 360;
+    var l = (mx + mn) / 2, s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+    var cc = (1 - Math.abs(2 * l - 1)) * s, xx = cc * (1 - Math.abs(((hh / 60) % 2) - 1)), mm = l - cc / 2;
+    var seg = Math.floor(hh / 60) % 6, r1, g1, b1;
+    if(seg === 0){ r1 = cc; g1 = xx; b1 = 0; }
+    else if(seg === 1){ r1 = xx; g1 = cc; b1 = 0; }
+    else if(seg === 2){ r1 = 0; g1 = cc; b1 = xx; }
+    else if(seg === 3){ r1 = 0; g1 = xx; b1 = cc; }
+    else if(seg === 4){ r1 = xx; g1 = 0; b1 = cc; }
+    else { r1 = cc; g1 = 0; b1 = xx; }
+    var f = function(v){ return ("0" + Math.max(0, Math.min(255, Math.round((v + mm) * 255))).toString(16)).slice(-2); };
+    return "#" + f(r1) + f(g1) + f(b1);
+  });
+}
+function orbBuildLut(hexes){
+  var stops = hexes.map(orbHexToRgb), arr = new Array(ORB_LUT_N);
+  for(var i = 0; i < ORB_LUT_N; i++){
+    var c = orbRamp(stops, ORB_LUT_N === 1 ? 0 : i / (ORB_LUT_N - 1));
+    arr[i] = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+  }
+  return arr;
+}
+/* 浅色主题：白底上浅色点看不见，故让「远点淡、近点深」——与暗色主题相反 */
+var ORB_PALETTES = {
+  dark: {
+    light: false,
+    out: ["#0e2a58", "#00c2ff", "#d6f9ff"],
+    inn: ["#3d0f3a", "#ff2d95", "#ffd6ef"],
+    glow: "#0a6ea8", ring: "#37d8ff",
+    hueThink: 75, hueSpeak: -150
+  },
+  light: {
+    light: true,
+    out: ["#a9c9e8", "#2574c4", "#0a2f52"],
+    inn: ["#f0b0cf", "#c2185b", "#5c0a29"],
+    glow: "#5aa0dd", ring: "#2f7fc4",
+    hueThink: 75, hueSpeak: -150
+  }
+};
+
+/* ---------- 点云生成：呼吸 + 音频位移（mask 决定哪一层吃音频） ----------
+   mask: 0 = 只外壳（listening，声从外面进来）
+         1 = 只内壳（speaking，能量从里面推出去）
+         2 = 两层都要 */
+function orbFrame(phase, out, geo, av){
+  var k = 0.5 - 0.5 * Math.cos(ORB_TAU * phase);
+  var cp = Math.cos(ORB_REST_PITCH), sp = Math.sin(ORB_REST_PITCH);
+  var E = av ? av.bands : null;
+  var rms = av ? av.rms : 0, bass = av ? av.bass : 0;
+  var cosT = av ? av.cosT : 0, sinT = av ? av.sinT : 0;
+  var mask = av ? av.mask : 2;
+  var pulse = 1 + rms * ORB_PULSE_R;
+  var idx = 0, i, q, r, e, d;
+
+  var rOut0 = 1 - 0.22 * k;
+  var cyO = Math.cos(phase * ORB_TAU), syO = Math.sin(phase * ORB_TAU);
+  var bO = geo.aOut.band, tO = geo.aOut.trig;
+  for(i = 0; i < geo.nOut; i++){
+    q = orbSpinPre(geo.uOut[i], cyO, syO, cp, sp);
+    r = rOut0; e = 0;
+    if(E && mask !== 1){
+      e = E[bO[i]];
+      r = (rOut0 + orbDisplace(e, tO[i * 2], tO[i * 2 + 1], cosT, sinT)) * pulse;
+    }
+    d = out[idx++];
+    d[0] = q[0] * r; d[1] = q[1] * r; d[2] = q[2] * r; d[3] = 0.85; d[4] = 0; d[5] = e;
+  }
+  var rIn0 = 0.45 + 0.30 * k;
+  var cyI = Math.cos(-phase * ORB_TAU), syI = Math.sin(-phase * ORB_TAU);
+  var bI = geo.aIn.band, tI = geo.aIn.trig;
+  for(i = 0; i < geo.nIn; i++){
+    q = orbSpinPre(geo.uIn[i], cyI, syI, cp, sp);
+    r = rIn0; e = 0;
+    if(E && mask !== 0){
+      e = bass;                                  // 内壳只跟低频走，整壳同步脉动 → 像心脏
+      r = (rIn0 + bass * ORB_HEART_AMP) * pulse;
+    }
+    d = out[idx++];
+    d[0] = q[0] * r; d[1] = q[1] * r; d[2] = q[2] * r; d[3] = 0.90; d[4] = 1; d[5] = e;
+  }
+  return out;
+}
+/* 无麦克风时的合成频谱：给 speaking / thinking 一个可见的能量来源 */
+function orbSynthBands(arr, t, k){
+  for(var i = 0; i < arr.length; i++){
+    var ph = t * 0.004 * (1 + k * 0.3) + i * 0.34 + k;
+    var v = 0.30 + 0.34 * Math.sin(ph) + 0.16 * Math.sin(t * 0.011 + i * 0.13);
+    arr[i] = v < 0 ? 0 : (v > 1 ? 1 : v);
+  }
+}
+
+/* ---------- 皮肤：sphere ---------- */
+function orbSkinSphere(canvas, opts){
+  var self = {};
+  self.canvas = canvas;
+  self.ctx = canvas.getContext("2d");
+  self.pal = ORB_PALETTES.dark;
+  self.lutBase = null; self.lutThink = null; self.lutSpeak = null;
+  self.dpr = 1; self.size = 300;
+  self.phase = 0; self.waveT = 0; self.rayAngle = 0;
+  self.armed = true;
+  self.shocks = [];
+  for(var s = 0; s < ORB_SHOCK_MAX; s++) self.shocks.push({ t: 0, live: false });
+  self.syn = new Float32Array(ORB_BANDS);
+  self.points = []; for(var p1 = 0; p1 < ORB_N_MAX; p1++) self.points.push(new Float64Array(6));
+  self.proj = [];   for(var p2 = 0; p2 < ORB_N_MAX; p2++) self.proj.push({ x: 0, y: 0, r: 0, a: 0, z: 0, shell: 0, li: 0 });
+  self.view = [];
+  self.geoCache = {}; self.geo = null; self.total = 0; self.gap = 6;
+  self.lowPerf = false; self._fc = 0; self._ft = 0;
+  self._glow = null; self._glowR = -1; self._core = null; self._coreR = -1;
+  self._rayGrad = null; self._rayR = -1;
+  self._lastT = 0; self._ro = null;
+  self._av = { bands: null, rms: 0, bass: 0, cosT: 1, sinT: 0, onset: 0, mask: 2 };
+
+  self.setPalette = function(pal){
+    self.pal = pal;
+    self.lutBase  = [orbBuildLut(pal.out), orbBuildLut(pal.inn)];
+    self.lutThink = [orbBuildLut(orbHueShift(pal.out, pal.hueThink)), orbBuildLut(orbHueShift(pal.inn, pal.hueThink))];
+    self.lutSpeak = [orbBuildLut(orbHueShift(pal.out, pal.hueSpeak)), orbBuildLut(orbHueShift(pal.inn, pal.hueSpeak))];
+    self._glow = null; self._glowR = -1;
+    self._core = null; self._coreR = -1;
+    self._rayGrad = null; self._rayR = -1;
+  };
+  self.setTheme = function(name){ self.setPalette(ORB_PALETTES[name === "light" ? "light" : "dark"]); };
+
+  self._counts = function(){
+    var R = self.size * 0.415;
+    var total = Math.round((Math.PI * R * R) / (ORB_GAP_PX * ORB_GAP_PX) * 2);
+    if(self.lowPerf) total = Math.round(total * 0.55);
+    total = Math.max(ORB_N_MIN, Math.min(ORB_N_MAX, total));
+    var nOut = Math.round(total * ORB_OUTER_SHARE), nIn = total - nOut;
+    var key = nOut + "|" + nIn, g = self.geoCache[key];
+    if(!g){ g = orbBuildGeo(nOut, nIn); self.geoCache[key] = g; }
+    self.geo = g; self.total = nOut + nIn;
+    self.gap = orbSpacingFor(R, self.total);
+    if(self.view.length !== self.total) self.view = self.proj.slice(0, self.total);
+  };
+  self.resize = function(){
+    var box = canvas.parentElement;
+    if(!box) return;
+    var r = box.getBoundingClientRect();
+    if(r.width < 2 || r.height < 2) return;
+    self.dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    self.size = Math.min(r.width, r.height);
+    canvas.width  = Math.max(1, Math.floor(r.width  * self.dpr));
+    canvas.height = Math.max(1, Math.floor(r.height * self.dpr));
+    canvas.style.width = r.width + "px";
+    canvas.style.height = r.height + "px";
+    self._counts();
+    self._glow = null; self._glowR = -1; self._core = null; self._coreR = -1;
+    self._rayGrad = null; self._rayR = -1;
+  };
+
+  self._spawn = function(){
+    var i, hit = null;
+    for(i = 0; i < self.shocks.length; i++) if(!self.shocks[i].live){ hit = self.shocks[i]; break; }
+    if(!hit){                                   // 池满 → 复用最旧的
+      hit = self.shocks[0];
+      for(i = 1; i < self.shocks.length; i++) if(self.shocks[i].t > hit.t) hit = self.shocks[i];
+    }
+    hit.t = 0; hit.live = true;
+  };
+  self._rays = function(cx, cy, R, onset, k){
+    var ctx = self.ctx;
+    var a = 0.035 + 0.045 * k + onset * 0.58;
+    if(a < 0.015) return;
+    var ri = R * ORB_RAYS_INNER, ro = R * (ORB_RAYS_BASE + onset * ORB_RAYS_ONSET);
+    var hw = ORB_RAYS_HALFW + onset * ORB_RAYS_HALFW_O, hwOut = hw * 1.9;
+    var gR = R * (ORB_RAYS_BASE + ORB_RAYS_ONSET);
+    if(!self._rayGrad || self._rayR !== gR){
+      var c = orbHexToRgb(self.pal.glow);
+      var gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, gR);
+      gr.addColorStop(0,    "rgba(255,255,255,0.55)");
+      gr.addColorStop(0.22, "rgba(" + c[0] + "," + c[1] + "," + c[2] + ",0.36)");
+      gr.addColorStop(0.60, "rgba(" + c[0] + "," + c[1] + "," + c[2] + ",0.12)");
+      gr.addColorStop(1,    "rgba(" + c[0] + "," + c[1] + "," + c[2] + ",0)");
+      self._rayGrad = gr; self._rayR = gR;
+    }
+    ctx.fillStyle = self._rayGrad;
+    ctx.globalAlpha = Math.min(1, a);
+    for(var i = 0; i < ORB_RAYS_N; i++){
+      var ang = self.rayAngle + (i / ORB_RAYS_N) * ORB_TAU;
+      var a0 = ang - hw, a1 = ang + hw, b0 = ang - hwOut, b1 = ang + hwOut;
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a0) * ri, cy + Math.sin(a0) * ri);
+      ctx.lineTo(cx + Math.cos(a1) * ri, cy + Math.sin(a1) * ri);
+      ctx.lineTo(cx + Math.cos(b1) * ro, cy + Math.sin(b1) * ro);
+      ctx.lineTo(cx + Math.cos(b0) * ro, cy + Math.sin(b0) * ro);
+      ctx.closePath(); ctx.fill();
+    }
+  };
+  self._shocks = function(cx, cy, R){
+    var ctx = self.ctx, c = orbHexToRgb(self.pal.ring);
+    for(var i = 0; i < self.shocks.length; i++){
+      var sh = self.shocks[i];
+      if(!sh.live) continue;
+      var p = sh.t / ORB_SHOCK_LIFE;
+      var e = 1 - Math.pow(1 - p, 2.2);
+      var rad = R * (ORB_SHOCK_R0 + (ORB_SHOCK_R1 - ORB_SHOCK_R0) * e);
+      var a = (1 - p) * (1 - p) * 0.55;
+      if(a < 0.004) continue;
+      ctx.globalAlpha = a;
+      ctx.strokeStyle = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+      ctx.lineWidth = Math.max(0.6, 2.6 * (1 - p));
+      ctx.beginPath(); ctx.arc(cx, cy, rad, 0, ORB_TAU); ctx.stroke();
+    }
+  };
+  self._rings = function(cx, cy, R, k){
+    var ctx = self.ctx, yaw = self.phase * ORB_TAU, rad = 1.06 + 0.05 * k;
+    var rings = [{ ax: 0, az: 0, a: 0.16, lw: 1.0 }, { ax: 1.05, az: 0.40, a: 0.11, lw: 0.9 }, { ax: -0.70, az: 1.20, a: 0.08, lw: 0.8 }];
+    var SEG = 72, pts = self._ringBuf || (self._ringBuf = []);
+    ctx.strokeStyle = self.pal.ring;
+    for(var r = 0; r < rings.length; r++){
+      var rg = rings[r], i;
+      for(i = 0; i <= SEG; i++){
+        var ang = (i / SEG) * ORB_TAU;
+        var pp = orbTilt([Math.cos(ang) * rad, 0, Math.sin(ang) * rad], rg.ax, rg.az);
+        pp = orbSpin(pp, yaw, ORB_REST_PITCH);
+        var pr = orbProject(pp, ORB_PERSPECTIVE);
+        pts[i] = { x: cx + pr.x * R, y: cy + pr.y * R, z: pr.z };
+      }
+      ctx.lineWidth = rg.lw;
+      ctx.globalAlpha = rg.a * 0.30;
+      ctx.beginPath();
+      var started = false;
+      for(i = 0; i <= SEG; i++){ if(pts[i].z >= 0){ started = false; continue; } if(!started){ ctx.moveTo(pts[i].x, pts[i].y); started = true; } else ctx.lineTo(pts[i].x, pts[i].y); }
+      ctx.stroke();
+      ctx.globalAlpha = rg.a;
+      ctx.beginPath(); started = false;
+      for(i = 0; i <= SEG; i++){ if(pts[i].z < 0){ started = false; continue; } if(!started){ ctx.moveTo(pts[i].x, pts[i].y); started = true; } else ctx.lineTo(pts[i].x, pts[i].y); }
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  };
+
+  self._render = function(av, mode){
+    if(!self.geo) return;
+    var ctx = self.ctx, dpr = self.dpr;
+    var w = self.canvas.width / dpr, h = self.canvas.height / dpr;
+    var cx = w / 2, cy = h / 2, pal = self.pal, R = self.size * 0.415;
+    var lut = (mode === "speaking") ? self.lutSpeak : (mode === "thinking" ? self.lutThink : self.lutBase);
+    var k = 0.5 - 0.5 * Math.cos(ORB_TAU * self.phase);
+    var rms = av ? av.rms : 0, onset = av ? av.onset : 0;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+
+    /* 光晕方向：listening 内收（吸），speaking 外扩（放） */
+    var comp = pal.light ? "source-over" : "lighter";
+    var aMul = pal.light ? 0.7 : 1;
+    var gR, gA, iA;
+    if(mode === "speaking"){        gR = R * (0.80 + onset * 0.50); gA = 0.26 + rms * 0.55 + onset * 0.95; iA = 0.14 + rms * 0.30 + onset * 0.70; }
+    else if(mode === "listening"){  gR = R * (0.52 - 0.10 * rms);   gA = 0.18 + 0.16 * k + rms * 0.75;      iA = 0.16 + 0.10 * k + rms * 0.55 + onset * 1.25; }
+    else if(mode === "thinking"){   gR = R * (0.62 + 0.10 * k);     gA = 0.16 + 0.18 * k;                    iA = 0.12 + 0.10 * k; }
+    else {                          gR = R * 0.58;                  gA = 0.14 + 0.14 * k;                    iA = 0.08 + 0.08 * k; }
+
+    var gc = orbHexToRgb(pal.glow);
+    ctx.globalCompositeOperation = comp;
+    if(!self._glow || self._glowR !== gR){
+      var gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, gR);
+      gr.addColorStop(0,    "rgba(" + gc[0] + "," + gc[1] + "," + gc[2] + ",0.34)");
+      gr.addColorStop(0.45, "rgba(" + gc[0] + "," + gc[1] + "," + gc[2] + ",0.13)");
+      gr.addColorStop(1,    "rgba(" + gc[0] + "," + gc[1] + "," + gc[2] + ",0)");
+      self._glow = gr; self._glowR = gR;
+    }
+    ctx.globalAlpha = Math.min(1, gA * aMul);
+    ctx.fillStyle = self._glow; ctx.fillRect(0, 0, w, h);
+
+    var iR = R * 0.24 * (1 + onset * 0.55);
+    if(!self._core || self._coreR !== iR){
+      var cr = ctx.createRadialGradient(cx, cy, 0, cx, cy, iR);
+      cr.addColorStop(0,    "rgba(255,255,255," + (pal.light ? "0.55" : "0.85") + ")");
+      cr.addColorStop(0.30, "rgba(" + gc[0] + "," + gc[1] + "," + gc[2] + ",0.55)");
+      cr.addColorStop(1,    "rgba(" + gc[0] + "," + gc[1] + "," + gc[2] + ",0)");
+      self._core = cr; self._coreR = iR;
+    }
+    ctx.globalAlpha = Math.min(1, iA * aMul);
+    ctx.fillStyle = self._core; ctx.fillRect(0, 0, w, h);
+
+    if(mode === "speaking" && !pal.light) self._rays(cx, cy, R, onset, k);
+    self._shocks(cx, cy, R);
+    ctx.globalCompositeOperation = "source-over";
+
+    self._rings(cx, cy, R, k);
+
+    /* ── 点云 ── */
+    orbFrame(self.phase, self.points, self.geo, av);
+    var baseDot = orbDotRadius(self.gap, dpr), P = self.proj, n = self.total;
+    var eLut = ORB_ENERGY_LUT * (ORB_LUT_N - 1);
+    for(var i = 0; i < n; i++){
+      var p = self.points[i];
+      var pr = orbProject([p[0], p[1], p[2]], ORB_PERSPECTIVE);
+      var o = P[i];
+      o.x = cx + pr.x * R;
+      o.y = cy + pr.y * R;
+      o.r = baseDot * (0.42 + 1.25 * pr.f) * pr.s;
+      o.a = p[3] * (0.07 + 0.93 * Math.pow(pr.f, 1.55));
+      o.z = pr.z; o.shell = p[4];
+      var li = (pr.f * (ORB_LUT_N - 1) + p[5] * eLut + 0.5) | 0;
+      o.li = li > ORB_LUT_N - 1 ? ORB_LUT_N - 1 : li;
+    }
+    var V = self.view;
+    V.sort(function(a, b){ return a.z - b.z; });
+    var prevKey = -1;
+    for(var j = 0; j < n; j++){
+      var o2 = V[j], a2 = o2.a, r2 = o2.r;
+      if(r2 < ORB_SUBPIXEL_MIN){ var q = r2 / ORB_SUBPIXEL_MIN; a2 *= q * q; r2 = ORB_SUBPIXEL_MIN; }
+      var key = o2.shell * ORB_LUT_N + o2.li;
+      if(key !== prevKey){ ctx.fillStyle = lut[o2.shell][o2.li]; prevKey = key; }
+      ctx.globalAlpha = a2;
+      ctx.beginPath(); ctx.arc(o2.x, o2.y, r2, 0, ORB_TAU); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  };
+
+  self.frame = function(af, mode, t){
+    if(!self.canvas.width || self.canvas.width < 2) self.resize();
+    if(!self.geo) return;
+    var dt = self._lastT ? Math.min(t - self._lastT, 50) : 16;
+    self._lastT = t;
+
+    /* 性能自适应：连续 30 帧偏慢就砍掉一半点 */
+    self._ft += dt; self._fc++;
+    if(self._fc >= 30){
+      var avg = self._ft / self._fc, was = self.lowPerf;
+      if(avg > 26) self.lowPerf = true; else if(avg < 18) self.lowPerf = false;
+      self._ft = 0; self._fc = 0;
+      if(was !== self.lowPerf) self.resize();
+    }
+    var mul = (mode === "thinking") ? 1.9 : (mode === "speaking" ? 1.25 : 1);
+    self.phase = (self.phase + dt / ORB_PERIOD_MS * mul) % 1;
+    self.waveT = (self.waveT + dt / 1000 * ORB_WAVE_HZ * ORB_TAU) % ORB_TAU;
+    self.rayAngle = (self.rayAngle + dt / 1000 * ORB_RAYS_SPIN * ORB_TAU) % ORB_TAU;
+    for(var s = 0; s < self.shocks.length; s++){
+      if(!self.shocks[s].live) continue;
+      self.shocks[s].t += dt;
+      if(self.shocks[s].t >= ORB_SHOCK_LIFE) self.shocks[s].live = false;
+    }
+
+    var av = null;
+    if(mode === "listening"){
+      if(af && af.bands){
+        self._av.bands = af.bands; self._av.rms = af.level || 0;
+        self._av.bass = af.bass || 0; self._av.onset = af.onset || 0;
+        self._av.mask = 0;                          // 声从外面进来 → 外壳响应
+        av = self._av;
+      }
+    } else if(mode === "speaking" || mode === "thinking"){
+      var real = !!(af && af.bands && (af.level || 0) > 0.015);
+      var B = real ? af.bands : self.syn;
+      if(!real) orbSynthBands(B, t, mode === "thinking" ? 0 : 1.7);
+      var sum = 0, bs = 0;
+      for(var i = 0; i < ORB_BANDS; i++){ sum += B[i] * B[i]; if(i < ORB_BASS_BANDS) bs += B[i]; }
+      self._av.bands = B;
+      self._av.rms   = real ? (af.level || 0) : Math.sqrt(sum / ORB_BANDS);
+      self._av.bass  = bs / ORB_BASS_BANDS;
+      self._av.onset = real ? (af.onset || 0) : (0.30 + 0.34 * Math.sin(t * 0.006) + 0.18 * Math.sin(t * 0.017));
+      self._av.mask  = (mode === "speaking") ? 1 : 0;   // 能量由内向外推 → 内壳响应
+      av = self._av;
+    }
+    if(av){
+      av.cosT = Math.cos(self.waveT); av.sinT = Math.sin(self.waveT);
+      var r = orbShockTrigger(self.armed, av.onset);
+      self.armed = r.armed;
+      if(r.fire) self._spawn();
+    }
+    self._render(av, mode);
+  };
+
+  self.dispose = function(){
+    if(self._ro){ try{ self._ro.disconnect(); }catch(e){} self._ro = null; }
+    self._glow = null; self._core = null; self._rayGrad = null;
+    self.geo = null; self.geoCache = {}; self.view = [];
+    try{
+      self.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
+    }catch(e){}
+  };
+
+  self.setPalette(ORB_PALETTES.dark);
+  self.resize();
+  if(window.ResizeObserver && canvas.parentElement){
+    try{ self._ro = new ResizeObserver(function(){ self.resize(); }); self._ro.observe(canvas.parentElement); }
+    catch(e){ self._ro = null; }
+  }
+  return self;
+}
+var ORB_SKINS = { sphere: orbSkinSphere };
+
+/* ---------- 音频引擎：只产数据帧 { level, bands, bass, onset, voice, speaking } ---------- */
+function OrbAudio(){
+  this.n = ORB_BANDS;
+  this.state = "idle";            // idle | requesting | running | denied | error | unsupported
+  this.error = "";
+  this.ctx = null; this.analyser = null; this.stream = null; this.src = null;
+  this.freq = null; this.binMap = null; this.vBin = null;
+  this.raw  = new Float32Array(this.n);
+  this.env  = new Float32Array(this.n);
+  this.bands = new Float32Array(this.n);
+  this.prevRaw = new Float32Array(this.n);
+  this.peak = ORB_AGC_FLOOR;
+  this.rms = 0; this.bass = 0; this.level = 0;
+  this.flux = 0; this.onset = 0;
+  this.vf = 0;                    // 人声频段加权电平
+  this.noiseFloor = -1;           // <0 = 尚未标定
+  this.voice = false;
+  this._now = 0; this._calibT = 0; this._winT = 0; this._winSum = 0; this._winN = 0; this._below = 0;
+  this._calibrated = false;       // 标定是否结束（不能用 noiseFloor<0 判断：首个窗口就是 0 会被短路）
+  this._f = { level: 0, bands: this.bands, bass: 0, onset: 0, voice: false, speaking: false };
+}
+OrbAudio.prototype.supported = function(){
+  return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia &&
+            (window.AudioContext || window.webkitAudioContext));
+};
+OrbAudio.prototype._resetVad = function(){
+  this._calibT = 0; this._winT = 0; this._winSum = 0; this._winN = 0;
+  this.noiseFloor = -1; this.voice = false; this._below = 0; this._calibrated = false;
+};
+OrbAudio.prototype.start = function(){
+  var self = this;
+  if(this.state === "running" || this.state === "requesting") return Promise.resolve(this.state);
+  if(!this.supported()){ this.state = "unsupported"; return Promise.resolve(this.state); }
+  this.state = "requesting";
+  return navigator.mediaDevices.getUserMedia({
+    audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
+  }).then(function(st){
+    self.stream = st;
+    try{
+      var AC = window.AudioContext || window.webkitAudioContext;
+      self.ctx = new AC();
+      var an = self.ctx.createAnalyser();
+      an.fftSize = ORB_FFT_SIZE;
+      an.smoothingTimeConstant = ORB_SMOOTHING;
+      an.minDecibels = -95; an.maxDecibels = -12;
+      self.src = self.ctx.createMediaStreamSource(st);
+      self.src.connect(an);                      // 不连 destination —— 否则麦克风回授啸叫
+      self.analyser = an;
+      self.freq = new Uint8Array(an.frequencyBinCount);
+      self.binMap = orbBandToBins(self.n, ORB_F_MIN, ORB_F_MAX, self.ctx.sampleRate, an.frequencyBinCount);
+      var nyq = self.ctx.sampleRate / 2, bc = an.frequencyBinCount;
+      var a = Math.max(0, Math.floor(ORB_VOICE_F0 / nyq * bc));
+      var b = Math.max(a + 1, Math.min(bc, Math.ceil(ORB_VOICE_F1 / nyq * bc)));
+      self.vBin = [a, b];
+      self.state = "running";
+      self._resetVad();
+      if(self.ctx.state === "suspended" && self.ctx.resume){
+        return self.ctx.resume().then(function(){ return self.state; });
+      }
+    }catch(e){
+      self.state = "error"; self.error = (e && e.name) || String(e);
+    }
+    return self.state;
+  }).catch(function(e){
+    var n = e && e.name;
+    self.state = (n === "NotAllowedError" || n === "SecurityError") ? "denied" : "error";
+    self.error = n || String(e);
+    return self.state;
+  });
+};
+OrbAudio.prototype.stop = function(){
+  if(this.stream){ try{ this.stream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){} }
+  if(this.ctx){ try{ this.ctx.close(); }catch(e){} }
+  this.stream = this.ctx = this.analyser = this.src = null;
+  this.state = "idle";
+  this.env.fill(0); this.bands.fill(0); this.raw.fill(0); this.prevRaw.fill(0);
+  this.rms = this.bass = this.level = 0;
+  this.flux = this.onset = 0; this.vf = 0;
+  this.voice = false; this.noiseFloor = -1;
+};
+OrbAudio.prototype.update = function(dtMs){
+  if(this.state !== "running" || !this.analyser) return false;
+  this.analyser.getByteFrequencyData(this.freq);
+  orbExtractBands(this.freq, this.binMap, this.raw);
+
+  /* 人声频段加权电平（300~3000Hz） */
+  var a = this.vBin[0], b = this.vBin[1], vs = 0, i;
+  for(i = a; i < b; i++) vs += this.freq[i];
+  this.vf = vs / ((b - a) * 255);
+  this._now += dtMs;
+
+  /* 自适应底噪：开麦后 1.2s 内取「最安静的一个 100ms 窗口」 */
+  if(!this._calibrated){
+    this._calibT += dtMs; this._winT += dtMs; this._winSum += this.vf; this._winN++;
+    if(this._winT >= 100){
+      var w = this._winSum / Math.max(1, this._winN);
+      this.noiseFloor = (this.noiseFloor < 0) ? w : Math.min(this.noiseFloor, w);
+      this._winT = 0; this._winSum = 0; this._winN = 0;
+    }
+    if(this._calibT >= ORB_CALIB_MS){
+      var nf = this.noiseFloor < 0 ? 0.004 : this.noiseFloor;
+      this.noiseFloor = Math.max(0.0015, Math.min(0.25, nf * 1.25));
+      this._calibrated = true;
+    }
+  }
+
+  var ka = orbCoef(dtMs, ORB_ATTACK_MS), kr = orbCoef(dtMs, ORB_RELEASE_MS);
+  var env = this.env, peak = 0;
+  for(i = 0; i < this.n; i++){
+    var v = this.raw[i];
+    if(v > peak) peak = v;
+    env[i] += (v - env[i]) * (v > env[i] ? ka : kr);
+  }
+  this.peak = Math.max(this.peak * ORB_AGC_DECAY, peak, ORB_AGC_FLOOR);
+  var gain = 1 / this.peak;
+  var sum = 0, bs = 0;
+  for(i = 0; i < this.n; i++){
+    var v2 = env[i] * gain;
+    if(v2 > 1) v2 = 1; else if(v2 < 0) v2 = 0;
+    this.bands[i] = v2; sum += v2 * v2;
+    if(i < ORB_BASS_BANDS) bs += v2;
+  }
+  this.rms = Math.sqrt(sum / this.n);
+  this.bass = bs / ORB_BASS_BANDS;
+  this.level = this.rms;
+
+  /* 双门限滞回 + hangover：字与字之间不断裂，安静时不误判 */
+  if(this._calibrated){
+    var open  = this.noiseFloor * ORB_VAD_OPEN_K  + ORB_VAD_OPEN_B;
+    var close = this.noiseFloor * ORB_VAD_CLOSE_K + ORB_VAD_CLOSE_B;
+    if(this.voice){
+      if(this.vf >= close) this._below = 0;
+      else if(!this._below) this._below = this._now;
+      else if(this._now - this._below >= ORB_VAD_HANGOVER) this.voice = false;
+    } else if(this.vf > open){
+      this.voice = true; this._below = 0;
+    }
+  }
+
+  var f = orbFluxOf(this.prevRaw, this.raw);
+  this.flux = orbSmoothTo(this.flux, f, dtMs, ORB_FLUX_SMOOTH_MS);
+  this.prevRaw.set(this.raw);
+  var target = Math.min(1, this.flux / ORB_FLUX_REF);
+  var ko = orbCoef(dtMs, target > this.onset ? ORB_ONSET_ATTACK : ORB_ONSET_RELEASE);
+  this.onset += (target - this.onset) * ko;
+  return true;
+};
+OrbAudio.prototype.frame = function(){
+  var f = this._f;
+  f.level = this.level; f.bands = this.bands; f.bass = this.bass;
+  f.onset = this.onset; f.voice = this.voice;
+  f.speaking = false;             // V0.2 TTS 接入后由播放状态驱动
+  return f;
+};
+
+/* ---------- 宿主：生命周期 + 四态状态机 ---------- */
+var ORB_TXT = {
+  idle:      { t: "待机",   s: "点击「开麦克风」，球体跟着你的声音起伏" },
+  listening: { t: "聆听中", s: "正在采集麦克风，球体随声压起伏" },
+  thinking:  { t: "思考中", s: "模型在组织回答，球体转成扫描态" },
+  speaking:  { t: "说话中", s: "回答正在流出，能量由内向外推出" }
+};
+var OrbHost = {
+  active: false, hidden: false, mic: false, skinKey: "sphere",
+  canvas: null, wrap: null, skin: null, audio: null,
+  raf: 0, _lt: 0, _uiN: 0, _bound: null,
+
+  palKey: function(){ return (settings && settings.theme === "light") ? "light" : "dark"; },
+  modeOf: function(){
+    if(chatStreaming) return "speaking";
+    if(typeof chatBusy !== "undefined" && chatBusy) return "thinking";
+    return this.mic ? "listening" : "idle";
+  },
+  enter: function(){
+    if(this.active) return;
+    var cv = document.getElementById("orbCanvas"), wrap = document.getElementById("orbPanel");
+    if(!cv || !wrap) return;
+    this.canvas = cv; this.wrap = wrap;
+    this.audio = new OrbAudio();
+    this.skin = (ORB_SKINS[this.skinKey] || orbSkinSphere)(cv, {});
+    this.skin.setPalette(ORB_PALETTES[this.palKey()]);
+    this.skin.resize();
+    this.active = true; this.hidden = false; this._lt = 0;
+    var folded = !!store.get("orbFolded", false);
+    wrap.classList.toggle("folded", folded);
+    var hb = document.getElementById("orbFoldBtn");
+    if(hb) hb.textContent = folded ? "展开" : "收起";
+    this._micBtn();
+    if(!this._bound) this._bound = this._loop.bind(this);
+    if(!this.raf) this.raf = requestAnimationFrame(this._bound);
+  },
+  /* 离开对话板块必须彻底收摊：停 rAF + 停音轨 + 关 AudioContext */
+  leave: function(){
+    if(!this.active) return;
+    this.active = false;
+    if(this.raf){ cancelAnimationFrame(this.raf); this.raf = 0; }
+    if(this.skin){ this.skin.dispose(); this.skin = null; }
+    if(this.audio){ this.audio.stop(); this.audio = null; }
+    this.mic = false; this._lt = 0;
+  },
+  repalette: function(){
+    if(this.active && this.skin) this.skin.setPalette(ORB_PALETTES[this.palKey()]);
+  },
+  toggleMic: function(){
+    var self = this;
+    if(!this.active) return;
+    if(this.mic){
+      this.mic = false;
+      if(this.audio) this.audio.stop();
+      this._micBtn();
+      return;
+    }
+    if(!this.audio) return;
+    this._micBtn("请求中…");
+    this.audio.start().then(function(st){
+      self.mic = (st === "running");
+      self._micBtn();
+    });
+  },
+  _micBtn: function(txt){
+    var b = document.getElementById("orbMicBtn");
+    if(b) b.textContent = txt || (this.mic ? "关麦克风" : "开麦克风");
+  },
+  _loop: function(t){
+    if(!this.active) return;
+    this.raf = requestAnimationFrame(this._bound);
+    if(this.hidden) return;
+    var dt = this._lt ? Math.min(t - this._lt, 50) : 16;
+    this._lt = t;
+    var af = null;
+    if(this.audio && this.mic && this.audio.update(dt)) af = this.audio.frame();
+    var mode = this.modeOf();
+    if(this.skin) this.skin.frame(af, mode, t);
+    if((this._uiN++ % 4) === 0) this._ui(mode, af);
+  },
+  _ui: function(mode, af){
+    var st = document.getElementById("orbBadge");
+    var tx = document.getElementById("orbBadgeTxt");
+    var sub = document.getElementById("orbSub");
+    var mt = document.getElementById("orbMeter");
+    if(!st || !tx) return;
+    var info = ORB_TXT[mode] || ORB_TXT.idle;
+    var t = info.t, s = info.s;
+    if(this.audio){
+      if(this.audio.state === "requesting"){ t = "请求权限中"; s = "浏览器正在询问是否允许使用麦克风"; }
+      else if(this.audio.state === "denied"){ t = "权限被拒绝"; s = "浏览器已拒绝麦克风，球体会保持呼吸"; }
+      else if(this.audio.state === "unsupported"){ t = "不支持"; s = "当前环境不支持麦克风采集，球体保持呼吸"; }
+      else if(this.audio.state === "error"){ t = "采集出错"; s = "（" + (this.audio.error || "未知") + "）球体保持呼吸"; }
+      else if(mode === "listening"){
+        t = (af && af.voice) ? "听到你了" : "聆听中";
+        s = (af && af.voice) ? "检测到人声，外壳随频谱起伏" : "安静，球体轻轻呼吸";
+      }
+    }
+    st.className = "op-badge " + (this.audio && this.audio.state === "denied" ? "denied" : mode);
+    tx.textContent = t;
+    if(sub) sub.textContent = s;
+    if(mt) mt.style.width = Math.round(Math.min(1, (af ? (af.level || 0) : 0) * 2.2) * 100) + "%";
+    var pn = this.wrap;
+    if(pn) pn.classList.toggle("live", !!this.mic);
+  },
+  bindGlobal: function(){
+    var self = this;
+    if(!this._bound) this._bound = this._loop.bind(this);
+    document.addEventListener("visibilitychange", function(){
+      if(!self.active) return;
+      if(document.hidden){
+        self.hidden = true;
+        if(self.raf){ cancelAnimationFrame(self.raf); self.raf = 0; }
+      } else {
+        self.hidden = false; self._lt = 0;
+        if(!self.raf) self.raf = requestAnimationFrame(self._bound);
+      }
+    });
+  }
+};
+
+/* ==================== V0.1 M7 · 画布空间 ====================
+   AI 通过 render_canvas 工具把结构化内容落到这里，前端负责渲染。
+   三种类型：explain（结构化解释）/ plan（目标拆解）/ flow（流程与逻辑关系图）
+
+   三条设计取舍：
+   1. 不让模型算坐标 —— 模型只给 nodes/edges，分层布局由前端算（模型算坐标必歪）
+   2. 画布渲染不打断对话 —— show 类工具直接画，不走写操作的确认卡
+   3. 参数不合法就降级 —— 返回 error 让模型改用文字回答，绝不把半截数据画上去
+   ==================================================================== */
+var canvasDocs = [];
+var CV_MAX = 8;
+var CV_FLOW_MAX_N = 10, CV_FLOW_MAX_E = 14;
+var CV_KIND_TXT = { explain: "解释", plan: "规划", flow: "流程" };
+
+function cvLoad(){ canvasDocs = store.get("canvas_docs", []) || []; }
+function cvPersist(){ store.set("canvas_docs", canvasDocs); }
+function cvClip(s, n){
+  s = String(s == null ? "" : s).trim().replace(/\s+/g, " ");
+  return s.length > n ? s.slice(0, n - 1) + "…" : s;
+}
+function cvArr(v){ return Object.prototype.toString.call(v) === "[object Array]" ? v : []; }
+/* 归一化：模型可能给字符串、可能给对象、可能给错字段名，一律通吃 */
+function cvStrs(v, maxN, maxLen){
+  var out = [];
+  var arr = cvArr(v);
+  if(!arr.length && typeof v === "string") arr = [v];
+  arr.slice(0, maxN).forEach(function(x){
+    var s = typeof x === "string" ? x : chatStr(x && (x.text || x.title || x.name || x.step || x.d || x.do || ""));
+    s = cvClip(s, maxLen);
+    if(s) out.push(s);
+  });
+  return out;
+}
+function cvPairs(v, maxN, tMax, dMax){
+  var out = [];
+  cvArr(v).slice(0, maxN).forEach(function(x){
+    if(typeof x === "string"){ var s = cvClip(x, dMax); if(s) out.push({ t: "", d: s }); return; }
+    if(!x || typeof x !== "object") return;
+    var t = cvClip(chatStr(x.t || x.title || x.name || x.head || x.point || x.k || ""), tMax);
+    var d = cvClip(chatStr(x.d || x.desc || x.detail || x.text || x.body || x.content || x.v || ""), dMax);
+    if(!t && !d) return;
+    out.push({ t: t, d: d });
+  });
+  return out;
+}
+/* 类型归一化：中文/英文/大小写/前缀通吃（顺序：flow → explain → plan） */
+function cvNormType(v){
+  var s = chatStr(v).toLowerCase();
+  if(!s) return "";
+  if(/flow|流程|逻辑|关系|示意|步骤图|链路|因果/.test(s)) return "flow";
+  if(/explain|解释|科普|答疑|讲解|原理|是什么|为什么/.test(s)) return "explain";
+  if(/plan|目标|拆解|规划|计划|分解|怎么做|如何做/.test(s)) return "plan";
+  if(s.indexOf("flo") === 0 || s.indexOf("gra") === 0) return "flow";
+  if(s.indexOf("exp") === 0) return "explain";
+  if(s.indexOf("pla") === 0) return "plan";
+  return "";
+}
+function cvNormKind(v){
+  var s = chatStr(v).toLowerCase();
+  if(/start|begin|开始|起点|入口|触发/.test(s)) return "start";
+  if(/end|finish|done|结束|终点|出口|完成/.test(s)) return "end";
+  if(/decision|branch|判断|分支|条件|菱形|选择|是否/.test(s)) return "decision";
+  return "step";
+}
+function cvNormFlow(a){
+  var nodes = [], edges = [], i;
+  cvArr(a.nodes || a.node || a.vertex || a.vertices).slice(0, CV_FLOW_MAX_N).forEach(function(x, i2){
+    var lab, id, kind = "step";
+    if(typeof x === "string"){ lab = x; id = "n" + i2; }
+    else if(x && typeof x === "object"){
+      lab = chatStr(x.label || x.name || x.text || x.title || "");
+      id  = chatStr(x.id || x.key || x.node || "") || ("n" + i2);
+      kind = cvNormKind(x.kind || x.type || x.shape || x.nodeType);
+    } else return;
+    lab = cvClip(lab, 18);
+    if(!lab) return;
+    nodes.push({ id: id, label: lab, kind: kind });
+  });
+  /* id 去重：模型可能给重复 id，后面覆盖前面会让边指向错节点 */
+  var seen = {}, uniq = [];
+  nodes.forEach(function(n){
+    if(seen[n.id]) n.id = n.id + "_" + uniq.length;
+    seen[n.id] = 1; uniq.push(n);
+  });
+  nodes = uniq;
+  var ids = {}; nodes.forEach(function(n){ ids[n.id] = 1; });
+  cvArr(a.edges || a.edge || a.links || a.link).slice(0, CV_FLOW_MAX_E).forEach(function(x){
+    if(!x || typeof x !== "object") return;
+    var from = chatStr(x.from || x.source || x.src || x.s || x.start || "");
+    var to   = chatStr(x.to   || x.target || x.dst || x.t || x.end || "");
+    if(!ids[from] || !ids[to]) return;      // 悬空边直接丢，不画
+    if(from === to) return;                  // 自环画出来只有一团，不画
+    edges.push({ from: from, to: to, label: cvClip(chatStr(x.label || x.text || x.name || ""), 8) });
+  });
+  return { nodes: nodes, edges: edges };
+}
+
+/* ---------- flow 布局：Kahn 拓扑分层 + 竖向下拉 ---------- */
+function cvFlowLayout(f, W){
+  var n = f.nodes.length, i, idx = {};
+  f.nodes.forEach(function(x, i){ idx[x.id] = i; });
+  var outE = [], indeg = [];
+  for(i = 0; i < n; i++){ outE.push([]); indeg.push(0); }
+  f.edges.forEach(function(e){
+    var a = idx[e.from], b = idx[e.to];
+    if(a == null || b == null) return;
+    outE[a].push(b); indeg[b]++;
+  });
+  /* 入度为 0 的在第 0 层；环内节点入度永远降不到 0，会被留在最后一层 */
+  var layer = [], deg = indeg.slice(), q = [], head = 0;
+  for(i = 0; i < n; i++){ layer.push(-1); if(deg[i] === 0){ layer[i] = 0; q.push(i); } }
+  /* 全是环（没有任何入度为 0 的节点）：不要让 BFS 硬跑，否则会被连锁推成一条长链。
+     直接把整环铺在同一层，连线走回边样式 —— 视觉上比拉成五六层清楚得多。 */
+  if(!q.length && n){
+    for(i = 0; i < n; i++) layer[i] = 0;
+    q.length = 0;
+  }
+  while(head < q.length){
+    var cur = q[head++];
+    outE[cur].forEach(function(j){
+      if(layer[j] < layer[cur] + 1) layer[j] = layer[cur] + 1;
+      deg[j]--;
+      if(deg[j] === 0) q.push(j);
+    });
+  }
+  var maxL = 0;
+  for(i = 0; i < n; i++) if(layer[i] > maxL) maxL = layer[i];
+  var byLayer = [];
+  for(i = 0; i <= maxL + 1; i++) byLayer.push([]);
+  for(i = 0; i < n; i++) byLayer[layer[i] < 0 ? maxL + 1 : layer[i]].push(i);
+  while(byLayer.length && !byLayer[byLayer.length - 1].length) byLayer.pop();
+
+  var margin = 14, nodeH = 46, gapY = 40, gapX = 12, maxCnt = 1;
+  byLayer.forEach(function(a){ if(a.length > maxCnt) maxCnt = a.length; });
+  var nodeW = Math.min(124, (W - margin * 2 - (maxCnt - 1) * gapX) / maxCnt);
+  nodeW = Math.max(56, nodeW);
+  var H = margin * 2 + byLayer.length * nodeH + (byLayer.length - 1) * gapY;
+  var pos = [];
+  for(i = 0; i < n; i++) pos.push({ x: 0, y: 0, cx: 0 });
+  byLayer.forEach(function(list, L){
+    var y = margin + L * (nodeH + gapY);
+    var total = list.length * nodeW + (list.length - 1) * gapX;
+    var x0 = (W - total) / 2;
+    list.forEach(function(i, j){
+      pos[i].x = x0 + j * (nodeW + gapX);
+      pos[i].y = y;
+      pos[i].cx = pos[i].x + nodeW / 2;
+    });
+  });
+  return { W: W, H: H, nodeW: nodeW, nodeH: nodeH, pos: pos, idx: idx, byLayer: byLayer };
+}
+function cvWrap(s, per){
+  var out = [], i;
+  for(i = 0; i < s.length; i += per) out.push(s.slice(i, i + per));
+  if(out.length > 2){ out = out.slice(0, 2); out[1] = out[1].slice(0, Math.max(1, per - 1)) + "…"; }
+  return out;
+}
+function cvFlowSvg(f, docId){
+  var W = 330;
+  var L = cvFlowLayout(f, W), s = [], i;
+  s.push('<svg class="cv-flow" viewBox="0 0 ' + L.W + " " + L.H + '" preserveAspectRatio="xMidYMid meet">');
+  s.push('<defs><marker id="cvarw' + esc(docId) + '" markerWidth="7" markerHeight="7" refX="6.4" refY="3.5" orient="auto">' +
+         '<path d="M0,0.7 L6.4,3.5 L0,6.3 z" style="fill:var(--text3)"/></marker></defs>');
+
+  /* 先画边，再画节点 —— 节点盖住线的端点，接口更干净 */
+  f.edges.forEach(function(e){
+    var a = L.idx[e.from], b = L.idx[e.to];
+    if(a == null || b == null) return;
+    var pa = L.pos[a], pb = L.pos[b];
+    var x1 = pa.cx, y1 = pa.y + L.nodeH, x2 = pb.cx, y2 = pb.y, d;
+    if(y2 <= y1 + 4){
+      /* 回边（往回指）：走侧面绕行 + 虚线，避免和正向线糊在一起 */
+      var ox = (pa.cx <= pb.cx ? -1 : 1) * (L.nodeW / 2 + 15);
+      var my = pa.y + L.nodeH / 2, ny = pb.y + L.nodeH / 2;
+      d = "M" + x1 + "," + my + " C" + (x1 + ox) + "," + my + " " + (x2 + ox) + "," + ny + " " + x2 + "," + ny;
+      s.push('<path d="' + d + '" fill="none" stroke="var(--text3)" stroke-width="1.2" stroke-dasharray="4 3" opacity=".8" marker-end="url(#cvarw' + esc(docId) + ')"/>');
+    } else {
+      var dy = Math.max(12, (y2 - y1) * 0.5);
+      d = "M" + x1 + "," + y1 + " C" + x1 + "," + (y1 + dy) + " " + x2 + "," + (y2 - dy) + " " + x2 + "," + y2;
+      s.push('<path d="' + d + '" fill="none" stroke="var(--text3)" stroke-width="1.3" opacity=".65" marker-end="url(#cvarw' + esc(docId) + ')"/>');
+    }
+    if(e.label){
+      var lx = (x1 + x2) / 2, ly = (y1 + y2) / 2 + (y2 <= y1 + 4 ? -4 : 0);
+      s.push('<text x="' + lx + '" y="' + ly + '" text-anchor="middle" font-size="9.5" style="fill:var(--text3)">' + esc(e.label) + "</text>");
+    }
+  });
+
+  f.nodes.forEach(function(nd, i){
+    var p = L.pos[i], x = p.x, y = p.y, w = L.nodeW, h = L.nodeH;
+    var cx = x + w / 2, cy = y + h / 2;
+    var per = nd.kind === "decision"
+      ? Math.max(2, Math.floor((w * 0.62 - 8) / 10.5))
+      : Math.max(3, Math.floor((w - 14) / 10.5));
+    var lines = cvWrap(nd.label, per);
+    if(nd.kind === "decision"){
+      s.push('<polygon points="' + cx + "," + y + " " + (x + w) + "," + cy + " " + cx + "," + (y + h) + " " + x + "," + cy +
+             '" style="fill:var(--purple-soft);stroke:var(--purple)" stroke-width="1.4"/>');
+    } else {
+      var rx = (nd.kind === "start" || nd.kind === "end") ? h / 2 : 8;
+      var fill = nd.kind === "start" ? "var(--green-soft)" : (nd.kind === "end" ? "var(--card)" : "var(--accent-soft)");
+      var stroke = nd.kind === "start" ? "var(--green)" : (nd.kind === "end" ? "var(--text3)" : "var(--accent)");
+      s.push('<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + rx +
+             '" style="fill:' + fill + ';stroke:' + stroke + '" stroke-width="1.4"/>');
+    }
+    lines.forEach(function(ln, li){
+      var ty = cy + (lines.length === 1 ? 4 : (li === 0 ? -1 : 12));
+      s.push('<text x="' + cx + '" y="' + ty + '" text-anchor="middle" font-size="11" style="fill:var(--text)">' + esc(ln) + "</text>");
+    });
+  });
+  s.push("</svg>");
+  return s.join("");
+}
+
+/* ---------- 三种卡片的 HTML ---------- */
+function cvExplainHTML(b){
+  var h = [];
+  if(b.summary) h.push('<div class="cv-sum">' + esc(b.summary) + "</div>");
+  if(b.points && b.points.length){
+    h.push('<div class="cv-pts">' + b.points.map(function(p, i){
+      return '<div class="cv-pt"><span class="cv-pn">' + (i + 1) + "</span><div class=\"cv-pb\">" +
+        (p.t ? '<div class="cv-pt-t">' + esc(p.t) + "</div>" : "") +
+        (p.d ? '<div class="cv-pt-d">' + esc(p.d) + "</div>" : "") + "</div></div>";
+    }).join("") + "</div>");
+  }
+  if(b.analogy) h.push('<div class="cv-note"><b>打个比方</b>' + esc(b.analogy) + "</div>");
+  if(b.pitfall) h.push('<div class="cv-note"><b>容易搞错</b>' + esc(b.pitfall) + "</div>");
+  return h.join("");
+}
+function cvPlanHTML(b){
+  var h = [];
+  h.push('<div class="cv-goal"><b>目标</b> · ' + esc(b.goal || "（未写明）") +
+    (b.horizon ? '　<span style="color:var(--text3)">' + esc(b.horizon) + "</span>" : "") + "</div>");
+  (b.stages || []).forEach(function(st){
+    h.push('<div class="cv-stage"><i class="cv-sdot"></i><div class="cv-sname">' + esc(st.name) + "</div>" +
+      '<div class="cv-steps">' + (st.steps || []).map(function(x){
+        return '<div class="cv-step">' + esc(x) + "</div>"; }).join("") + "</div></div>");
+  });
+  if(b.firstMove) h.push('<div class="cv-first"><b>今天就能做的第一步</b>' + esc(b.firstMove) + "</div>");
+  return h.join("");
+}
+function cvPlanActs(d){
+  return '<div class="cv-acts">' +
+    '<button class="btn" data-cvact="todo" data-id="' + esc(d.id) + '">加进今日清单</button>' +
+    '<button class="btn" data-cvact="goal" data-id="' + esc(d.id) + '">存成长期目标</button></div>';
+}
+function cvCardHTML(d){
+  var inner = "", acts = "";
+  if(d.type === "explain") inner = cvExplainHTML(d.body || {});
+  else if(d.type === "plan"){ inner = cvPlanHTML(d.body || {}); acts = cvPlanActs(d); }
+  else if(d.type === "flow"){
+    inner = cvFlowSvg(d.body || { nodes: [], edges: [] }, d.id) +
+      '<div class="cv-legend">' +
+      '<span><i style="background:var(--green)"></i>开始</span>' +
+      '<span><i style="background:var(--accent)"></i>步骤</span>' +
+      '<span><i style="background:var(--purple)"></i>判断</span>' +
+      '<span><i style="background:var(--text3)"></i>结束</span></div>';
+  }
+  return '<div class="cv-card" data-id="' + esc(d.id) + '">' +
+    '<div class="cv-head"><span class="cv-kind ' + esc(d.type) + '">' + esc(CV_KIND_TXT[d.type] || "画布") + "</span>" +
+    '<span class="cv-title">' + esc(d.title) + "</span>" +
+    '<button class="cv-close" data-cvdel="' + esc(d.id) + '" title="从画布移除">×</button></div>' +
+    '<div class="cv-body">' + inner + "</div>" + acts + "</div>";
+}
+function cvRender(){
+  var box = document.getElementById("cpBody");
+  if(!box) return;
+  var cnt = document.getElementById("cpCount");
+  if(cnt) cnt.textContent = canvasDocs.length ? (canvasDocs.length + " 张") : "";
+  if(!canvasDocs.length){
+    box.innerHTML = '<div class="cp-empty"><b>画布还是空的</b>' +
+      '<span>问「为什么 / 是什么 / 原理」→ 落成结构化解释</span>' +
+      '<span>问「我想达成 X，怎么拆」→ 落成目标规划</span>' +
+      '<span>问「A 和 B 什么关系 / 流程是怎样的」→ 落成流程图</span></div>';
+    return;
+  }
+  box.innerHTML = canvasDocs.map(cvCardHTML).join("");
+}
+function cvRemove(id){
+  canvasDocs = canvasDocs.filter(function(x){ return x.id !== id; });
+  cvPersist(); cvRender();
+}
+function cvClear(){
+  if(!canvasDocs.length){ toast("画布已经是空的"); return; }
+  confirmModal("清空画布", "将移除画布上的 " + canvasDocs.length + " 张内容。对话记录不受影响。确定吗？", function(){
+    canvasDocs = []; cvPersist(); cvRender(); toast("画布已清空");
+  });
+}
+function cvZoom(){
+  var p = document.getElementById("canvasPanel"), m = document.getElementById("cpMask");
+  if(!p || !m) return;
+  var on = p.classList.toggle("zoomed");
+  m.classList.toggle("show", on);
+  var b = document.getElementById("cpZoomBtn");
+  if(b) b.textContent = on ? "还原" : "放大";
+}
+/* 画布上的规划落到真实数据：仍然走 M3 的写操作确认卡 + 撤销栈，不偷偷写库 */
+function cvPushWrite(toolName, args){
+  var impl = TOOL_IMPL[toolName];
+  if(!impl || !impl.plan){ toast("这个操作现在用不了"); return; }
+  var plan = null;
+  try{ plan = impl.plan(args); }catch(e){ plan = { error: String(e && e.message ? e.message : e) }; }
+  if(!plan || plan.error){ toast("没法执行：" + (plan && plan.error)); return; }
+  chatToday().push({ id: uid(), role: "tool", ts: Date.now(),
+    tool: { name: toolName, label: plan.label, rows: plan.rows || [], state: "pending", note: "", undoId: "", args: args } });
+  chatPersist(); renderChat();
+  toast("已生成确认卡，在左边对话里点「确认执行」");
+}
+function cvPlanApply(id, kind){
+  var d = null;
+  canvasDocs.forEach(function(x){ if(x.id === id) d = x; });
+  if(!d || d.type !== "plan") return;
+  var b = d.body || {}, title = "";
+  if(kind === "todo"){
+    title = chatStr(b.firstMove);
+    if(!title && b.stages && b.stages.length && b.stages[0].steps) title = chatStr(b.stages[0].steps[0]);
+    if(!title) title = chatStr(b.goal);
+    if(!title){ toast("这个规划里没有可以落到今日清单的一步"); return; }
+    cvPushWrite("add_todo", { title: title });
+  } else {
+    title = chatStr(b.goal) || chatStr(d.title);
+    if(!title){ toast("没有目标标题"); return; }
+    var desc = (b.stages || []).map(function(s){
+      return s.name + "：" + (s.steps || []).join("、"); }).join("\n");
+    cvPushWrite("add_goal", { title: title, desc: desc });
+  }
 }
 
 /* ==================== 事件绑定 ==================== */
@@ -4295,6 +6906,102 @@ function bindEvents(){
   document.getElementById("themeBtn").addEventListener("click", toggleTheme);
   document.getElementById("themeBtn2").addEventListener("click", toggleTheme);
 
+  /* V0.1 M2 · AI 对话 */
+  var ci = document.getElementById("chatInput");
+  document.getElementById("chatSendBtn").addEventListener("click", chatSend);
+  document.getElementById("chatStopBtn").addEventListener("click", chatStop);
+  document.getElementById("chatClearBtn").addEventListener("click", chatClear);
+  document.getElementById("chatGoSetBtn").addEventListener("click", function(){ go("set"); });
+  /* V0.1 M3 · 工具预览卡的按钮（列表每次重绘，用事件委托而不是逐个绑定） */
+  document.getElementById("chatMsgs").addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-act]") : null;
+    if(!b) return;
+    var act = b.getAttribute("data-act"), id = b.getAttribute("data-id");
+    if(act === "ok") chatToolConfirm(id);
+    else if(act === "no") chatToolCancel(id);
+    else if(act === "undo") chatToolUndo(id);
+  });
+  ci.addEventListener("keydown", function(e){
+    if(e.key === "Enter" && !e.shiftKey){ e.preventDefault(); chatSend(); }
+  });
+  ci.addEventListener("input", function(){
+    var n = String(ci.value || "").trim().length;
+    document.getElementById("chatHint").textContent = n ? (n + " 字 · Enter 发送，Shift+Enter 换行") : "";
+  });
+
+  /* V0.1 M5 · 声场球：麦克风只在用户主动点击时才申请 */
+  document.getElementById("orbMicBtn").addEventListener("click", function(){ OrbHost.toggleMic(); });
+  document.getElementById("orbFoldBtn").addEventListener("click", function(){
+    var w = document.getElementById("orbPanel");
+    var c = w.classList.toggle("folded");
+    store.set("orbFolded", c);
+    document.getElementById("orbFoldBtn").textContent = c ? "展开" : "收起";
+    if(!c && OrbHost.skin) OrbHost.skin.resize();
+  });
+
+  /* V0.1 M7 · 画布空间 */
+  document.getElementById("cpZoomBtn").addEventListener("click", cvZoom);
+  document.getElementById("cpClearBtn").addEventListener("click", cvClear);
+  document.getElementById("cpMask").addEventListener("click", function(){
+    if(document.getElementById("canvasPanel").classList.contains("zoomed")) cvZoom();
+  });
+  document.getElementById("cpBody").addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-cvdel],[data-cvact]") : null;
+    if(!b) return;
+    var del = b.getAttribute("data-cvdel");
+    if(del){ cvRemove(del); return; }
+    var act = b.getAttribute("data-cvact"), id = b.getAttribute("data-id");
+    if(act === "todo") cvPlanApply(id, "todo");
+    else if(act === "goal") cvPlanApply(id, "goal");
+  });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && document.getElementById("canvasPanel").classList.contains("zoomed")) cvZoom();
+  });
+
+  /* V0.1 M1 · AI 接入 */
+  var psel = document.getElementById("llmPreset");
+  psel.innerHTML = LLM_PRESETS.map(function(p, i){
+    return '<option value="' + i + '">' + esc(p.name) + '</option>';
+  }).join("");
+  psel.addEventListener("change", function(){
+    var p = LLM_PRESETS[parseInt(psel.value, 10)];
+    if(!p) return;
+    document.getElementById("llmName").value  = p.name;
+    document.getElementById("llmBase").value  = p.base;
+    document.getElementById("llmModel").value = p.model;
+    llmMsg("");
+  });
+  document.getElementById("llmSaveBtn").addEventListener("click", llmSaveFromForm);
+  document.getElementById("llmTestBtn").addEventListener("click", llmTest);
+  document.getElementById("llmClearBtn").addEventListener("click", function(){
+    document.getElementById("llmKey").value = "";
+    var c = llmCur();
+    if(!c){ llmMsg("没有启用中的配置。"); return; }
+    confirmModal("清除密钥", "将移除「" + c.name + "」已保存的 API Key，配置保留。确定吗？", function(){
+      c.key = ""; llmPersist(); llmRenderList(); llmMsg("已清除密钥。");
+    });
+  });
+
+  /* V0.1 M4 · 记忆 */
+  document.getElementById("memProfileSave").addEventListener("click", memSaveProfile);
+  document.getElementById("memAddBtn").addEventListener("click", memAddManually);
+  document.getElementById("memList").addEventListener("click", function(e){
+    var b = e.target.closest ? e.target.closest("[data-mact]") : null;
+    if(!b) return;
+    var act = b.getAttribute("data-mact"), mid = b.getAttribute("data-mid");
+    var m = null;
+    memories.forEach(function(x){ if(x.id === mid) m = x; });
+    if(!m) return;
+    if(act === "pin"){
+      m.pin = !m.pin; memPersist(); memRenderList();
+    } else if(act === "del"){
+      confirmModal("删除记忆", "将删除「" + m.content + "」，不可恢复。确定吗？", function(){
+        memories = memories.filter(function(x){ return x.id !== mid; });
+        memPersist(); memRenderList(); toast("已删除记忆");
+      });
+    }
+  });
+
   document.getElementById("modalCancel").addEventListener("click", function(){
     document.getElementById("modal-mask").classList.remove("show"); modalCb = null;
   });
@@ -4338,6 +7045,17 @@ function init(){
   buildNeuro = store.get("buildNeuro", []) || [];
   buildBuilds = store.get("buildBuilds", []) || [];
   buildCur = bdToday();
+
+  /* V0.1 M1 · AI 接入配置（密钥独立加载，不参与示例数据） */
+  llmLoad();
+  llmFillFrom(llmCur());
+
+  /* V0.1 M2 · 对话记录（按天分桶，独立于示例数据） */
+  chatLoad();
+  chatUndoLoad();   /* M3 · 撤销栈 */
+  memLoad();        /* M4 · 记忆 */
+  cvLoad();         /* M7 · 画布 */
+  OrbHost.bindGlobal();   /* M5 · 页面隐藏时暂停球体 */
 
   /* 体重趋势图：窗口尺寸变化时重新渲染 SVG */
   window.addEventListener("resize", function(){
