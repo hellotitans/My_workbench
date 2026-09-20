@@ -462,6 +462,13 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
 .chat-input textarea{width:100%;min-height:62px;max-height:180px;resize:vertical}
 .ci-actions{display:flex;align-items:center;gap:8px}
 .ci-hint{font-size:11.5px;color:var(--text3);margin-right:auto}
+/* V0.2 M8 · 语音输入：转写状态条 */
+.ci-asr{display:flex;align-items:center;gap:7px;font-size:11.5px;line-height:1.5;
+  background:var(--accent-soft);color:var(--accent);border-radius:8px;padding:5px 10px}
+.ci-asr.warn{background:var(--red-soft);color:var(--red)}
+.ci-asr i{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none;animation:asrBlink 1s ease-in-out infinite}
+.ci-asr.done i,.ci-asr.warn i{animation:none}
+@keyframes asrBlink{0%,100%{opacity:1}50%{opacity:.22}}
 .msg.ai.typing::after{content:"▍";margin-left:2px;animation:ckBlink 1s steps(2,start) infinite}
 @keyframes ckBlink{to{visibility:hidden}}
 /* ================= V0.1 M5 · 声场感应面板（独立窗口） ================= */
@@ -1704,6 +1711,8 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
             </div>
             <div id="chatMsgs" class="chat-msgs"></div>
             <div class="chat-input">
+              <!-- V0.2 M8 · 语音输入：转写状态条（只在麦克风开着时出现） -->
+              <div class="ci-asr" id="asrBar" style="display:none"><i></i><span id="asrBarTxt"></span></div>
               <textarea id="chatInput" class="form" placeholder="说点什么…（Enter 发送，Shift+Enter 换行）"></textarea>
               <div class="ci-actions">
                 <span class="ci-hint" id="chatHint"></span>
@@ -1825,6 +1834,28 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
           </div>
           <div class="llm-list" id="llmList"></div>
           <div class="llm-msg" id="llmMsg" style="display:none"></div>
+        </div>
+
+        <div class="card">
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>语音输入</h2>
+          <div class="desc">
+            开启麦克风说话，声音会被转写成文字<b>填进输入框等你确认</b>，不会自动发出去。<br>
+            实测十家服务商的接口，只有硅基流动的语音接口既允许浏览器直连、又是通用协议格式（百炼兼容模式与火山没有这个接口，OpenAI 与 Groq 国内连不上）。密钥同样<b>只存本机、不进备份文件</b>。
+          </div>
+          <div class="llm-grid">
+            <div class="llm-f"><label>Base URL</label><input type="text" id="asrBase" placeholder="https://api.siliconflow.cn/v1"></div>
+            <div class="llm-f"><label>模型名</label><input type="text" id="asrModel" placeholder="FunAudioLLM/SenseVoiceSmall"></div>
+            <div class="llm-f"><label>API Key</label><input type="password" id="asrKey" placeholder="sk-..."></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button class="btn primary" id="asrSaveBtn">保存</button>
+            <button class="btn" id="asrTestBtn">测试连接</button>
+            <button class="btn" id="asrClearBtn">清除密钥</button>
+          </div>
+          <div class="llm-msg" id="asrMsg" style="display:none"></div>
+          <p style="font-size:12px;color:var(--text3);line-height:1.8;margin-top:10px">
+            不填也能用：没配密钥时会自动改用<b>浏览器自带的语音识别</b>——零配置，但 Chrome 的原生识别要连境外服务，国内可能连不上或很慢。
+          </p>
         </div>
 
         <div class="card">
@@ -4198,6 +4229,11 @@ function renderSettings(){
   var mp = document.getElementById("memProfile");
   if(mp && document.activeElement !== mp) mp.value = memProfile();
   memRenderList();
+  /* V0.2 M8 · 语音输入（默认值填好，用户只补一个密钥） */
+  var ab = document.getElementById("asrBase"), am = document.getElementById("asrModel"), ak = document.getElementById("asrKey");
+  if(ab && !ab.value) ab.value = asrCfg.base || "https://api.siliconflow.cn/v1";
+  if(am && !am.value) am.value = asrCfg.model || "FunAudioLLM/SenseVoiceSmall";
+  if(ak && document.activeElement !== ak) ak.value = asrCfg.key || "";
 }
 
 /* ==================== V0.1 M1 · LLM 接入层 ==================== */
@@ -6055,7 +6091,7 @@ OrbAudio.prototype.frame = function(){
 /* ---------- 宿主：生命周期 + 四态状态机 ---------- */
 var ORB_TXT = {
   idle:      { t: "待机",   s: "点击「开麦克风」，球体跟着你的声音起伏" },
-  listening: { t: "聆听中", s: "正在采集麦克风，球体随声压起伏" },
+  listening: { t: "聆听中", s: "正在采集麦克风；说话会被转成文字填进输入框" },
   thinking:  { t: "思考中", s: "模型在组织回答，球体转成扫描态" },
   speaking:  { t: "说话中", s: "回答正在流出，能量由内向外推出" }
 };
@@ -6092,6 +6128,7 @@ var OrbHost = {
   leave: function(){
     if(!this.active) return;
     this.active = false;
+    if(typeof OrbASR !== "undefined") OrbASR.detach();
     if(this.raf){ cancelAnimationFrame(this.raf); this.raf = 0; }
     if(this.skin){ this.skin.dispose(); this.skin = null; }
     if(this.audio){ this.audio.stop(); this.audio = null; }
@@ -6105,6 +6142,7 @@ var OrbHost = {
     if(!this.active) return;
     if(this.mic){
       this.mic = false;
+      if(typeof OrbASR !== "undefined") OrbASR.detach();   /* 先停转写，再收麦克风 */
       if(this.audio) this.audio.stop();
       this._micBtn();
       return;
@@ -6114,6 +6152,10 @@ var OrbHost = {
     this.audio.start().then(function(st){
       self.mic = (st === "running");
       self._micBtn();
+      if(typeof OrbASR !== "undefined"){
+        if(self.mic) OrbASR.attach(self.audio);   /* 复用同一条流，不二次申请权限 */
+        else OrbASR.detach();
+      }
     });
   },
   _micBtn: function(txt){
@@ -6147,7 +6189,7 @@ var OrbHost = {
       else if(this.audio.state === "error"){ t = "采集出错"; s = "（" + (this.audio.error || "未知") + "）球体保持呼吸"; }
       else if(mode === "listening"){
         t = (af && af.voice) ? "听到你了" : "聆听中";
-        s = (af && af.voice) ? "检测到人声，外壳随频谱起伏" : "安静，球体轻轻呼吸";
+        s = (af && af.voice) ? "听到人声，说出来会转成文字" : "安静，说一句就转成文字";
       }
     }
     st.className = "op-badge " + (this.audio && this.audio.state === "denied" ? "denied" : mode);
@@ -6164,14 +6206,335 @@ var OrbHost = {
       if(!self.active) return;
       if(document.hidden){
         self.hidden = true;
+        /* 切走了就别继续转写，省流量也避免把别的声音录进来 */
+        if(typeof OrbASR !== "undefined") OrbASR.detach();
         if(self.raf){ cancelAnimationFrame(self.raf); self.raf = 0; }
       } else {
         self.hidden = false; self._lt = 0;
+        if(typeof OrbASR !== "undefined" && self.mic && self.audio) OrbASR.attach(self.audio);
         if(!self.raf) self.raf = requestAnimationFrame(self._bound);
       }
     });
   }
 };
+
+/* ==================== V0.2 M8 · 语音输入（ASR） ====================
+   开麦克风后持续采集，说完一句自动断句 → 转写 → 文字追加到输入框等人确认。
+
+   四条设计取舍：
+   1. 不自动发送 —— 转写结果只填进输入框，发出去永远由用户按 Enter / 点发送
+   2. 追加不覆盖 —— 连续说话会累积，用户可以随时改
+   3. 直采 PCM 而不是 MediaRecorder —— MediaRecorder 的 webm 只有第一个分片带文件头，
+      按句切出来的后续片段会解码失败；自己采 PCM 再封 WAV，每一段都是完整可解码的
+   4. 云端优先 + 原生兜底 —— 有密钥走云端，没密钥或失败自动切浏览器自带识别；
+      识别挂了只是没有文字，声场球照常转，不报错不打断对话
+
+   与声场球的关系：复用同一条麦克风流与同一个 AudioContext，不二次申请权限；
+   音频数据只从 OrbAudio 单向流入这里，这里不反调球体的任何函数。
+   ================================================================== */
+var ASR_RATE = 16000;        // 转写用 16k 单声道：足够清楚，体积只有 48k 的三分之一
+var ASR_MAX_SEC = 25;        // 单段最长 25 秒，到点强制切段，防止请求过大
+var ASR_MIN_SEC = 0.35;      // 短于这个时长视为误触（咳嗽、敲桌子），丢弃
+var ASR_SILENCE_MS = 700;    // 静音这么久就认为一句话说完了
+var ASR_CALIB_MS = 1200;     // 开麦后先花 1.2 秒量环境底噪
+var ASR_OPEN_K = 3.0,  ASR_OPEN_B  = 0.006;   // 起音门限
+var ASR_CLOSE_K = 1.9, ASR_CLOSE_B = 0.003;   // 收音门限（比起音低，形成滞回，避免一个字一顿）
+
+var asrCfg = { base:"", model:"", key:"" };
+function asrLoad(){
+  var c = store.get("asr_cfg", null);
+  if(c && typeof c === "object"){
+    asrCfg.base = String(c.base || ""); asrCfg.model = String(c.model || ""); asrCfg.key = String(c.key || "");
+  }
+}
+function asrPersist(){ store.set("asr_cfg", { base:asrCfg.base, model:asrCfg.model, key:asrCfg.key }); }
+function asrCloudReady(){ return !!(asrCfg.base && asrCfg.model && asrCfg.key); }
+function asrEndpoint(){ return String(asrCfg.base || "").replace(/\/+$/, "") + "/audio/transcriptions"; }
+
+/* 状态条：txt 为空则隐藏 */
+function asrBar(txt, warn, done){
+  var b = document.getElementById("asrBar"), t = document.getElementById("asrBarTxt");
+  if(!b || !t) return;
+  if(!txt){ b.style.display = "none"; return; }
+  b.style.display = "flex";
+  b.className = "ci-asr" + (warn ? " warn" : "") + (done ? " done" : "");
+  t.textContent = txt;
+}
+
+/* 转写结果追加到输入框：不覆盖已有内容，绝不自动发送 */
+function asrAppend(txt){
+  txt = String(txt || "").trim();
+  if(!txt) return;
+  var ta = document.getElementById("chatInput");
+  if(!ta || ta.disabled) return;
+  var cur = ta.value;
+  /* 只有「前面是中文、后面紧跟英文/数字」时才补一个空格，其余直接接上 */
+  var need = (cur && !/\s$/.test(cur) && /^[\x20-\x7E]/.test(txt)) ? " " : "";
+  ta.value = cur + need + txt;
+  try{ ta.focus(); ta.selectionStart = ta.selectionEnd = ta.value.length; }catch(e){}
+  try{ ta.dispatchEvent(new Event("input")); }catch(e){}
+}
+
+/* Float32 采样 → 16bit 单声道 WAV（手写封装，不引任何库） */
+function asrWav(f32, rate){
+  var n = f32.length, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf), i, o, k;
+  function str(off, s){ for(k = 0; k < s.length; k++) v.setUint8(off + k, s.charCodeAt(k)); }
+  str(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); str(8, "WAVE");
+  str(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  str(36, "data"); v.setUint32(40, n * 2, true);
+  o = 44;
+  for(i = 0; i < n; i++){
+    var s = f32[i]; s = s < -1 ? -1 : (s > 1 ? 1 : s);
+    v.setInt16(o, s < 0 ? s * 0x8000 : s * 0x7FFF, true); o += 2;
+  }
+  return new Blob([buf], { type: "audio/wav" });
+}
+/* 线性插值重采样（48k → 16k） */
+function asrResample(src, inRate, outRate){
+  if(inRate === outRate) return src;
+  var ratio = inRate / outRate, len = Math.floor(src.length / ratio), out = new Float32Array(len), i;
+  for(i = 0; i < len; i++){
+    var p = i * ratio, i0 = Math.floor(p), i1 = Math.min(src.length - 1, i0 + 1), f = p - i0;
+    out[i] = src[i0] * (1 - f) + src[i1] * f;
+  }
+  return out;
+}
+
+var OrbASR = {
+  on: false, mode: "off",            // off | cloud | native
+  ctx: null, srcNode: null, sp: null, gain: null,
+  acc: null, accN: 0, tailN: 0,       // 当前这一句的 16k 采样 / 尾巴上的静音长度
+  speaking: false, silenceMs: 0,
+  nf: -1, _calibMs: 0, _calibrated: false,
+  seq: 0, expect: 0, pending: null, inflight: 0,
+  native: null, _nStop: false,
+
+  /* 挂到已开好的音频链路上（不自己开麦克风） */
+  attach: function(audio){
+    var self = this;
+    if(!audio || audio.state !== "running" || !audio.ctx || !audio.stream || !audio.src) return false;
+    this.detach();
+    this.pending = {};
+    this.mode = asrCloudReady() ? "cloud" : "native";
+    var ok = false;
+    if(this.mode === "cloud"){
+      try{
+        this.ctx = audio.ctx;
+        this.srcNode = audio.src;
+        this.sp = this.ctx.createScriptProcessor ? this.ctx.createScriptProcessor(4096, 1, 1) : null;
+        if(!this.sp){ this.mode = "native"; }
+      }catch(e){ this.sp = null; this.mode = "native"; }
+      if(this.sp){
+        try{
+          this.gain = this.ctx.createGain(); this.gain.gain.value = 0;   // 静音，只为让音频图保持运转
+          this.sp.onaudioprocess = function(e){ self._onAudio(e); };
+          this.srcNode.connect(this.sp);
+          this.sp.connect(this.gain);
+          this.gain.connect(this.ctx.destination);
+          ok = true;
+        }catch(e){ ok = false; }
+      }
+      if(!ok) this.mode = "native";
+    }
+    this.on = true;
+    this.acc = []; this.accN = 0; this.tailN = 0; this.speaking = false; this.silenceMs = 0;
+    this.nf = -1; this._calibMs = 0; this._calibrated = false;
+    this.seq = 0; this.expect = 0; this.inflight = 0;
+    if(this.mode === "native") this._nativeStart();
+    this._bar();
+    return true;
+  },
+  detach: function(){
+    this.on = false;
+    if(this.sp){
+      try{ this.sp.onaudioprocess = null; }catch(e){}
+      try{ if(this.srcNode) this.srcNode.disconnect(this.sp); }catch(e){}
+      try{ this.sp.disconnect(); }catch(e){}
+    }
+    if(this.gain){ try{ this.gain.disconnect(); }catch(e){} }
+    this.sp = null; this.gain = null; this.srcNode = null; this.ctx = null;
+    this.acc = []; this.accN = 0; this.tailN = 0; this.speaking = false;
+    this.pending = {}; this.inflight = 0;
+    this._nativeStop();
+    this.mode = "off";
+    asrBar("");
+  },
+
+  _bar: function(){
+    if(this.mode === "cloud") asrBar("在听…说完停一下就转成文字");
+    else if(this.mode === "native") asrBar("用浏览器自带识别（没配云端密钥），说完停一下");
+    else asrBar("语音识别不可用：去设置里填一个语音密钥，或换个支持语音识别的浏览器", true, true);
+  },
+
+  /* 每 ~85ms 一个块：算能量 → 判断说话起止 → 累积采样 */
+  _onAudio: function(e){
+    if(!this.on || !this.ctx) return;
+    var inp = e.inputBuffer.getChannelData(0), i, s = 0;
+    for(i = 0; i < inp.length; i++) s += inp[i] * inp[i];
+    var rms = Math.sqrt(s / Math.max(1, inp.length));
+    var dtMs = inp.length / this.ctx.sampleRate * 1000;
+
+    /* 开麦头 1.2 秒只量底噪，不收音（避免把开麦那一下的噪音当成第一句） */
+    if(!this._calibrated){
+      this._calibMs += dtMs;
+      if(this.nf < 0 || rms < this.nf) this.nf = rms;
+      if(this._calibMs >= ASR_CALIB_MS){
+        var base = this.nf < 0 ? 0.001 : this.nf;
+        this.nf = Math.max(0.0008, Math.min(0.05, base * 1.3));
+        this._calibrated = true;
+      }
+      return;
+    }
+    if(!this.speaking){
+      if(rms <= this.nf * ASR_OPEN_K + ASR_OPEN_B) return;
+      this.speaking = true; this.silenceMs = 0;
+      this.acc = []; this.accN = 0; this.tailN = 0;
+    }
+    var voiced = rms > this.nf * ASR_CLOSE_K + ASR_CLOSE_B;
+    this.silenceMs = voiced ? 0 : this.silenceMs + dtMs;
+
+    var d = asrResample(inp, this.ctx.sampleRate, ASR_RATE);
+    this.acc.push(d); this.accN += d.length;
+    /* 记下尾巴上攒了多少静音，切段时裁掉（否则每句话都拖着 0.7 秒空白发出去，
+       而且一声咳嗽会因为「0.17 秒声音 + 0.68 秒静音」凑够时长被当成一句话） */
+    this.tailN = voiced ? 0 : this.tailN + d.length;
+    if(this.silenceMs >= ASR_SILENCE_MS || this.accN / ASR_RATE >= ASR_MAX_SEC){
+      this.speaking = false;
+      this._flush();
+    }
+  },
+
+  /* 一句话说完：裁掉尾部静音 → 拼成整段送出去 */
+  _flush: function(){
+    var parts = this.acc, total = this.accN, tail = this.tailN;
+    this.acc = []; this.accN = 0; this.tailN = 0;
+    var keep = Math.round(ASR_RATE * 0.12);          // 留 120ms 余量，别把最后一个字削掉
+    var n = total - Math.max(0, tail - keep);
+    if(n <= 0) return;
+    if(n / ASR_RATE < ASR_MIN_SEC) return;           // 太短，多半是误触
+    var all = new Float32Array(n), o = 0, i;
+    for(i = 0; i < parts.length && o < n; i++){
+      var p = parts[i];
+      if(o + p.length > n) p = p.subarray(0, n - o);
+      all.set(p, o); o += p.length;
+    }
+    this._send(all);
+  },
+
+  _send: function(pcm){
+    var self = this;
+    if(!asrCloudReady()) return;
+    var seq = this.seq++;
+    this.inflight++;
+    asrBar(this.inflight > 1 ? ("识别中…（还有 " + this.inflight + " 句在排）") : "识别中…");
+    var fd = new FormData();
+    fd.append("file", asrWav(pcm, ASR_RATE), "speech.wav");
+    fd.append("model", asrCfg.model);
+    var ac = null, timer = null;
+    if(window.AbortController){
+      ac = new AbortController();
+      timer = setTimeout(function(){ try{ ac.abort(); }catch(e){} }, 30000);
+    }
+    fetch(asrEndpoint(), {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + asrCfg.key },
+      body: fd,
+      signal: ac ? ac.signal : undefined
+    }).then(function(r){
+      if(!r.ok) return { __err: r.status };
+      return r.json().catch(function(){ return null; });
+    }).then(function(j){
+      if(j && j.__err){ self._result(seq, ""); asrBar("识别失败（" + j.__err + "），检查一下密钥和模型名", true, true); return; }
+      var t = "";
+      if(j) t = (typeof j.text === "string" ? j.text : (j.data && typeof j.data.text === "string" ? j.data.text : ""));
+      self._result(seq, t);
+    }).catch(function(e){
+      self._result(seq, "");
+      if(String(e && e.name) === "AbortError") asrBar("识别超时，这一句没转成文字", true, true);
+      else asrBar("识别请求没发出去（" + ((e && e.message) || "网络问题") + "）", true, true);
+    }).then(function(){ if(timer) clearTimeout(timer); });
+  },
+
+  /* 按说话顺序落字：前面的没回来就先攒着，保证语序不乱 */
+  _result: function(seq, txt){
+    this.inflight = Math.max(0, this.inflight - 1);
+    this.pending[seq] = txt;
+    var got = false;
+    while(this.pending[this.expect] !== undefined){
+      var t = this.pending[this.expect];
+      delete this.pending[this.expect];
+      if(t){ asrAppend(t); got = true; }
+      this.expect++;
+    }
+    if(got){ asrBar("已转成文字，确认后发送", false, true); setTimeout(this._bindBarReset, 2600); }
+    else if(!this.inflight && this.on) this._bar();
+  },
+  _bindBarReset: function(){
+    if(OrbASR.on && !OrbASR.inflight) OrbASR._bar();
+  },
+
+  /* 兜底：浏览器自带识别 */
+  _nativeStart: function(){
+    var self = this, SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR){ this.mode = "off"; this._bar(); return; }
+    try{
+      var r = new SR();
+      r.lang = "zh-CN"; r.continuous = true; r.interimResults = false;
+      r.onresult = function(e){
+        var txt = "", i;
+        for(i = e.resultIndex; i < e.results.length; i++) txt += e.results[i][0].transcript;
+        if(txt){ asrAppend(txt); asrBar("已转成文字，确认后发送", false, true); setTimeout(self._bindBarReset, 2600); }
+      };
+      r.onerror = function(e){
+        var err = e && e.error;
+        if(err === "not-allowed" || err === "service-not-allowed"){
+          self._nativeStop(); self.mode = "off";
+          asrBar("浏览器语音识别被拒绝，去设置里填云端密钥更好用", true, true);
+        } else if(err === "network"){
+          self._nativeStop(); self.mode = "off";
+          asrBar("浏览器自带识别连不上（它要连境外服务），去设置里填云端密钥", true, true);
+        }
+      };
+      r.onend = function(){ if(self.on && !self._nStop){ try{ r.start(); }catch(e){} } };
+      r.start();
+      this.native = r; this._nStop = false;
+    }catch(e){ this.mode = "off"; this._bar(); }
+  },
+  _nativeStop: function(){
+    this._nStop = true;
+    if(this.native){ try{ this.native.stop(); }catch(e){} this.native = null; }
+  }
+};
+
+function asrMsg(t, err){
+  var m = document.getElementById("asrMsg");
+  if(!m) return;
+  if(!t){ m.style.display = "none"; return; }
+  m.style.display = "block";
+  m.className = "llm-msg" + (err ? " err" : " ok");
+  m.textContent = t;
+}
+/* 测试：发一段 0.2 秒静音，只为探端点通不通、密钥对不对 */
+function asrTest(){
+  if(!asrCloudReady()){ asrMsg("先把 Base URL、模型名、API Key 三样填全再测试。", true); return; }
+  asrMsg("正在测试…");
+  var pcm = new Float32Array(Math.round(ASR_RATE * 0.2));
+  var fd = new FormData();
+  fd.append("file", asrWav(pcm, ASR_RATE), "probe.wav");
+  fd.append("model", asrCfg.model);
+  fetch(asrEndpoint(), { method: "POST", headers: { "Authorization": "Bearer " + asrCfg.key }, body: fd })
+    .then(function(r){ return r.text().then(function(t){ return { st: r.status, ok: r.ok, body: t }; }); })
+    .then(function(x){
+      if(x.st === 200 || x.st === 201){ asrMsg("通了（HTTP " + x.st + "）。去对话页开麦克风说句话试试。"); return; }
+      if(x.st === 401 || x.st === 403){ asrMsg("密钥不对或被拒绝（HTTP " + x.st + "）。", true); return; }
+      var hint = String(x.body || "").slice(0, 160);
+      asrMsg("没通（HTTP " + x.st + "）" + (hint ? "：" + hint : ""), true);
+    })
+    .catch(function(e){
+      asrMsg("连不上：" + ((e && e.message) || "网络问题") + "。检查 Base URL 能不能直连。", true);
+    });
+}
 
 /* ==================== V0.1 M7 · 画布空间 ====================
    AI 通过 render_canvas 工具把结构化内容落到这里，前端负责渲染。
@@ -6982,6 +7345,22 @@ function bindEvents(){
     });
   });
 
+  /* V0.2 M8 · 语音输入 */
+  document.getElementById("asrSaveBtn").addEventListener("click", function(){
+    asrCfg.base  = String(document.getElementById("asrBase").value  || "").trim();
+    asrCfg.model = String(document.getElementById("asrModel").value || "").trim();
+    asrCfg.key   = String(document.getElementById("asrKey").value   || "").trim();
+    asrPersist();
+    if(asrCloudReady()) asrMsg("已保存。开麦克风说话，转写结果会填进输入框等你确认。");
+    else asrMsg("已保存，但三样没填全，会退回浏览器自带识别（国内可能连不上）。", true);
+  });
+  document.getElementById("asrTestBtn").addEventListener("click", asrTest);
+  document.getElementById("asrClearBtn").addEventListener("click", function(){
+    document.getElementById("asrKey").value = "";
+    asrCfg.key = ""; asrPersist();
+    asrMsg("密钥已清除，语音识别会退回浏览器自带识别。");
+  });
+
   /* V0.1 M4 · 记忆 */
   document.getElementById("memProfileSave").addEventListener("click", memSaveProfile);
   document.getElementById("memAddBtn").addEventListener("click", memAddManually);
@@ -7055,6 +7434,7 @@ function init(){
   chatUndoLoad();   /* M3 · 撤销栈 */
   memLoad();        /* M4 · 记忆 */
   cvLoad();         /* M7 · 画布 */
+  asrLoad();        /* V0.2 M8 · 语音识别配置（密钥类，不进导出） */
   OrbHost.bindGlobal();   /* M5 · 页面隐藏时暂停球体 */
 
   /* 体重趋势图：窗口尺寸变化时重新渲染 SVG */
