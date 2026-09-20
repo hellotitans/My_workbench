@@ -6251,11 +6251,13 @@ function asrPersist(){ store.set("asr_cfg", { base:asrCfg.base, model:asrCfg.mod
 function asrCloudReady(){ return !!(asrCfg.base && asrCfg.model && asrCfg.key); }
 function asrEndpoint(){ return String(asrCfg.base || "").replace(/\/+$/, "") + "/audio/transcriptions"; }
 
-/* 状态条：txt 为空则隐藏 */
+/* 状态条：txt 为空则隐藏；warn/done 消息停留几秒，不被「在听」立即冲掉 */
+var asrHoldUntil = 0;
 function asrBar(txt, warn, done){
   var b = document.getElementById("asrBar"), t = document.getElementById("asrBarTxt");
   if(!b || !t) return;
   if(!txt){ b.style.display = "none"; return; }
+  if(warn || done) asrHoldUntil = Date.now() + 6000;
   b.style.display = "flex";
   b.className = "ci-asr" + (warn ? " warn" : "") + (done ? " done" : "");
   t.textContent = txt;
@@ -6340,7 +6342,7 @@ var OrbASR = {
     this.on = true;
     this.acc = []; this.accN = 0; this.tailN = 0; this.speaking = false; this.silenceMs = 0;
     this.nf = -1; this._calibMs = 0; this._calibrated = false;
-    this.seq = 0; this.expect = 0; this.inflight = 0;
+    this.seq = 0; this.expect = 0; this.inflight = 0; this.q = [];
     if(this.mode === "native") this._nativeStart();
     this._bar();
     return true;
@@ -6362,6 +6364,11 @@ var OrbASR = {
   },
 
   _bar: function(){
+    var self = this;
+    if(Date.now() < asrHoldUntil){
+      setTimeout(function(){ if(self.on && !self.inflight) self._bar(); }, 1200);
+      return;
+    }
     if(this.mode === "cloud") asrBar("在听…说完停一下就转成文字");
     else if(this.mode === "native") asrBar("用浏览器自带识别（没配云端密钥），说完停一下");
     else asrBar("语音识别不可用：去设置里填一个语音密钥，或换个支持语音识别的浏览器", true, true);
@@ -6422,19 +6429,27 @@ var OrbASR = {
     this._send(all);
   },
 
+  /* 串行发送：同一时刻最多一句在识别。
+     免费档并发额度低，连说几句同时发出去只会互相排队，最后集体超时 */
   _send: function(pcm){
     var self = this;
     if(!asrCloudReady()) return;
+    if(this.inflight > 0){
+      this.q.push(pcm);
+      asrBar("识别中…（排队的还有 " + this.q.length + " 句）");
+      return;
+    }
     var seq = this.seq++;
     this.inflight++;
-    asrBar(this.inflight > 1 ? ("识别中…（还有 " + this.inflight + " 句在排）") : "识别中…");
+    asrBar("识别中…");
     var fd = new FormData();
     fd.append("file", asrWav(pcm, ASR_RATE), "speech.wav");
     fd.append("model", asrCfg.model);
     var ac = null, timer = null;
+    var t0 = Date.now(), kb = Math.max(1, Math.round((44 + pcm.length * 2) / 1024));
     if(window.AbortController){
       ac = new AbortController();
-      timer = setTimeout(function(){ try{ ac.abort(); }catch(e){} }, 30000);
+      timer = setTimeout(function(){ try{ ac.abort(); }catch(e){} }, 60000);
     }
     fetch(asrEndpoint(), {
       method: "POST",
@@ -6442,23 +6457,49 @@ var OrbASR = {
       body: fd,
       signal: ac ? ac.signal : undefined
     }).then(function(r){
-      if(!r.ok) return { __err: r.status };
-      return r.json().catch(function(){ return null; });
-    }).then(function(j){
-      if(j && j.__err){ self._result(seq, ""); asrBar("识别失败（" + j.__err + "），检查一下密钥和模型名", true, true); return; }
+      /* 先取 text 再解析：失败时服务端的 message 比裸状态码有用得多 */
+      return r.text().then(function(body){
+        var j = null;
+        try{ j = body ? JSON.parse(body) : null; }catch(e){}
+        return { st: r.status, ok: r.ok, j: j, raw: String(body || "") };
+      });
+    }).then(function(x){
+      if(!x.ok){
+        var srv = "";
+        if(x.j && x.j.message) srv = x.j.message;
+        else if(x.j && x.j.error && x.j.error.message) srv = x.j.error.message;
+        else srv = x.raw.slice(0, 80);
+        self._result(seq, "");
+        asrBar("识别失败（HTTP " + x.st + (srv ? "：" + srv : "") + "）· 用时 " + ((Date.now() - t0) / 1000).toFixed(1) + " 秒", true, true);
+        return;
+      }
       var t = "";
-      if(j) t = (typeof j.text === "string" ? j.text : (j.data && typeof j.data.text === "string" ? j.data.text : ""));
+      if(x.j) t = (typeof x.j.text === "string" ? x.j.text : (x.j.data && typeof x.j.data.text === "string" ? x.j.data.text : ""));
       self._result(seq, t);
     }).catch(function(e){
       self._result(seq, "");
-      if(String(e && e.name) === "AbortError") asrBar("识别超时，这一句没转成文字", true, true);
-      else asrBar("识别请求没发出去（" + ((e && e.message) || "网络问题") + "）", true, true);
-    }).then(function(){ if(timer) clearTimeout(timer); });
+      var sec = ((Date.now() - t0) / 1000).toFixed(1);
+      if(String(e && e.name) === "AbortError"){
+        asrBar("识别超时（60 秒没返回 · 这句 " + kb + "KB · 用时 " + sec + " 秒）。高峰期识别会排队，等一会再说；若开了代理/VPN，试试把 api.siliconflow.cn 设为直连", true, true);
+      } else {
+        asrBar("识别请求没发出去（" + ((e && e.message) || "网络问题") + "）", true, true);
+      }
+    }).then(function(){
+      if(timer) clearTimeout(timer);
+      self.inflight = Math.max(0, self.inflight - 1);
+      self._next();
+    });
   },
 
-  /* 按说话顺序落字：前面的没回来就先攒着，保证语序不乱 */
+  /* 上一句回来了，放队头那句出去 */
+  _next: function(){
+    if(!this.on) return;
+    if(!this.q.length){ if(!this.inflight) this._bar(); return; }
+    this._send(this.q.shift());
+  },
+
+  /* 按说话顺序落字：前面的没回来就先攒着，保证语序不乱（inflight 在请求收尾处扣减） */
   _result: function(seq, txt){
-    this.inflight = Math.max(0, this.inflight - 1);
     this.pending[seq] = txt;
     var got = false;
     while(this.pending[this.expect] !== undefined){
@@ -6523,10 +6564,12 @@ function asrTest(){
   var fd = new FormData();
   fd.append("file", asrWav(pcm, ASR_RATE), "probe.wav");
   fd.append("model", asrCfg.model);
+  var t0 = Date.now();
   fetch(asrEndpoint(), { method: "POST", headers: { "Authorization": "Bearer " + asrCfg.key }, body: fd })
     .then(function(r){ return r.text().then(function(t){ return { st: r.status, ok: r.ok, body: t }; }); })
     .then(function(x){
-      if(x.st === 200 || x.st === 201){ asrMsg("通了（HTTP " + x.st + "）。去对话页开麦克风说句话试试。"); return; }
+      var sec = ((Date.now() - t0) / 1000).toFixed(1);
+      if(x.st === 200 || x.st === 201){ asrMsg("通了（HTTP " + x.st + " · 用时 " + sec + " 秒）。去对话页开麦克风说句话试试。"); return; }
       if(x.st === 401 || x.st === 403){ asrMsg("密钥不对或被拒绝（HTTP " + x.st + "）。", true); return; }
       var hint = String(x.body || "").slice(0, 160);
       asrMsg("没通（HTTP " + x.st + "）" + (hint ? "：" + hint : ""), true);
