@@ -4341,6 +4341,45 @@ function llmSaveFromForm(){
   llmMsg("已保存并启用「" + item.name + "」。\n密钥不会写入导出的备份文件。" +
          (item.key ? "" : "\n注意：还没填 API Key，调用会失败。"), item.key ? "ok" : "");
 }
+/* 「Failed to fetch」后的网络自诊：
+   用两个 no-cors 探测分清卡在哪一层——
+   ① 百度通 + 接口域名不通 → 域名被浏览器代理/拦截扩展或「安全 DNS」挡了
+   ② 都不通 → 浏览器整体出不了网（多半挂着一个已关闭的代理）
+   只要有一次回调就收敛，不重复报 */
+function netDiag(cb, base){
+  var done = false, r = {};
+  function fin(){
+    if(done) return; done = true;
+    var cls;
+    if(r.baidu === "ok" && r.api !== "ok"){
+      cls = "浏览器能上网，但「" + (r.apiHost || "接口域名") + "」被挡：多半是浏览器的代理/广告拦截扩展，或浏览器「安全 DNS」解析失败。先用无痕窗口（默认禁扩展）对比试一次";
+    } else if(r.baidu !== "ok"){
+      cls = "浏览器的外网请求全都不通：大概率挂着一个已经关闭的代理——检查浏览器的代理扩展，或系统设置里搜「代理」看手动代理是否还开着";
+    } else {
+      cls = "网络与域名都通但仍失败：换无痕窗口再对比，或把 Base URL 重新粘贴一遍（别带引号、空格）";
+    }
+    cb(cls);
+  }
+  function host(u){
+    try{ return new URL(u).host; }catch(e){ return ""; }
+  }
+  function ping(url, key){
+    fetch(url, { mode: "no-cors", cache: "no-store" })
+      .then(function(){ r[key] = "ok"; fin(); },
+            function(){ r[key] = "fail"; fin(); });
+  }
+  try{
+    r.apiHost = host(base) || "接口域名";
+    ping("https://www.baidu.com/favicon.ico", "baidu");
+    ping((host(base) ? "https://" + r.apiHost : "https://api.siliconflow.cn") + "/favicon.ico", "api");
+    setTimeout(function(){
+      if(r.baidu !== "ok") r.baidu = "fail";
+      if(r.api !== "ok") r.api = "fail";
+      fin();
+    }, 10000);
+  }catch(e){ cb("自诊没跑起来（" + ((e && e.message) || e) + "）"); done = true; }
+}
+
 function llmTest(){
   var c = llmCur();
   if(!c){ llmMsg("请先在上方保存并启用一个配置。", "err"); return; }
@@ -4379,9 +4418,13 @@ function llmTest(){
       llmMsg("连接成功（" + ((Date.now() - t0) / 1000).toFixed(1) + " 秒）\n模型回复：" + (reply || "(空)"), "ok");
     });
   }).catch(function(e){
-    if(e && e.name === "AbortError") llmMsg("请求超时（20 秒）。可能网络不通，或该服务在国内不可达。", "err");
-    else llmMsg("请求失败：" + (e && e.message ? e.message : e) +
-                "\n常见原因：CORS 被拒、网络不通、Base URL 写错。", "err");
+    if(e && e.name === "AbortError"){ llmMsg("请求超时（20 秒）。可能网络不通，或该服务在国内不可达。", "err"); }
+    else {
+      var m0 = "请求失败：" + (e && e.message ? e.message : e) +
+               "\n常见原因：CORS 被拒、网络不通、Base URL 写错。";
+      llmMsg(m0, "err");
+      netDiag(function(t){ llmMsg(m0 + "\n自诊：" + t, "err"); }, c.base);
+    }
   }).then(function(){
     clearTimeout(timer);
     btn.disabled = false; btn.textContent = "测试连接";
@@ -6575,7 +6618,9 @@ function asrTest(){
       asrMsg("没通（HTTP " + x.st + "）" + (hint ? "：" + hint : ""), true);
     })
     .catch(function(e){
-      asrMsg("连不上：" + ((e && e.message) || "网络问题") + "。检查 Base URL 能不能直连。", true);
+      var m0 = "连不上：" + ((e && e.message) || "网络问题") + "。检查 Base URL 能不能直连。";
+      asrMsg(m0, true);
+      netDiag(function(t){ asrMsg(m0 + "\n自诊：" + t, true); }, asrCfg.base);
     });
 }
 
