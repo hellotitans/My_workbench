@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>方案 B · 赛博霓虹 · 个人生活台主页设计稿</title>
+<style>
+/* ============ 方案 B「赛博霓虹 Cyber Neon」============
+   关键词：近纯黑底 / 青×品红双霓虹 / 切角卡片 / 扫描线 / L 型标定角 / 强辉光
+   气质：最抓眼球、最"赛博朋克"。视觉冲击强，但辉光面积大，长时间使用略累。
+================================================================ */
+:root{
+  --bg:#04040a;
+  --cyan:#00f0ff; --magenta:#ff2ea6; --lime:#b6ff3d; --amber:#ffd23d; --violet:#8b5cf6;
+  --panel:#0a0a16; --line:rgba(0,240,255,.28);
+  --t1:#e6f6ff; --t2:#8ba0c4; --t3:#5a6b8c;
+  --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --cut:polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:var(--bg); color:var(--t1); font-size:14px; min-height:100vh;
+  background-image:
+    radial-gradient(760px 460px at 6% -6%, rgba(0,240,255,.16), transparent 60%),
+    radial-gradient(680px 420px at 96% 8%, rgba(255,46,166,.15), transparent 62%),
+    radial-gradient(900px 500px at 50% 108%, rgba(139,92,246,.13), transparent 66%);
+}
+/* 扫描线 + 网格 */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:8;
+  background:repeating-linear-gradient(180deg, rgba(180,240,255,.035) 0 1px, transparent 1px 3px)}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:
+    linear-gradient(rgba(0,240,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,240,255,.05) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(1000px 640px at 50% 10%, #000 18%, transparent 86%)}
+#app{display:flex;min-height:100vh;position:relative;z-index:1}
+
+/* ---------- 侧栏 ---------- */
+#sidebar{
+  width:236px;flex-shrink:0;position:sticky;top:0;height:100vh;
+  background:linear-gradient(180deg, rgba(12,12,26,.96), rgba(4,4,12,.96));
+  border-right:1px solid var(--line); display:flex;flex-direction:column;
+  box-shadow:1px 0 24px rgba(0,240,255,.12);
+}
+.logo{padding:24px 20px 18px;display:flex;align-items:center;gap:11px;position:relative}
+.logo::after{content:'';position:absolute;left:20px;right:20px;bottom:0;height:1px;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta),transparent)}
+.logo .mk svg{width:32px;height:32px;color:var(--cyan);
+  filter:drop-shadow(0 0 10px rgba(0,240,255,.9))}
+.logo .t{font-size:16px;font-weight:700;letter-spacing:1.2px;text-shadow:0 0 14px rgba(0,240,255,.55)}
+.logo .s{font-size:10px;color:var(--magenta);margin-top:3px;font-family:var(--mono);
+  letter-spacing:2.4px;text-shadow:0 0 10px rgba(255,46,166,.6)}
+nav{flex:1;padding:14px 12px;overflow-y:auto}
+.nav-label{font-family:var(--mono);font-size:9px;letter-spacing:2.4px;color:var(--t3);padding:0 10px 8px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:2px;
+  cursor:pointer;color:var(--t2);margin-bottom:3px;font-size:14px;
+  border-left:2px solid transparent;transition:.18s}
+.nav-item:hover{background:rgba(0,240,255,.08);color:var(--t1)}
+.nav-item.active{
+  background:linear-gradient(90deg, rgba(255,46,166,.2), rgba(0,240,255,.05));
+  color:var(--cyan); border-left-color:var(--magenta); font-weight:600;
+  text-shadow:0 0 10px rgba(0,240,255,.6);
+  box-shadow:inset 0 0 18px rgba(0,240,255,.1)}
+.nav-item svg{width:16px;height:16px;flex:none}
+.nav-item.active svg{filter:drop-shadow(0 0 7px var(--cyan))}
+.nav-item .tag{margin-left:auto;font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:2px;
+  background:rgba(255,46,166,.16);color:var(--magenta);border:1px solid rgba(255,46,166,.4)}
+.side-foot{padding:14px 16px;border-top:1px solid var(--line)}
+.hud{font-family:var(--mono);font-size:10px;color:var(--t3);line-height:1.95;letter-spacing:.6px}
+.hud b{color:var(--cyan);font-weight:600;text-shadow:0 0 8px rgba(0,240,255,.6)}
+.hud .row{display:flex;justify-content:space-between}
+.hud .row.warn b{color:var(--magenta);text-shadow:0 0 8px rgba(255,46,166,.6)}
+
+/* ---------- 主区 ---------- */
+main{flex:1;min-width:0;padding:26px 30px 40px;max-width:1320px;margin:0 auto}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
+.page-head h1{font-size:26px;font-weight:800;letter-spacing:1px;
+  text-shadow:0 0 18px rgba(0,240,255,.5)}
+.page-head .sub{color:var(--t2);font-size:12.5px;margin-top:5px}
+.page-head .sub em{font-style:normal;font-family:var(--mono);color:var(--magenta);
+  text-shadow:0 0 10px rgba(255,46,166,.6)}
+.head-actions{display:flex;gap:9px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:2px;
+  border:1px solid var(--line);background:rgba(10,10,22,.7);color:var(--t2);cursor:pointer;
+  font-size:12.5px;font-family:inherit;transition:.16s}
+.btn:hover{color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 16px rgba(0,240,255,.35), inset 0 0 14px rgba(0,240,255,.1)}
+.btn svg{width:14px;height:14px}
+.btn.primary{background:linear-gradient(135deg,var(--magenta),#ff6ec7);border-color:transparent;
+  color:#12000a;font-weight:800;letter-spacing:.5px;box-shadow:0 0 20px rgba(255,46,166,.45)}
+.btn.primary:hover{box-shadow:0 0 28px rgba(255,46,166,.7)}
+
+/* ---------- 栅格 ---------- */
+.home-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;align-items:stretch}
+.c4{grid-column:span 4} .c6{grid-column:span 6} .c8{grid-column:span 8} .c12{grid-column:span 12}
+
+/* ---------- 卡片：切角 + 霓虹描边（伪元素叠层）---------- */
+.card{position:relative;display:flex;flex-direction:column;padding:17px 19px;
+  background:var(--panel);clip-path:var(--cut)}
+.card::before{content:'';position:absolute;inset:0;z-index:0;clip-path:var(--cut);
+  background:linear-gradient(135deg, rgba(0,240,255,.65), rgba(0,240,255,.12) 42%, rgba(255,46,166,.5));}
+.card::after{content:'';position:absolute;inset:1px;z-index:0;clip-path:var(--cut);
+  background:linear-gradient(160deg,#0c0c1c,#07070f);}
+.card > *{position:relative;z-index:1}
+.card.hot::before{background:linear-gradient(135deg, rgba(255,46,166,.8), rgba(255,46,166,.15) 45%, rgba(0,240,255,.6))}
+
+/* 角标 */
+.corner{position:absolute;width:11px;height:11px;z-index:2;pointer-events:none}
+.corner.tl{top:5px;left:5px;border-top:1.5px solid var(--cyan);border-left:1.5px solid var(--cyan)}
+.corner.br{bottom:5px;right:5px;border-bottom:1.5px solid var(--magenta);border-right:1.5px solid var(--magenta)}
+
+.chead{display:flex;align-items:center;gap:9px;margin-bottom:3px}
+.chead .no{font-family:var(--mono);font-size:9.5px;color:#04040a;letter-spacing:1.4px;
+  background:var(--cyan);padding:2px 6px;font-weight:700}
+.chead h2{font-size:14.5px;font-weight:800;letter-spacing:.6px;display:flex;align-items:center;gap:7px}
+.chead h2 svg{width:15px;height:15px;color:var(--cyan);filter:drop-shadow(0 0 6px rgba(0,240,255,.8))}
+.cdesc{font-size:11.5px;color:var(--t3);margin-bottom:13px;padding-left:2px}
+.cbody{flex:1;display:flex;flex-direction:column;min-height:0}
+
+/* ---------- 日期卡 ---------- */
+.date-card{padding:19px 21px;justify-content:space-between}
+.date-card::after{background:linear-gradient(160deg, rgba(12,20,42,.96), rgba(24,8,32,.96))}
+.date-card .glow{position:absolute;right:-70px;top:-80px;width:230px;height:230px;border-radius:50%;
+  background:radial-gradient(circle, rgba(0,240,255,.28), transparent 66%);z-index:1;pointer-events:none}
+.day-head{display:flex;align-items:baseline;gap:8px;position:relative}
+.day-head .d{font-family:var(--mono);font-size:29px;font-weight:800;letter-spacing:-1px;color:#fff;
+  text-shadow:0 0 20px rgba(0,240,255,.9)}
+.day-head .w{font-size:11px;color:var(--magenta);font-family:var(--mono);letter-spacing:2px;
+  text-shadow:0 0 12px rgba(255,46,166,.8)}
+.day-greet{font-size:19px;font-weight:700;line-height:1.5;margin:15px 0 17px;position:relative;letter-spacing:.3px}
+.day-greet b{color:var(--cyan);text-shadow:0 0 16px rgba(0,240,255,.85)}
+.day-foot{position:relative;display:flex;align-items:center;gap:8px;
+  font-size:11.5px;color:var(--t2);font-family:var(--mono);letter-spacing:.5px}
+.day-foot b{color:#fff;font-size:18px;font-weight:800;text-shadow:0 0 14px rgba(255,46,166,.9)}
+.day-foot .bar{flex:1;height:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.day-foot .bar i{display:block;height:100%;width:72%;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  box-shadow:0 0 12px rgba(0,240,255,.9)}
+.day-ring{position:absolute;right:-34px;bottom:-56px;width:196px;height:196px;opacity:.6;pointer-events:none;z-index:1}
+
+/* ---------- 今天要处理 ---------- */
+.focus-item{display:flex;align-items:center;gap:10px;padding:9px 11px;
+  background:rgba(255,255,255,.03);border-left:2px solid rgba(0,240,255,.3);margin-bottom:7px;transition:.16s}
+.focus-item:hover{background:rgba(0,240,255,.09);border-left-color:var(--cyan);
+  box-shadow:inset 0 0 16px rgba(0,240,255,.08)}
+.focus-item.overdue{border-left-color:var(--magenta);background:rgba(255,46,166,.08)}
+.mini-check{width:18px;height:18px;border:1.5px solid var(--cyan);background:transparent;flex:none;
+  display:grid;place-items:center;cursor:pointer;color:transparent;box-shadow:0 0 8px rgba(0,240,255,.3) inset}
+.mini-check.checked{background:var(--lime);border-color:var(--lime);color:#0a1400;
+  box-shadow:0 0 14px rgba(182,255,61,.8)}
+.mini-check svg{width:11px;height:11px}
+.fi-text{flex:1;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fi-text.done{color:var(--t3);text-decoration:line-through}
+.badge{font-family:var(--mono);font-size:9.5px;padding:2px 6px;flex:none;letter-spacing:.4px;font-weight:700}
+.badge.red{background:rgba(255,46,166,.2);color:var(--magenta);border:1px solid var(--magenta);
+  box-shadow:0 0 12px rgba(255,46,166,.35)}
+.badge.green{background:rgba(182,255,61,.12);color:var(--lime);border:1px solid rgba(182,255,61,.5)}
+
+/* ---------- 今日打卡 ---------- */
+.checkin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;height:100%}
+.ck-card{position:relative;padding:12px;border-radius:2px;overflow:hidden;
+  border:1px solid rgba(0,240,255,.18);background:rgba(255,255,255,.025);
+  display:flex;flex-direction:column;gap:7px;transition:.18s}
+.ck-card:hover{border-color:var(--cyan);box-shadow:0 0 18px rgba(0,240,255,.25), inset 0 0 20px rgba(0,240,255,.07)}
+.ck-card.done{border-color:rgba(182,255,61,.55);background:linear-gradient(150deg,rgba(182,255,61,.12),rgba(0,240,255,.05))}
+.ck-top{display:flex;align-items:center;gap:8px}
+.ck-ic{width:26px;height:26px;display:grid;place-items:center;flex:none;
+  background:rgba(0,240,255,.1);border:1px solid rgba(0,240,255,.35);color:var(--cyan)}
+.ck-ic svg{width:14px;height:14px}
+.ck-card.done .ck-ic{background:rgba(182,255,61,.16);border-color:rgba(182,255,61,.6);color:var(--lime);
+  box-shadow:0 0 14px rgba(182,255,61,.4)}
+.ck-name{font-size:12.5px;font-weight:700;letter-spacing:.3px}
+.ck-st{font-size:10.5px;color:var(--t3);font-family:var(--mono);margin-top:auto}
+.ck-card.done .ck-st{color:var(--lime)}
+.ck-stamp{position:absolute;right:7px;top:6px;font-size:16px;font-weight:800;color:var(--lime);
+  transform:rotate(-12deg);font-family:var(--mono);text-shadow:0 0 14px rgba(182,255,61,.95)}
+.ck-card.locked{opacity:.45}
+.lock-tag{position:absolute;right:6px;top:6px;font-family:var(--mono);font-size:8.5px;font-weight:700;
+  padding:1px 4px;background:rgba(255,46,166,.16);color:var(--magenta);border:1px solid rgba(255,46,166,.4)}
+.ck-sum{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  border:1px dashed rgba(0,240,255,.4);background:rgba(0,240,255,.05);position:relative}
+.ck-sum .ring{width:58px;height:58px;position:relative}
+.ck-sum .ring svg{width:58px;height:58px;transform:rotate(-90deg)}
+.ck-sum .ring .val{position:absolute;inset:0;display:grid;place-items:center;
+  font-family:var(--mono);font-size:14px;font-weight:800;color:#fff;text-shadow:0 0 12px rgba(0,240,255,.9)}
+.ck-sum .lb{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:1.4px}
+
+/* ---------- 快速备忘 ---------- */
+.memo-box textarea{
+  width:100%;min-height:66px;background:rgba(0,0,0,.45);border:1px solid rgba(0,240,255,.28);
+  color:var(--t1);padding:10px 11px;font-size:13px;font-family:inherit;resize:none;line-height:1.6}
+.memo-box textarea:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 18px rgba(0,240,255,.25), inset 0 0 14px rgba(0,240,255,.08)}
+.memo-box textarea::placeholder{color:var(--t3)}
+.memo-list{margin-top:8px;display:flex;flex-direction:column;gap:6px;overflow-y:auto;max-height:150px}
+.memo-item{display:flex;gap:9px;padding:8px 10px;background:rgba(255,255,255,.03);
+  border-left:2px solid var(--magenta);font-size:12.5px;line-height:1.55;color:var(--t2)}
+.memo-item time{font-family:var(--mono);font-size:9.5px;color:var(--cyan);flex:none;padding-top:2px}
+
+/* ---------- 本周概览 ---------- */
+.wk-table{display:flex;flex-direction:column;gap:1px}
+.wk-head,.wk-row{display:grid;grid-template-columns:76px repeat(7,1fr);gap:6px;align-items:center}
+.wk-head{padding-bottom:7px;border-bottom:1px solid rgba(0,240,255,.22);margin-bottom:6px}
+.wk-head span{font-family:var(--mono);font-size:9.5px;color:var(--t3);text-align:center;letter-spacing:.6px}
+.wk-head span:first-child{text-align:left}
+.wk-row{padding:6px 0}
+.wk-row:nth-child(even){background:rgba(0,240,255,.035)}
+.wk-name{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px}
+.wk-name i{width:6px;height:6px;background:var(--cyan);flex:none;box-shadow:0 0 7px var(--cyan)}
+.wk-dot{width:100%;height:20px;display:grid;place-items:center;
+  border:1px solid rgba(0,240,255,.14);background:rgba(255,255,255,.02)}
+.wk-dot.on{background:rgba(182,255,61,.16);border-color:rgba(182,255,61,.5);
+  box-shadow:inset 0 0 12px rgba(182,255,61,.18)}
+.wk-dot.on::after{content:'';width:7px;height:7px;background:var(--lime);box-shadow:0 0 9px var(--lime)}
+.wk-dot.today{border-color:var(--magenta)}
+
+/* ---------- 备份提示 ---------- */
+.backup-tip{grid-column:span 12;display:flex;align-items:center;gap:10px;padding:11px 15px;
+  background:rgba(255,210,61,.09);border:1px solid rgba(255,210,61,.4);color:var(--amber);font-size:12.5px;
+  box-shadow:0 0 20px rgba(255,210,61,.12)}
+.backup-tip svg{width:16px;height:16px;flex:none}
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar">
+    <div class="logo">
+      <div class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4.5"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"/></svg></div>
+      <div><div class="t">个人生活台</div><div class="s">LIFE // WORKBENCH</div></div>
+    </div>
+    <nav>
+      <div class="nav-label">MODULES // 07</div>
+      <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>首页</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>今日计划</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>学习进度</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>开发工作</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.8 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>生活记录</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>成长笔记</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>建设打卡</div>
+      <div class="nav-label" style="padding-top:12px">EXT // 02</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>AI 对话<span class="tag">AI</span></div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 13.9H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.5l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.3z"/></svg>数据与设置</div>
+    </nav>
+    <div class="side-foot">
+      <div class="hud">
+        <div class="row"><span>SYS</span><b>ONLINE</b></div>
+        <div class="row"><span>UPTIME</span><b>31 D</b></div>
+        <div class="row warn"><span>ALERT</span><b>2 OVERDUE</b></div>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="page-head">
+      <div>
+        <h1>首页</h1>
+        <div class="sub">今日概览 · <em>2026 / 09 / 22</em> · 数据本地存储</div>
+      </div>
+      <div class="head-actions">
+        <button class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>导出备份</button>
+        <button class="btn primary">导入数据</button>
+      </div>
+    </div>
+
+    <div class="home-grid">
+      <div class="card c4 date-card">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="glow"></div>
+        <div class="chead"><span class="no">01</span><h2>TODAY</h2></div>
+        <div>
+          <div class="day-head"><span class="d">09.22</span><span class="w">TUE</span></div>
+          <div class="day-greet">别想了，<br>先<b>动手</b>做 5 分钟。</div>
+        </div>
+        <div class="day-foot"><span>已陪伴你</span><b>31</b><span>天</span><span class="bar"><i></i></span></div>
+        <svg class="day-ring" viewBox="0 0 240 240" aria-hidden="true">
+          <circle cx="120" cy="120" r="106" fill="none" stroke="rgba(0,240,255,.16)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="84" fill="none" stroke="rgba(255,46,166,.28)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="60" fill="none" stroke="rgba(0,240,255,.36)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(255,46,166,.6)" stroke-width="1"/>
+          <circle cx="219" cy="156" r="4" fill="#00f0ff"/><circle cx="43" cy="92" r="2.6" fill="#ff2ea6"/>
+        </svg>
+      </div>
+
+      <div class="card c8">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">02</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>今天要处理</h2></div>
+        <div class="cdesc">逾期与顺延项标红，做完直接点左侧方块打勾</div>
+        <div class="cbody">
+          <div class="focus-item">
+            <span class="mini-check checked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></span>
+            <span class="fi-text done">完成 M9.2 对话区加长与回归测试</span><span class="badge green">已完成</span></div>
+          <div class="focus-item">
+            <span class="mini-check"></span><span class="fi-text">整理作品集项目文档（架构图 + 决策记录）</span></div>
+          <div class="focus-item overdue">
+            <span class="mini-check"></span><span class="fi-text">预约周三的面试复盘</span><span class="badge red">逾期 · 09/20</span></div>
+          <div class="focus-item">
+            <span class="mini-check"></span><span class="fi-text">读《精益数据分析》第 3 章</span></div>
+          <div class="focus-item">
+            <span class="mini-check"></span><span class="fi-text">给妈妈打个电话</span></div>
+        </div>
+      </div>
+
+      <div class="card c12">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">03</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>今日打卡</h2></div>
+        <div class="cdesc">当日各板块完成情况，板块当天有有效完成动作即打卡成功</div>
+        <div class="checkin-grid">
+          <div class="ck-card done"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg></div><div class="ck-name">今日打卡</div></div><div class="ck-st">备忘已记录</div><div class="ck-stamp">记</div></div>
+          <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div class="ck-name">今日计划</div></div><div class="ck-st">完成 3 / 5</div></div>
+          <div class="ck-card done"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="ck-name">学习进度</div></div><div class="ck-st">今日有学习记录</div><div class="ck-stamp">学</div></div>
+          <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div><div class="ck-name">开发工作</div></div><div class="ck-st">今日还没动工</div></div>
+          <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.8 1.1-1a5.5 5.5 0 0 0 0-7.8z"/></svg></div><div class="ck-name">生活记录</div></div><div class="ck-st">喝水 6 / 8</div></div>
+          <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="ck-name">今日心得</div></div><div class="ck-st">还没有复盘记录</div></div>
+          <div class="ck-card done"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="ck-name">建设打卡</div></div><div class="ck-st">连续 12 天</div><div class="ck-stamp">建</div></div>
+          <div class="ck-sum">
+            <div class="ring"><svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="23" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4"/><circle cx="29" cy="29" r="23" fill="none" stroke="#00f0ff" stroke-width="4" stroke-linecap="butt" stroke-dasharray="144.5" stroke-dashoffset="41.3" style="filter:drop-shadow(0 0 6px rgba(0,240,255,.95))"/></svg><div class="val">5/7</div></div>
+            <div class="lb">今日完成度</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card c6 memo-box">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">04</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg>快速备忘</h2></div>
+        <div class="cdesc">随手记，不分类</div>
+        <div class="cbody">
+          <textarea placeholder="想到什么记什么…（Ctrl+Enter 保存）"></textarea>
+          <div style="margin-top:8px;display:flex;justify-content:flex-end"><button class="btn primary">保存备忘</button></div>
+          <div class="memo-list">
+            <div class="memo-item"><time>09:12</time><span>语音识别改成串行队列后，超时问题消失了 —— 免费额度是并发排队，不是单次慢</span></div>
+            <div class="memo-item"><time>昨天</time><span>周四前把 README 的架构图补上</span></div>
+            <div class="memo-item"><time>09/20</time><span>present_files 预览管线会污染 HTML 源文件，以后先 commit 再预览</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card c6">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">05</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>本周打卡概览</h2></div>
+        <div class="cdesc">最近 7 天各板块记录情况，实心点 = 当天有记录</div>
+        <div class="wk-table">
+          <div class="wk-head"><span>板块</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span><span>周一</span><span>今天</span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>今日打卡</span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot on today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>今日计划</span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>学习进度</span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>开发工作</span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>生活记录</span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>成长笔记</span><span class="wk-dot"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>建设打卡</span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on today"></span></div>
+        </div>
+      </div>
+
+      <div class="backup-tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+        <span>数据已积累到一定规模，建议点击右上角「导出备份」保存一份 JSON 快照。</span>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
