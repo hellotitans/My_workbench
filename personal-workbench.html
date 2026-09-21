@@ -411,18 +411,23 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
 }
 #page-chat,.chat-layout,.chat-main,.chat-side{min-height:0}
 .chat-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
-.chat-main{min-width:0;display:flex;flex-direction:column;gap:14px;height:calc(100vh - 214px);min-height:600px}
+.chat-main{min-width:0;display:flex;flex-direction:column;gap:12px;height:calc(100vh - 214px);min-height:600px}
 .chat-side{display:flex;flex-direction:column;gap:14px;height:calc(100vh - 214px);min-height:600px}
+/* M9.2 · 对话页沉浸模式：让出全局标题条的 75px + 收窄底部留白 + 卡片内边距瘦身，
+   纵向空间全给对话记录和画布（实测消息区 288px → 449px，配好模型后约 507px） */
+body.chat-page .page-head{display:none}
+body.chat-page main{padding-bottom:24px}
+body.chat-page .chat-main,body.chat-page .chat-side{height:calc(100vh - 66px)}
 .chat-card{padding:0;overflow:hidden;display:flex;flex-direction:column;flex:1;min-height:0}
 @media(max-width:1180px){
   .chat-layout{grid-template-columns:minmax(0,1fr)}
-  .chat-main,.chat-side{height:auto}
+  body.chat-page .chat-main,body.chat-page .chat-side,.chat-main,.chat-side{height:auto}
   .chat-card{height:calc(100vh - 180px)}
 }
-.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 18px;border-bottom:1px solid var(--border)}
+.chat-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border)}
 .ch-title{font-weight:700;font-size:14.5px}
 .ch-sub{font-size:11.5px;color:var(--text3);margin-top:3px}
-.chat-msgs{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.chat-msgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:11px}
 /* 一行 = 头像 + 气泡（+ 时间），左右分栏构成对话框 */
 .mrow{display:flex;align-items:flex-end;gap:9px}
 .mrow.me{flex-direction:row-reverse}
@@ -470,8 +475,8 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
 .chat-note svg{width:16px;height:16px;flex:none;color:var(--accent)}
 .chat-note span{flex:1}
 .chat-input textarea:disabled{opacity:.55;cursor:not-allowed}
-.chat-input{border-top:1px solid var(--border);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
-.chat-input textarea{width:100%;min-height:62px;max-height:180px;resize:vertical}
+.chat-input{border-top:1px solid var(--border);padding:10px 14px;display:flex;flex-direction:column;gap:7px}
+.chat-input textarea{width:100%;min-height:54px;max-height:180px;resize:vertical}
 .ci-actions{display:flex;align-items:center;gap:8px}
 .ci-hint{font-size:11.5px;color:var(--text3);margin-right:auto}
 /* V0.2 M8 · 语音输入：转写状态条 */
@@ -2298,6 +2303,8 @@ function go(key){
   /* M5 · 离开对话板块必须彻底收摊（停 rAF + 停音轨 + 关 AudioContext） */
   if(currentKey === "chat" && key !== "chat") OrbHost.leave();
   currentKey = key;
+  /* M9.2 · 对话页开「沉浸模式」：让出全局标题条的纵向空间给对话与画布 */
+  document.body.classList.toggle("chat-page", key === "chat");
   MODULES.forEach(function(x){
     var el = document.getElementById("page-" + x.key);
     if(el) el.style.display = x.key === key ? "" : "none";
