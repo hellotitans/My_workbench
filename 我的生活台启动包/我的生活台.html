@@ -410,7 +410,7 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
     #0a0e1a;
 }
 #page-chat,.chat-layout,.chat-main,.chat-side{min-height:0}
-.chat-layout{display:grid;grid-template-columns:418px minmax(0,1fr);gap:16px;align-items:stretch}
+.chat-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:stretch}
 .chat-main{min-width:0;display:flex;flex-direction:column;gap:14px;height:calc(100vh - 214px);min-height:600px}
 .chat-side{display:flex;flex-direction:column;gap:14px;height:calc(100vh - 214px);min-height:600px}
 .chat-card{padding:0;overflow:hidden;display:flex;flex-direction:column;flex:1;min-height:0}
@@ -483,14 +483,14 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
 @keyframes asrBlink{0%,100%{opacity:1}50%{opacity:.22}}
 .msg.ai.typing::after{content:"▍";margin-left:2px;animation:ckBlink 1s steps(2,start) infinite}
 @keyframes ckBlink{to{visibility:hidden}}
-/* ================= V0.2 · 声场感应面板（全界面唯一光源） ================= */
+/* ================= V0.2 M9.1 · 声场感应面板（窄横条：球左 · 信息右） ================= */
 .orb-panel{
   padding:0;overflow:hidden;display:flex;flex-direction:column;flex:none;
   border:1px solid rgba(34,211,238,.14);
   box-shadow:0 0 36px rgba(34,211,238,.06), 0 10px 30px rgba(0,0,0,.5);
 }
 .op-head{
-  display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--border);
   background:rgba(18,27,49,.6);
 }
 .op-title{font-size:12.5px;font-weight:700;letter-spacing:.5px;color:var(--teal)}
@@ -515,18 +515,19 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
 }
 .op-fold:hover{color:var(--accent)}
 
-/* 感应台：正方形取景区 + 四角标定框，底是深空渐变（球体在这里发光） */
+/* 窄横条主体：左边方形取景台（球在这里发光），右边信息列 */
+.orb-row{display:flex;align-items:stretch;min-height:0}
 .orb-stage{
-  position:relative;flex:none;width:100%;height:252px;overflow:hidden;
-  background:radial-gradient(120% 105% at 50% 40%, #111c36 0%, #0a0e1a 70%);
-  border-bottom:1px solid var(--border);
+  position:relative;flex:none;width:238px;height:190px;overflow:hidden;
+  background:radial-gradient(120% 105% at 50% 42%, #0b1224 0%, #04070f 72%);
+  border-right:1px solid var(--border);
 }
 .orb-stage canvas{display:block;width:100%;height:100%}
-.orb-stage .oc{position:absolute;width:15px;height:15px;border:1.5px solid var(--teal);opacity:.30;pointer-events:none}
-.orb-stage .oc.tlc{top:9px;left:9px;border-right:none;border-bottom:none;border-radius:4px 0 0 0}
-.orb-stage .oc.trc{top:9px;right:9px;border-left:none;border-bottom:none;border-radius:0 4px 0 0}
-.orb-stage .oc.blc{bottom:9px;left:9px;border-right:none;border-top:none;border-radius:0 0 0 4px}
-.orb-stage .oc.brc{bottom:9px;right:9px;border-left:none;border-top:none;border-radius:0 0 4px 0}
+.orb-stage .oc{position:absolute;width:13px;height:13px;border:1.5px solid var(--teal);opacity:.30;pointer-events:none}
+.orb-stage .oc.tlc{top:8px;left:8px;border-right:none;border-bottom:none;border-radius:4px 0 0 0}
+.orb-stage .oc.trc{top:8px;right:8px;border-left:none;border-bottom:none;border-radius:0 4px 0 0}
+.orb-stage .oc.blc{bottom:8px;left:8px;border-right:none;border-top:none;border-radius:0 0 0 4px}
+.orb-stage .oc.brc{bottom:8px;right:8px;border-left:none;border-top:none;border-radius:0 0 4px 0}
 .orb-stage .scan{
   position:absolute;left:0;right:0;height:1px;pointer-events:none;opacity:0;
   background:linear-gradient(90deg,transparent,var(--teal),transparent);
@@ -534,14 +535,18 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
 .orb-panel.live .orb-stage .scan{opacity:.5;animation:orbScan 3.4s linear infinite}
 @keyframes orbScan{0%{top:6%}100%{top:94%}}
 
-.orb-foot{padding:10px 14px;display:flex;flex-direction:column;gap:7px;background:rgba(18,27,49,.45)}
+.orb-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;padding:12px 14px;background:rgba(18,27,49,.45)}
 .of-sub{font-size:11.5px;color:var(--text3);line-height:1.6;min-height:19px}
 .of-meter{height:3px;border-radius:99px;background:var(--border);overflow:hidden}
 .of-meter i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--teal),#ff2ea6);transition:width .08s linear}
-.of-btns{display:flex;gap:8px}
+.of-btns{display:flex;gap:8px;margin-top:auto}
 .of-btns .btn{flex:1;padding:5px 10px;font-size:12px}
-/* 收起：只留标题条 */
-.orb-panel.folded .orb-stage,.orb-panel.folded .orb-foot{display:none}
+/* 收起：只留细头条 */
+.orb-panel.folded .orb-row{display:none}
+@media(max-width:560px){
+  .orb-row{flex-direction:column}
+  .orb-stage{width:100%;height:172px;border-right:none;border-bottom:1px solid var(--border)}
+}
 
 /* ================= V0.2 M7 · 画布空间 → 无限画板 ================= */
 .canvas-panel{padding:0;overflow:hidden;display:flex;flex-direction:column;flex:1;min-height:0}
@@ -1733,23 +1738,26 @@ input:focus,select:focus,textarea.form:focus{outline:none;border-color:var(--acc
         <!-- 左：声场感应（固定在顶部） + 对话 -->
         <div class="chat-main">
 
-          <!-- V0.1 M5 · 声场感应（AudioEngine → Skin → OrbHost） -->
+          <!-- V0.1 M5 · 声场感应（AudioEngine → Skin → OrbHost）；M9.1 窄横条改版 -->
           <div class="card orb-panel" id="orbPanel">
             <div class="op-head">
               <span class="op-title">声场感应</span>
               <span class="op-badge" id="orbBadge"><i></i><span id="orbBadgeTxt">待机</span></span>
               <button class="op-fold" id="orbFoldBtn">收起</button>
             </div>
-            <div class="orb-stage" id="orbStage">
-              <canvas id="orbCanvas"></canvas>
-              <i class="oc tlc"></i><i class="oc trc"></i><i class="oc blc"></i><i class="oc brc"></i>
-              <i class="scan"></i>
-            </div>
-            <div class="orb-foot">
-              <div class="of-sub" id="orbSub">点击「开麦克风」，球体跟着你的声音起伏</div>
-              <div class="of-meter"><i id="orbMeter"></i></div>
-              <div class="of-btns">
-                <button class="btn" id="orbMicBtn">开麦克风</button>
+            <div class="orb-row">
+              <div class="orb-stage" id="orbStage">
+                <canvas id="orbCanvas"></canvas>
+                <i class="oc tlc"></i><i class="oc trc"></i><i class="oc blc"></i><i class="oc brc"></i>
+                <i class="scan"></i>
+              </div>
+              <div class="orb-info">
+                <div class="of-sub" id="orbSub">点击「开麦克风」，球体跟着你的声音起伏</div>
+                <div class="of-meter"><i id="orbMeter"></i></div>
+                <div class="of-btns">
+                  <button class="btn" id="orbMicBtn">开麦克风</button>
+                  <button class="btn" id="orbSkinBtn">皮肤：点阵</button>
+                </div>
               </div>
             </div>
           </div>
@@ -5649,6 +5657,14 @@ var ORB_PALETTES = {
     glow: "#0a6ea8", ring: "#37d8ff",
     hueThink: 75, hueSpeak: -150
   },
+  /* M9.1 · 点阵球专用高对比配色：更亮的霓虹青-品红 + 更深的底色，暗场上更抓眼 */
+  dark2: {
+    light: false,
+    out: ["#071d40", "#1ee5ff", "#f4feff"],
+    inn: ["#33062e", "#ff2fb0", "#ffeaf8"],
+    glow: "#00c8ff", ring: "#3fe4ff",
+    hueThink: 75, hueSpeak: -150
+  },
   light: {
     light: true,
     out: ["#a9c9e8", "#2574c4", "#0a2f52"],
@@ -5871,10 +5887,11 @@ function orbSkinSphere(canvas, opts){
     var comp = pal.light ? "source-over" : "lighter";
     var aMul = pal.light ? 0.7 : 1;
     var gR, gA, iA;
-    if(mode === "speaking"){        gR = R * (0.80 + onset * 0.50); gA = 0.26 + rms * 0.55 + onset * 0.95; iA = 0.14 + rms * 0.30 + onset * 0.70; }
-    else if(mode === "listening"){  gR = R * (0.52 - 0.10 * rms);   gA = 0.18 + 0.16 * k + rms * 0.75;      iA = 0.16 + 0.10 * k + rms * 0.55 + onset * 1.25; }
-    else if(mode === "thinking"){   gR = R * (0.62 + 0.10 * k);     gA = 0.16 + 0.18 * k;                    iA = 0.12 + 0.10 * k; }
-    else {                          gR = R * 0.58;                  gA = 0.14 + 0.14 * k;                    iA = 0.08 + 0.08 * k; }
+    /* M9.1 · 发光整体上调：暗底高对比，四态亮度差距拉开 */
+    if(mode === "speaking"){        gR = R * (0.84 + onset * 0.50); gA = 0.40 + rms * 0.70 + onset * 1.05; iA = 0.24 + rms * 0.40 + onset * 0.85; }
+    else if(mode === "listening"){  gR = R * (0.54 - 0.10 * rms);   gA = 0.32 + 0.22 * k + rms * 0.90;      iA = 0.26 + 0.14 * k + rms * 0.70 + onset * 1.40; }
+    else if(mode === "thinking"){   gR = R * (0.64 + 0.10 * k);     gA = 0.30 + 0.26 * k;                    iA = 0.22 + 0.16 * k; }
+    else {                          gR = R * 0.60;                  gA = 0.28 + 0.20 * k;                    iA = 0.18 + 0.14 * k; }
 
     var gc = orbHexToRgb(pal.glow);
     ctx.globalCompositeOperation = comp;
@@ -5891,8 +5908,8 @@ function orbSkinSphere(canvas, opts){
     var iR = R * 0.24 * (1 + onset * 0.55);
     if(!self._core || self._coreR !== iR){
       var cr = ctx.createRadialGradient(cx, cy, 0, cx, cy, iR);
-      cr.addColorStop(0,    "rgba(255,255,255," + (pal.light ? "0.55" : "0.85") + ")");
-      cr.addColorStop(0.30, "rgba(" + gc[0] + "," + gc[1] + "," + gc[2] + ",0.55)");
+      cr.addColorStop(0,    "rgba(255,255,255," + (pal.light ? "0.55" : "0.92") + ")");
+      cr.addColorStop(0.30, "rgba(" + gc[0] + "," + gc[1] + "," + gc[2] + ",0.72)");
       cr.addColorStop(1,    "rgba(" + gc[0] + "," + gc[1] + "," + gc[2] + ",0)");
       self._core = cr; self._coreR = iR;
     }
@@ -5916,7 +5933,7 @@ function orbSkinSphere(canvas, opts){
       o.x = cx + pr.x * R;
       o.y = cy + pr.y * R;
       o.r = baseDot * (0.42 + 1.25 * pr.f) * pr.s;
-      o.a = p[3] * (0.07 + 0.93 * Math.pow(pr.f, 1.55));
+      o.a = p[3] * (0.11 + 0.89 * Math.pow(pr.f, 1.45));
       o.z = pr.z; o.shell = p[4];
       var li = (pr.f * (ORB_LUT_N - 1) + p[5] * eLut + 0.5) | 0;
       o.li = li > ORB_LUT_N - 1 ? ORB_LUT_N - 1 : li;
@@ -5938,7 +5955,7 @@ function orbSkinSphere(canvas, opts){
   self.frame = function(af, mode, t){
     if(!self.canvas.width || self.canvas.width < 2) self.resize();
     if(!self.geo) return;
-    var dt = self._lastT ? Math.min(t - self._lastT, 50) : 16;
+    var dt = self._lastT ? Math.max(0, Math.min(t - self._lastT, 50)) : 16;   /* M9.1 · dt 双向钳制，防时间倒流 */
     self._lastT = t;
 
     /* 性能自适应：连续 30 帧偏慢就砍掉一半点 */
@@ -6435,11 +6452,36 @@ var ORB_TXT = {
   speaking:  { t: "说话中", s: "回答正在流出，能量由内向外推出" }
 };
 var OrbHost = {
-  active: false, hidden: false, mic: false, skinKey: "neon",
+  active: false, hidden: false, mic: false, skinKey: "sphere",
   canvas: null, wrap: null, skin: null, audio: null,
   raf: 0, _lt: 0, _uiN: 0, _bound: null,
 
-  palKey: function(){ return (settings && settings.theme === "light") ? "light" : "dark"; },
+  palKey: function(){
+    /* M9.1 · 点阵皮肤用高对比霓虹配色（dark2）；neon 皮肤配色固定，不吃调色板 */
+    var light = settings && settings.theme === "light";
+    if(this.skinKey === "sphere") return light ? "light" : "dark2";
+    return light ? "light" : "dark";
+  },
+  SKIN_LABEL: { sphere: "点阵", neon: "霓虹" },
+  setSkin: function(key){
+    if(!ORB_SKINS[key]) return;
+    this.skinKey = key;
+    store.set("orbSkin", key);
+    if(!this.active){
+      this._skinBtn();
+      return;
+    }
+    if(this.skin) this.skin.dispose();
+    var cv = this.canvas || document.getElementById("orbCanvas");
+    this.skin = ORB_SKINS[key](cv, {});
+    this.skin.setPalette(ORB_PALETTES[this.palKey()]);
+    this.skin.resize();
+    this._skinBtn();
+  },
+  _skinBtn: function(){
+    var b = document.getElementById("orbSkinBtn");
+    if(b) b.textContent = "皮肤：" + (this.SKIN_LABEL[this.skinKey] || this.skinKey);
+  },
   modeOf: function(){
     if(chatStreaming) return "speaking";
     if(typeof chatBusy !== "undefined" && chatBusy) return "thinking";
@@ -6451,9 +6493,12 @@ var OrbHost = {
     if(!cv || !wrap) return;
     this.canvas = cv; this.wrap = wrap;
     this.audio = new OrbAudio();
+    this.skinKey = store.get("orbSkin", "sphere");
+    if(!ORB_SKINS[this.skinKey]) this.skinKey = "sphere";
     this.skin = (ORB_SKINS[this.skinKey] || orbSkinSphere)(cv, {});
     this.skin.setPalette(ORB_PALETTES[this.palKey()]);
     this.skin.resize();
+    this._skinBtn();
     this.active = true; this.hidden = false; this._lt = 0;
     var folded = !!store.get("orbFolded", false);
     wrap.classList.toggle("folded", folded);
@@ -7794,6 +7839,10 @@ function bindEvents(){
 
   /* V0.1 M5 · 声场球：麦克风只在用户主动点击时才申请 */
   document.getElementById("orbMicBtn").addEventListener("click", function(){ OrbHost.toggleMic(); });
+  /* V0.2 M9.1 · 皮肤切换：点阵（斐波那契） ↔ 霓虹 */
+  document.getElementById("orbSkinBtn").addEventListener("click", function(){
+    OrbHost.setSkin(OrbHost.skinKey === "sphere" ? "neon" : "sphere");
+  });
   document.getElementById("orbFoldBtn").addEventListener("click", function(){
     var w = document.getElementById("orbPanel");
     var c = w.classList.toggle("folded");
