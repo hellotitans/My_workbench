@@ -298,11 +298,14 @@ body.light .day-foot b{color:var(--accent);text-shadow:none;animation:none}
 .mini-check svg{width:14px;height:14px;color:#fff}
 
 /* 今日打卡：B 版 4 列竖排小卡（设计稿 .ck-card 同构） */
-.checkin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;height:100%}
+/* 今日打卡：B 版 4 列竖排小卡（设计稿 .ck-card 同构）
+   设计稿的 .checkin-grid 用 height:100%（其父卡定高），主程序父卡自适应高度，
+   照搬会撑破卡片 36px，故去掉，改由卡片 min-height 控高 */
+.checkin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;align-items:stretch}
 .ck-card{
   position:relative;padding:12px;border-radius:10px;overflow:hidden;
   border:1px solid rgba(69,216,255,.28);background:rgba(255,255,255,.03);
-  display:flex;flex-direction:column;gap:7px;transition:.18s;
+  display:flex;flex-direction:column;gap:7px;transition:.18s;min-height:94px;
   box-shadow:inset 0 0 10px rgba(69,216,255,.012);
 }
 .ck-card:hover{border-color:var(--cyan);
