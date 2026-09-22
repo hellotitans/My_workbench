@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-dm-ref="3" style="" data-page-node-id="l6i1XG1ZxHVwT4Ob1ofdAd"><head data-page-node-id="iHbgyCC43S1ZsWNK428d7P">
-<meta charset="utf-8" data-page-node-id="C7HQWySdBfoiWfUJbvL4DY">
+<html lang="zh-CN" data-dm-ref="3" style=""><head>
+<meta charset="utf-8">
 <title>方案 B · 赛博霓虹 · 个人生活台主页设计稿</title>
 <style>
 /* ============ 方案 B「赛博霓虹 Cyber Neon」============
@@ -9,7 +9,7 @@
 ================================================================ */
 :root{
   --bg:#030307;
-  --cyan:#45d8ff; --cyan-hi:#7ae7ff; --magenta:#ff58b0; --gold:#d9f05e; --gold-hi:#ecff77; --amber:#ffd23d; --violet:#7c74d6;
+  --cyan:#45d8ff; --cyan-hi:#7ae7ff; --magenta:#ff58b0; --gold:#d9f05e; --gold-hi:#ecff77; --laser:#e8ff00; --amber:#ffd23d; --violet:#7c74d6;
   --panel:#0a0a16; --line:rgba(69,216,255,.22); --line-hi:rgba(69,216,255,.40);
   --t1:#d9e5f2; --t2:#8b9cb8; --t3:#607292;
   --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -278,11 +278,11 @@ main{flex:1;min-width:0;padding:26px 30px 40px;max-width:1320px;margin:0 auto}
 .wk-dot{width:100%;height:20px;border-radius:4px;display:grid;place-items:center;
   border:1px solid rgba(69,216,255,.2);background:rgba(255,255,255,.025)}
 .wk-dot.on{background:rgba(69,216,255,.20);
-  border-color:rgba(236,255,119,.60);
-  box-shadow:inset 0 0 7.2px rgba(236,255,119,.10), 0 0 6.4px rgba(236,255,119,.12)}
+  border-color:rgba(232,255,0,.62);
+  box-shadow:inset 0 0 7.2px rgba(232,255,0,.10), 0 0 6.4px rgba(232,255,0,.13)}
 .wk-dot.on::after{content:'';width:7px;height:7px;border-radius:50%;
-  background:var(--gold-hi);
-  box-shadow:0 0 7.2px rgba(236,255,119,.75)}
+  background:var(--laser);
+  box-shadow:0 0 7.2px rgba(232,255,0,.78)}
 .wk-dot.today{border-color:var(--magenta);box-shadow:0 0 9px rgba(255,88,176,0.069)}
 
 /* ---------- 备份提示 ---------- */
@@ -292,143 +292,144 @@ main{flex:1;min-width:0;padding:26px 30px 40px;max-width:1320px;margin:0 auto}
 .backup-tip svg{width:16px;height:16px;flex:none}
 </style>
 </head>
-<body style="" data-page-node-id="UjH7h4UajRiV5hFaUHLvZC">
-<div id="app" data-page-node-id="hj9FFdRuql6ONau1EQBpdF">
-  <aside id="sidebar" data-page-node-id="lLk3QIWjhIuv2CqDfTKOYY">
-    <div class="logo" data-page-node-id="b45EltUIjIjTSZsXAx6lzx">
-      <div class="mk" data-page-node-id="c6AczdlhFkT6oyLXsgZiL4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" data-page-node-id="lNmtRZk8HZBFjP9MuZpkiU"><circle cx="12" cy="12" r="3" data-page-node-id="AickF2McLtQcXwY1V8WYud"></circle><ellipse cx="12" cy="12" rx="10" ry="4.5" data-page-node-id="ckhLcGUMSp1OLdO2Q6kXxY"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)" data-page-node-id="AcqEdJ7zxC0X0d5L4nWdef"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)" data-page-node-id="oSu13I5TReQJkEbExbfvW7"></ellipse></svg></div>
-      <div data-page-node-id="HVQy4r3rRv6z07VfjNsHO2"><div class="t" data-page-node-id="LeZ2PJPraDjSJv7LrEbrCK">个人生活台</div><div class="s" data-page-node-id="KquZvB7GWYwJFDQQ70VeAJ">LIFE // WORKBENCH</div></div>
+<body style="">
+<div id="app">
+  <aside id="sidebar">
+    <div class="logo">
+      <div class="mk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"></circle><ellipse cx="12" cy="12" rx="10" ry="4.5"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(60 12 12)"></ellipse><ellipse cx="12" cy="12" rx="10" ry="4.5" transform="rotate(120 12 12)"></ellipse></svg></div>
+      <div><div class="t">个人生活台</div><div class="s">LIFE // WORKBENCH</div></div>
     </div>
-    <nav data-page-node-id="VZeRveIEBsEuiyFe5HfEU8">
-      <div class="nav-label" data-page-node-id="waFDgHKKuF5gElM710KYVp">MODULES // 07</div>
-      <div class="nav-item active" data-page-node-id="5ExmFVllCwLPfYoTaUfGo2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="2aNewT4pyf9iTyJ8RHT64G"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" data-page-node-id="Kdqt9GxEz4Ecv8kyR7nK5j"></path></svg>首页</div>
-      <div class="nav-item" data-page-node-id="rlYZSC05EzGosWpNhrnrcz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="iNF6P8zC2TfCo2YsCCk0TB"><path d="M9 11l3 3L22 4" data-page-node-id="X0Ma1L5s4IO87wT5wdxsKe"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" data-page-node-id="fS22aLi7E7bvSFqg0EdJRB"></path></svg>今日计划</div>
-      <div class="nav-item" data-page-node-id="uFvG3N6eIkfDk5RmtXaMM2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="Yy6BYyHI4xg25gADUSF5VQ"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="B3V4nbaeRDRpkDzkvXqhK5"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="bhiwsNaGWFrpCzOoUe7piu"></path></svg>学习进度</div>
-      <div class="nav-item" data-page-node-id="LD0ADy0VtaW9g4LC8vXM1a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="12oWo2GWhYECBefrAvd7I4"><polyline points="16 18 22 12 16 6" data-page-node-id="aoYGcy3QTxJKFVrVpEmKVm"></polyline><polyline points="8 6 2 12 8 18" data-page-node-id="Ozr42l3v2qv6mV0HHR5Ug8"></polyline></svg>开发工作</div>
-      <div class="nav-item" data-page-node-id="h722utky9jC11cy1LOJi7I"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="a9aVPqODeseinTq27qeusm"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.8 1.1-1a5.5 5.5 0 0 0 0-7.8z" data-page-node-id="Wyf6QjDGAUbJ0g3AfvZvzD"></path></svg>生活记录</div>
-      <div class="nav-item" data-page-node-id="HdwiaJqt9B9pEpDDivXCOh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="ODUSXknYsjB3KRGXs0zE3R"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" data-page-node-id="ICzuEPMLqOs2d6xNh85NEB"></path><path d="M14 2v6h6M9 13h6M9 17h4" data-page-node-id="tMLH77uurpwfcQqx6LaElU"></path></svg>成长笔记</div>
-      <div class="nav-item" data-page-node-id="VsaUyZYFFxNGKA3jVhR4Vi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="cG7dajsLmmUtmr1l0T6ZeY"><rect x="3" y="4" width="18" height="18" rx="2" data-page-node-id="L6JDVOMdfpaUqB8hGFgzgW"></rect><path d="M16 2v4M8 2v4M3 10h18" data-page-node-id="psIH5QOjJqWRf9TCyRRtHe"></path></svg>建设打卡</div>
-      <div class="nav-label" style="padding-top:12px" data-page-node-id="5ZgGSupo4AtxJ1wiJTMAId">EXT // 02</div>
-      <div class="nav-item" data-page-node-id="uOeOVIGhqazS2OfHw3eW4O"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="rFXKoWls1sURukhV57ykj2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" data-page-node-id="1Pdfg8WspPCiaQD8cOR56B"></path></svg>AI 对话<span class="tag" data-page-node-id="smkfI6TJzBxVv2Bquf9iZi">AI</span></div>
-      <div class="nav-item" data-page-node-id="2cpG6TkPoLwMDCcVPdxilk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="D2iEd6eMQK1Cqz4XcedbVP"><circle cx="12" cy="12" r="3" data-page-node-id="32QtPVHSnGJtTJJ2kO1mkx"></circle><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 13.9H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.5l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.3z" data-page-node-id="6xgYceRmNP9xNEooxCrpF5"></path></svg>数据与设置</div>
+    <nav>
+      <div class="nav-label">MODULES // 07</div>
+      <div class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>首页</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>今日计划</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>学习进度</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>开发工作</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.8 1.1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>生活记录</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M9 13h6M9 17h4"></path></svg>成长笔记</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>建设打卡</div>
+      <div class="nav-label" style="padding-top:12px">EXT // 02</div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>AI 对话<span class="tag">AI</span></div>
+      <div class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 13.9H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.5l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.1V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1.3z"></path></svg>数据与设置</div>
     </nav>
-    <div class="side-foot" data-page-node-id="pLPtTNFln2oH0YnErAFvny">
-      <div class="hud" data-page-node-id="F4nB43gSg0JplhNUAF1XIv">
-        <div class="row" data-page-node-id="sK7lSVmqT7HTGQvdM3hKkZ"><span data-page-node-id="hOCGDNL4YMYTbDtbVFdGmt">SYS</span><b data-page-node-id="P4EcqqCZAqJtsIjetyNF7I">ONLINE</b></div>
-        <div class="row" data-page-node-id="ktQ0AEGePyKaPFc1GTL5FG"><span data-page-node-id="mwwWoL77FMZtc8CrQFurGy">UPTIME</span><b data-page-node-id="CzIgeK7QHVKylf0MnJQW4O">31 D</b></div>
-        <div class="row warn" data-page-node-id="WCek8tgernYkQzrrXhREA8"><span data-page-node-id="dczdhf0PLePPqOLowUgawN">ALERT</span><b data-page-node-id="XDN2AT48IF52Uz50maSDDw">2 OVERDUE</b></div>
+    <div class="side-foot">
+      <div class="hud">
+        <div class="row"><span>SYS</span><b>ONLINE</b></div>
+        <div class="row"><span>UPTIME</span><b>31 D</b></div>
+        <div class="row warn"><span>ALERT</span><b>2 OVERDUE</b></div>
       </div>
     </div>
   </aside>
 
-  <main data-page-node-id="9PM65iKZ934orrAOkberEJ">
-    <div class="page-head" data-page-node-id="7oD4Hc7dS3eDLy0ivHWag9">
-      <div data-page-node-id="3n7M0hVYKV0PYpevYni3dU">
-        <h1 data-page-node-id="lbv0T8XI2x0v8tDM9FBSXO">首页</h1>
-        <div class="sub" data-page-node-id="UHGUEq3r6fLE9QkPpd4KAK">今日概览 · <em data-page-node-id="C2YfPYByXj12PPCOTBFvgA">2026 / 09 / 22</em> · 数据本地存储</div>
+  <main>
+    <div class="page-head">
+      <div>
+        <h1>首页</h1>
+        <div class="sub">今日概览 · <em>2026 / 09 / 22</em> · 数据本地存储</div>
       </div>
-      <div class="head-actions" data-page-node-id="pe25zkpVkf3K5LISJLPJrZ">
-        <button class="btn" data-page-node-id="SBppulAWqAPqWs2a9OWiWm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="zsop3OpnBNNkPKUDZ3tFaE"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" data-page-node-id="8ee5JYdZSQIuTtf1rfiyRB"></path><polyline points="7 10 12 15 17 10" data-page-node-id="N9QNjnSnJMi7aYsyNS9uU1"></polyline><line x1="12" y1="15" x2="12" y2="3" data-page-node-id="TXa5XQjWA3oYr4qRqsM1Re"></line></svg>导出备份</button>
-        <button class="btn primary" data-page-node-id="8g6K1ptyyvcHjETJwIUdvH">导入数据</button>
+      <div class="head-actions">
+        <button class="btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>导出备份</button>
+        <button class="btn primary">导入数据</button>
       </div>
     </div>
 
-    <div class="home-grid" data-page-node-id="61kDfklzvW8BTt23I9ti2O">
-      <div class="card c4 date-card" data-page-node-id="pNaQ8sCmkUeCd7lEJ8nNCe">
-        <i class="corner tl" data-page-node-id="qSxRnwfYqHVthCpzquTqCI"></i><i class="corner br" data-page-node-id="LSzFTyQoUWR8X2GrXhcjbi"></i>
-        <div class="glow" data-page-node-id="AX0DszA72sSnqWOZQuadC5"></div>
-        <div class="chead" data-page-node-id="z7YioEiKGCE8x2us5tQZVk"><span class="no" data-page-node-id="YLytpbwJcfEk18PVhhVCkj">01</span><h2 data-page-node-id="H2kKrNdCKCrgGp72nfu7iV">TODAY</h2></div>
-        <div data-page-node-id="PVWzpBHD3ZjtItXLUDC7rU">
-          <div class="day-head" data-page-node-id="OzOiFUOa7CeTuWFAdPSsNB"><span class="d" data-page-node-id="WCKIF2p96YQbl5vnctVp7M">09.22</span><span class="w" data-page-node-id="SP8OXPEVJjwOXgYQjhCppu">TUE</span></div>
-          <div class="day-greet" data-page-node-id="aoNNaKcLmgcn2S3QFSDMME">别想了，<br data-page-node-id="xWPoMrtuQCySJalsdrZq1m">先<b data-page-node-id="VhheDNmA8BJ0gDPjAXmFw4">动手</b>做 5 分钟。</div>
+    <div class="home-grid">
+      <div class="card c4 date-card">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="glow"></div>
+        <div class="chead"><span class="no">01</span><h2>TODAY</h2></div>
+        <div>
+          <div class="day-head"><span class="d">09.22</span><span class="w">TUE</span></div>
+          <div class="day-greet">别想了，<br>先<b>动手</b>做 5 分钟。</div>
         </div>
-        <div class="day-foot" data-page-node-id="QLTuH9SBVjUPBfzQNVhFCL"><span data-page-node-id="ETIkvrBnOUQEl8Hll09Bo2">已陪伴你</span><b data-page-node-id="FJ5jvSHMHqQONBcFO5Ypx5">31</b><span data-page-node-id="p8jqIUDD5cagtdWIjPEEIH">天</span><span class="bar" data-page-node-id="RmgzkYkhJBZBTAGiPWPe8D"><i data-page-node-id="SZqBuYvVjirUfYRnVGzun8"></i></span></div>
-        <svg class="day-ring" viewBox="0 0 240 240" aria-hidden="true" data-page-node-id="vqIEdEqVvpRo5Gl81novK8">
-          <circle cx="120" cy="120" r="106" fill="none" stroke="rgba(69,216,255,.34)" stroke-width="1.1" data-page-node-id="6p9hriJpc0nX6YZXheFyfL"></circle>
-          <circle cx="120" cy="120" r="84" fill="none" stroke="rgba(255,88,176,.52)" stroke-width="1.1" data-page-node-id="6KT2Q2MQcPEfjUBauhWFQo"></circle>
-          <circle cx="120" cy="120" r="60" fill="none" stroke="rgba(69,216,255,.74)" stroke-width="1.2" data-page-node-id="HDZAFjzDRPgeFFcZsW01p3"></circle>
-          <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(255,88,176,.95)" stroke-width="1.3" data-page-node-id="C318HEOHYK1zZ85g6uxoLr"></circle>
-          <circle cx="219" cy="156" r="4.6" fill="#45d8ff" data-page-node-id="NSKCNDF0UIXXUYWRS4q4RF"></circle><circle cx="43" cy="92" r="3" fill="#ff58b0" data-page-node-id="XFFY1hwcXjGmE8Z0W8p98A"></circle>
-          <circle cx="120" cy="120" r="2.4" fill="#eaffff" data-page-node-id="KHh1UmIceUr0NWVUfzmDbi"></circle>
+        <div class="day-foot"><span>已陪伴你</span><b>31</b><span>天</span><span class="bar"><i></i></span></div>
+        <svg class="day-ring" viewBox="0 0 240 240" aria-hidden="true">
+          <circle cx="120" cy="120" r="106" fill="none" stroke="rgba(69,216,255,.34)" stroke-width="1.1"></circle>
+          <circle cx="120" cy="120" r="84" fill="none" stroke="rgba(255,88,176,.52)" stroke-width="1.1"></circle>
+          <circle cx="120" cy="120" r="60" fill="none" stroke="rgba(69,216,255,.74)" stroke-width="1.2"></circle>
+          <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(255,88,176,.95)" stroke-width="1.3"></circle>
+          <circle cx="219" cy="156" r="4.6" fill="#45d8ff"></circle><circle cx="43" cy="92" r="3" fill="#ff58b0"></circle>
+          <circle cx="120" cy="120" r="2.4" fill="#eaffff"></circle>
         </svg>
       </div>
 
-      <div class="card c8" data-page-node-id="H71nZG0bACEId7S4XmK1Rn">
-        <i class="corner tl" data-page-node-id="xSMXd5T5F8z4Xb37HDaN9a"></i><i class="corner br" data-page-node-id="obiOXUalH6pp0IDxD5crzR"></i>
-        <div class="chead" data-page-node-id="oLi6BjTQcg7FV5va635ER5"><span class="no" data-page-node-id="BYv8o37gFUW0F6M0vNCnjt">02</span><h2 data-page-node-id="7fmXfUG2MYAnyYgarCUYtr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="nhFmBOpEnUvzMiAa4sD4ue"><circle cx="12" cy="12" r="9" data-page-node-id="yncZ8QpV49h2N3LGHKy3wm"></circle><path d="M12 7v5l3 3" data-page-node-id="nDpsViw7ICd3L6GDFKrnBp"></path></svg>今天要处理</h2></div>
-        <div class="cdesc" data-page-node-id="zBsw2e7ixBOUAhcJ6xr9qu">逾期与顺延项标红，做完直接点左侧方块打勾</div>
-        <div class="cbody" data-page-node-id="KFTHjYBNDmwr9fJB73BWZB">
-          <div class="focus-item" data-page-node-id="DqSd326lmocKZKICbCURer">
-            <span class="mini-check checked" data-page-node-id="CgIWwjLG1jB2pjRmeYG799"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" data-page-node-id="NZEfzuupMe4AUhBzOGWeMN"><path d="M20 6L9 17l-5-5" data-page-node-id="Gmds8cXKzIrCayxb1putT3"></path></svg></span>
-            <span class="fi-text done" data-page-node-id="mGXZEPENSjpt5u5iZGPksQ">完成 M9.2 对话区加长与回归测试</span><span class="badge gold" data-page-node-id="nN0xkOz0gQ5cSnBynrdDWH">已完成</span></div>
-          <div class="focus-item" data-page-node-id="O0Q9vrNa9dXkdveXyiWHA3">
-            <span class="mini-check" data-page-node-id="XEu6Iu5B4l1iC5f6KIis9z"></span><span class="fi-text" data-page-node-id="Hodb4oNffFzPKTr1qtUcP6">整理作品集项目文档（架构图 + 决策记录）</span></div>
-          <div class="focus-item overdue" data-page-node-id="Ru5cEKXs3saPiEHoQLQtrm">
-            <span class="mini-check" data-page-node-id="4UdfH6yQ37KlOlfIDtUDRt"></span><span class="fi-text" data-page-node-id="1gGHLjPDdjmCj86N1DKt8y">预约周三的面试复盘</span><span class="badge red" data-page-node-id="8q2EQ4Hlxg5zS4KSlRf8DB">逾期 · 09/20</span></div>
-          <div class="focus-item" data-page-node-id="aAd5PErJTPewylGyOkWor6">
-            <span class="mini-check" data-page-node-id="azWYMb1MBlXYzCI6wTMIIx"></span><span class="fi-text" data-page-node-id="ck6pT9B0gkJ3R5c8tVIGI8">读《精益数据分析》第 3 章</span></div>
-          <div class="focus-item" data-page-node-id="065T0vn3AGYKfxsCMub2Nf">
-            <span class="mini-check" data-page-node-id="pqPsfAms4PVn2N7jhkEUuX"></span><span class="fi-text" data-page-node-id="sr15aYeoxQIh1XA2GMc6zk">给妈妈打个电话</span></div>
+      <div class="card c8">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">02</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg>今天要处理</h2></div>
+        <div class="cdesc">逾期与顺延项标红，做完直接点左侧方块打勾</div>
+        <div class="cbody">
+          <div class="focus-item">
+            <span class="mini-check checked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"></path></svg></span>
+            <span class="fi-text done">完成 M9.2 对话区加长与回归测试</span><span class="badge gold">已完成</span></div>
+          <div class="focus-item">
+            <span class="mini-check"></span><span class="fi-text">整理作品集项目文档（架构图 + 决策记录）</span></div>
+          <div class="focus-item overdue">
+            <span class="mini-check"></span><span class="fi-text">预约周三的面试复盘</span><span class="badge red">逾期 · 09/20</span></div>
+          <div class="focus-item">
+            <span class="mini-check"></span><span class="fi-text">读《精益数据分析》第 3 章</span></div>
+          <div class="focus-item">
+            <span class="mini-check"></span><span class="fi-text">给妈妈打个电话</span></div>
         </div>
       </div>
 
-      <div class="card c12" data-page-node-id="Exnujcj4KX93lvOytKNnzw">
-        <i class="corner tl" data-page-node-id="cKr7cJoZlig9fYQJaB2vfN"></i><i class="corner br" data-page-node-id="LAnBJzAd8YHjkbZezJVGds"></i>
-        <div class="chead" data-page-node-id="20ubJpybQrwucEPVMJZDUe"><span class="no" data-page-node-id="jtpBiVMvajQlypKyIQhgSH">03</span><h2 data-page-node-id="rO4iBru5EvChBNAVl5XNE3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="4aADQlx1BVCWSCKc3wcy9Q"><path d="M20 6L9 17l-5-5" data-page-node-id="EDZD3rJu3BZNog9NjxL5kb"></path></svg>今日打卡</h2></div>
-        <div class="cdesc" data-page-node-id="p92SmdbaHMt3eloS9iBeqp">当日各板块完成情况，板块当天有有效完成动作即打卡成功</div>
-        <div class="checkin-grid" data-page-node-id="UT46GfXETy8qFaTWjRiotJ">
-          <div class="ck-card done" style="" data-page-node-id="nLG9GL8oDukN8mTiHFlIDV"><div class="ck-top" data-page-node-id="jAbg8Iad8wDx5ZEqEEZdgo"><div class="ck-ic" data-page-node-id="9AFmZy78kkhZAOpdRGPHlC"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="bYGyingL7Q7EsX9AAXH2Du"><path d="M4 5h16M4 12h16M4 19h10" data-page-node-id="3S3kPWT1IrsbK2n85iJoxB"></path></svg></div><div class="ck-name" data-page-node-id="8XevhRNXVxGJACacIHbG2w">今日打卡</div></div><div class="ck-st" data-page-node-id="UNyII1frSj2Z0rXYVC6STx">备忘已记录</div><div class="ck-stamp" data-page-node-id="uBxu2GlCVYmBFYtKAcDWEC">记</div></div>
-          <div class="ck-card" data-page-node-id="6IyUvTRVQTukThkD1WFt1h"><div class="ck-top" data-page-node-id="mwTh2skJvjzeMFds9ND948"><div class="ck-ic" data-page-node-id="FfQ4fVhyvFILBJHFxd175b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="RTCNh5NXwDLVjs8mgy1Zhg"><path d="M9 11l3 3L22 4" data-page-node-id="Sg7zdykezjlZiDSlEbHFtp"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" data-page-node-id="HWvxNNbOugQ3ohWJAAKdCJ"></path></svg></div><div class="ck-name" data-page-node-id="NDF5Ee0nqDvJ0tOkoO0POV">今日计划</div></div><div class="ck-st" data-page-node-id="tdm5Q7GibdFh2zXnHzR5CD">完成 3 / 5</div></div>
-          <div class="ck-card done" style="" data-page-node-id="URnPwKMZDU8bdbfqWhKpQZ"><div class="ck-top" data-page-node-id="Qr1weq9XkFFXh6LNwIZTE1"><div class="ck-ic" data-page-node-id="NqzPUOAZF1YzBP4qzALEAp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="UfuiXuGzYAdvhEF2pO5BRn"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" data-page-node-id="ZR4tJgi8B2kzwA0Rl8lQxf"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" data-page-node-id="CAKxI2Gwb130PBxepKqsgk"></path></svg></div><div class="ck-name" data-page-node-id="DOFmm5aTK3GVF2goThzwTX">学习进度</div></div><div class="ck-st" data-page-node-id="JDvSWatCySHrNe91fXmZpD">今日有学习记录</div><div class="ck-stamp" data-page-node-id="uCv1ks9DL4KNETJ1P7wntC">学</div></div>
-          <div class="ck-card" data-page-node-id="anN4mUsWTwUETuhWyDxPzR"><div class="ck-top" data-page-node-id="uFadJAv23IzoVjDcEGKMrE"><div class="ck-ic" data-page-node-id="S0hB2NAWA2OxrpvByJ9DUW"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="ut2g0N8jaW7vGMwktYMCnc"><polyline points="16 18 22 12 16 6" data-page-node-id="CC7nrfVuGgMypMSlqJLM9B"></polyline><polyline points="8 6 2 12 8 18" data-page-node-id="vd4yrJoDJhwjVB7oDH9wsv"></polyline></svg></div><div class="ck-name" data-page-node-id="Dnt6aGU6YxOrGU1c3RtSPC">开发工作</div></div><div class="ck-st" data-page-node-id="iBdRlJB9zOVQW691d9PQBl">今日还没动工</div></div>
-          <div class="ck-card" data-page-node-id="N9Uwh1Tk3PszyIHYMCKPth"><div class="ck-top" data-page-node-id="RJZOcdTTQwVMYU7MkHpPqJ"><div class="ck-ic" data-page-node-id="Bitj56TcfJR3s3eeEO9RUN"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="M14zGCEs42vzIcOC9IuOS8"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.8 1.1-1a5.5 5.5 0 0 0 0-7.8z" data-page-node-id="iBEE77iO1Nj8X0hLkZrVmf"></path></svg></div><div class="ck-name" data-page-node-id="5Xb2hMCNG3QuukTbH9To9Y">生活记录</div></div><div class="ck-st" data-page-node-id="hRt5QaTr3dM7728QTYB0JG">喝水 6 / 8</div></div>
-          <div class="ck-card" data-page-node-id="ZWhjTHgNRgSvRbBcSeV8Lv"><div class="ck-top" data-page-node-id="JFvrRL7CR97AZmzFPywgsR"><div class="ck-ic" data-page-node-id="NBPj7szmpyClp10tFDkeca"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="kS18XyKEYjDTftIStkV9sW"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" data-page-node-id="DeBVcf83F2Lu2udMlMW1jw"></path><path d="M14 2v6h6" data-page-node-id="BjXFloAOyq7Ss2pRWAmQ9C"></path></svg></div><div class="ck-name" data-page-node-id="Hf4sJRr5UwhZU5xYaHW7NZ">今日心得</div></div><div class="ck-st" data-page-node-id="Xi1RzpuuHRBu5175YpZyVC">还没有复盘记录</div></div>
-          <div class="ck-card done" style="" data-page-node-id="RhAAOCPEj9gjA5QdEKES75"><div class="ck-top" data-page-node-id="cbaikJxPBAo3fzFfQPdpTY"><div class="ck-ic" data-page-node-id="LHd8ZZtgJQz2Do1LaWFXjk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="Ap2ePFCSdzddJnj5A0jzkE"><rect x="3" y="4" width="18" height="18" rx="2" data-page-node-id="BMbBtVAnY2qsX0fSkPKHVe"></rect><path d="M16 2v4M8 2v4M3 10h18" data-page-node-id="UOkEaxFOsEMP38MDAb3h9Q"></path></svg></div><div class="ck-name" data-page-node-id="dVRnK7UyVfcdUFi9jngRfe">建设打卡</div></div><div class="ck-st" data-page-node-id="uqg8DudlDKF4TBwQcJMQRy">连续 12 天</div><div class="ck-stamp" data-page-node-id="jYtFUAEyqWFb8txhCHJUqg">建</div></div>
-          <div class="ck-sum" data-page-node-id="R1T2HCAnKIJgMgfFYE9WY1">
-            <div class="ring" data-page-node-id="V2FJiJxgm3GsgwaOdAuHu8"><svg viewBox="0 0 58 58" data-page-node-id="4dFx9tSErLoAZC8LpkWE2h"><circle cx="29" cy="29" r="23" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4" data-page-node-id="vAWHiTb7wfOgxDiPFZcOzy"></circle><circle cx="29" cy="29" r="23" fill="none" stroke="#ecff77" stroke-width="4" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="41.3" style="filter:drop-shadow(0 0 7px rgba(236,255,119,.5))" data-page-node-id="YV8ajjwFJckoOYRYesYDUQ"></circle></svg><div class="val" data-page-node-id="EK1kkPLUD47HyFRUWHpIWi">5/7</div></div>
-            <div class="lb" data-page-node-id="ZpeKBgCKFT5Pjp833QdvVi">今日完成度</div>
+      <div class="card c12">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">03</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>今日打卡</h2></div>
+        <div class="cdesc">当日各板块完成情况，板块当天有有效完成动作即打卡成功</div>
+        <div class="checkin-grid">
+          <div class="ck-card done" style=""><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"></path></svg></div><div class="ck-name">今日打卡</div></div><div class="ck-st">备忘已记录</div><div class="ck-stamp">记</div></div>
+          <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div><div class="ck-name">今日计划</div></div><div class="ck-st">完成 3 / 5</div></div>
+          <div class="ck-card done" style=""><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div class="ck-name">学习进度</div></div><div class="ck-st">今日有学习记录</div><div class="ck-stamp">学</div></div>
+          <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div><div class="ck-name">开发工作</div></div><div class="ck-st">今日还没动工</div></div>
+          <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.8 1.1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg></div><div class="ck-name">生活记录</div></div><div class="ck-st">喝水 6 / 8</div></div>
+          <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path></svg></div><div class="ck-name">今日心得</div></div><div class="ck-st">还没有复盘记录</div></div>
+          <div class="ck-card done" style=""><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg></div><div class="ck-name">建设打卡</div></div><div class="ck-st">连续 12 天</div><div class="ck-stamp">建</div></div>
+          <div class="ck-sum">
+            <div class="ring"><svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="23" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4"></circle><circle cx="29" cy="29" r="23" fill="none" stroke="#ecff77" stroke-width="4" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="41.3" style="filter:drop-shadow(0 0 7px rgba(236,255,119,.5))"></circle></svg><div class="val">5/7</div></div>
+            <div class="lb">今日完成度</div>
           </div>
         </div>
       </div>
 
-      <div class="card c6 memo-box" data-page-node-id="crd06WxkwwwvLl6HI3kb8z">
-        <i class="corner tl" data-page-node-id="0oseESb2ueRPwEK9U4Hs1v"></i><i class="corner br" data-page-node-id="0IT8iTwxLBJxKDc0gKiknj"></i>
-        <div class="chead" data-page-node-id="J2LB0R78CnAnBqWKPH4hAq"><span class="no" data-page-node-id="SFF2lja8cWZkqEXvC1y1w5">04</span><h2 data-page-node-id="90S8nWkpV8vKaI5LzPC6jV"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="Fh099JHGmuiCE8X8FdbdXE"><path d="M4 5h16M4 12h16M4 19h10" data-page-node-id="iy7OBGP2T2j110PC1Rb66d"></path></svg>快速备忘</h2></div>
-        <div class="cdesc" data-page-node-id="CbMF5mlaSvpVUH7JlNJSGF">随手记，不分类</div>
-        <div class="cbody" data-page-node-id="xawRZwBh2cbySgt8zxEjmX">
+      <div class="card c6 memo-box">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">04</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"></path></svg>快速备忘</h2></div>
+        <div class="cdesc">随手记，不分类</div>
+        <div class="cbody">
           <textarea placeholder="想到什么记什么…（Ctrl+Enter 保存）"></textarea>
-          <div style="margin-top:7px;display:flex;justify-content:flex-end" data-page-node-id="aDEwtaJ2qzIRUoBzYTuRdB"><button class="btn primary" data-page-node-id="6DO9IIs2WLzLoVdNLmqhxX">保存备忘</button></div>
-          <div class="memo-list" data-page-node-id="CA0h7ILOm3OMMc3iKesQf0">
-            <div class="memo-item" data-page-node-id="Usx5KINpCf59piMZaisMWT"><time data-page-node-id="dJJanO7SvpoHSab7Q7jEfC">09:12</time><span data-page-node-id="iGaKBEpXRrCB2Fb8zET78L">语音识别改成串行队列后，超时问题消失了 —— 免费额度是并发排队，不是单次慢</span></div>
-            <div class="memo-item" data-page-node-id="osAMGADMNnFxecH9dfglVH"><time data-page-node-id="egPDfi5jv1bDBpT746p2LV">昨天</time><span data-page-node-id="NDRbK8CaC7VYzttQuU7nLy">周四前把 README 的架构图补上</span></div>
-            <div class="memo-item" data-page-node-id="XNhAQBeTKI36k1N5kyjYew"><time data-page-node-id="txQzFbiL0mI5uFhKlwOVZ2">09/20</time><span data-page-node-id="VEn50GE8rUoEjEOeToBPy7">present_files 预览管线会污染 HTML 源文件，以后先 commit 再预览</span></div>
+          <div style="margin-top:7px;display:flex;justify-content:flex-end"><button class="btn primary">保存备忘</button></div>
+          <div class="memo-list">
+            <div class="memo-item"><time>09:12</time><span>语音识别改成串行队列后，超时问题消失了 —— 免费额度是并发排队，不是单次慢</span></div>
+            <div class="memo-item"><time>昨天</time><span>周四前把 README 的架构图补上</span></div>
+            <div class="memo-item"><time>09/20</time><span>present_files 预览管线会污染 HTML 源文件，以后先 commit 再预览</span></div>
           </div>
         </div>
       </div>
 
-      <div class="card c6" data-page-node-id="yFxSR05boHfebRr15nAlng">
-        <i class="corner tl" data-page-node-id="nTyVLccZSAA8nqS0QYehuq"></i><i class="corner br" data-page-node-id="dHaYC4trKT1wYT7RzPucp6"></i>
-        <div class="chead" data-page-node-id="Q4hx6qDKy1Y2uIk5yLOCFj"><span class="no" data-page-node-id="2bGgGOe8AaKf7ORPw0XE6G">05</span><h2 data-page-node-id="CX7hF1AasjTLJIcvJpjPUv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="frfXXYZfAKSD8DAgs6OBAP"><rect x="3" y="4" width="18" height="16" rx="2" data-page-node-id="8Au9tU73erbj7ti6kIu973"></rect><path d="M3 9h18M8 2v4M16 2v4" data-page-node-id="8SKg9RNsHCNTXVhvaohyre"></path></svg>本周打卡概览</h2></div>
-        <div class="cdesc" data-page-node-id="VJ8HDOurJAZzcoFAYoGWtJ">最近 7 天各板块记录情况，实心点 = 当天有记录</div>
-        <div class="wk-table" data-page-node-id="mQQVyFp0r798EPILk1jwBN">
-          <div class="wk-head" data-page-node-id="Wfshcr882qhbRtdB2dWPop"><span data-page-node-id="UvkWvjfN1ZaGPrvg1s2FhD">板块</span><span data-page-node-id="2Kb3yHCe6G02QUvBczTvYu">周三</span><span data-page-node-id="4kZr4InpTkEjdLCxTvr3dH">周四</span><span data-page-node-id="2jMYtZt7qRBDYDXDkoVgoT">周五</span><span data-page-node-id="CTJMUi3Ms6dSM6Si43xFqU">周六</span><span data-page-node-id="GGFrvjOjo6fwrwyjf8tGzQ">周日</span><span data-page-node-id="X6qZcy0DY8fD8HCwFRF5O4">周一</span><span data-page-node-id="9201PZjR6Yfs5KY0Rj1CDT">今天</span></div>
-          <div class="wk-row" data-page-node-id="OxjfnFHJzOUi5V7b8F37jD"><span class="wk-name" data-page-node-id="NUSoNsTzO1hWrFovwgF7Yt"><i data-page-node-id="9Vl4eWGKSQXwfiA2VMWGN4"></i>今日打卡</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);" data-page-node-id="1GpjphHzCxLmrBbloPeaBu"></span><span class="wk-dot" data-page-node-id="vQidfGEq00aVZRKxqmNnCH"></span><span class="wk-dot on" data-page-node-id="GLlpKZJVBZOSAZ1yZIg43L"></span><span class="wk-dot on" data-page-node-id="e4buu2TubWlpACZjI5pN1w"></span><span class="wk-dot" data-page-node-id="aHlWgclxg35GBUIEcUHfLL"></span><span class="wk-dot on" data-page-node-id="JVi8TkI2oGIJUm6Wkf7AWw"></span><span class="wk-dot on today" data-page-node-id="VTRGkxPt2c0X3692Q9RX8j"></span></div>
-          <div class="wk-row" data-page-node-id="CSBVlMW0EIKjTF6DMHfWUP"><span class="wk-name" data-page-node-id="fLjyn30uqHp35JEbxNpbDz"><i data-page-node-id="PxkBYUWNdlQ7W395cEdtw9"></i>今日计划</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);" data-page-node-id="zvNqMOkqRd19tCDWOdEDN2"></span><span class="wk-dot on" data-page-node-id="voXp92YI9JLbbAH7kBHVHt"></span><span class="wk-dot on" data-page-node-id="pywWC3B9axAfP8PobVdNfb"></span><span class="wk-dot" data-page-node-id="VpcGwiK2zHC7cvpKnPKmzw"></span><span class="wk-dot" data-page-node-id="smpGGjWtfRTs5QqQbuJDTa"></span><span class="wk-dot on" data-page-node-id="4XHDJVlCCoCowGLIr2JFpl"></span><span class="wk-dot today" data-page-node-id="nkBQCLaNxLefJ9EItV1k6w"></span></div>
-          <div class="wk-row" data-page-node-id="MVzXaWHKqTlAmjMoSJPQq6"><span class="wk-name" data-page-node-id="v4ZbCfqZO76mhXuzMeQ1oK"><i data-page-node-id="Dwz1QUSBn8PMqcF0ads74v"></i>学习进度</span><span class="wk-dot" data-page-node-id="gqtHC9YASGPFyP6xC4XUo8"></span><span class="wk-dot on" data-page-node-id="BrAZ6yff58aMDGzpmAt67h"></span><span class="wk-dot" data-page-node-id="lA9UVgDShm7VKuAHgCPiQC"></span><span class="wk-dot on" data-page-node-id="IhE5aUb5CL9JuSiz0WI5YA"></span><span class="wk-dot on" data-page-node-id="nKMgEGo2uWFnxAFEYf212M"></span><span class="wk-dot" data-page-node-id="BJxkHtH1nxlPCQX4AT9Nqx"></span><span class="wk-dot on today" data-page-node-id="StEQBYmjKG39oT9hnaE787"></span></div>
-          <div class="wk-row" data-page-node-id="D9p4ATHUvxd5x5uR5S4slW"><span class="wk-name" data-page-node-id="KdEpAOOHBeIVPE1qcs7uH0"><i data-page-node-id="zCCCdeK5Xn5VKpsvGO589O"></i>开发工作</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);" data-page-node-id="utzetg26wrfz6ZX2XLx0j7"></span><span class="wk-dot on" data-page-node-id="xg6JF7w6bxbiDcS1bjQgiG"></span><span class="wk-dot on" data-page-node-id="dR2s3Gdrip2AGFa6PDQIo6"></span><span class="wk-dot on" data-page-node-id="n6JbdxTmdyxycHIFlpBpG0"></span><span class="wk-dot on" data-page-node-id="yC1WEoM857dKpwbyAGjK6e"></span><span class="wk-dot on" data-page-node-id="3yv0SR9ioQ66zf8CmwVynZ"></span><span class="wk-dot today" data-page-node-id="pUD0Y4uLs0o3djROv4oF4z"></span></div>
-          <div class="wk-row" data-page-node-id="CMYhcEIZVFfeDyVCDG3Cx5"><span class="wk-name" data-page-node-id="6ivRqDdZO5EBFDMcUYvxQ6"><i data-page-node-id="sh3OAKUKiOmzvgsR2aNsZI"></i>生活记录</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);" data-page-node-id="OF7wPbXEvA6W27ImRGoOaf"></span><span class="wk-dot on" data-page-node-id="uCMWHV6gC2H3eJOhBAxEQQ"></span><span class="wk-dot" data-page-node-id="ooMRrIUrXtqqLPC2Q2itZm"></span><span class="wk-dot on" data-page-node-id="UhsahN0CTOYFA7j1motEAO"></span><span class="wk-dot on" data-page-node-id="ljHyq1Mu4hvRkgiH3GGI8r"></span><span class="wk-dot on" data-page-node-id="moFFrvUxaZn6qtRlodXpxY"></span><span class="wk-dot on today" data-page-node-id="VaVnDiBApA55dhV9bhIWEu"></span></div>
-          <div class="wk-row" data-page-node-id="97mah03inTK48VH7yagadA"><span class="wk-name" data-page-node-id="7rwjQusqmU4YlvlxC9ZilT"><i data-page-node-id="GgIaqvmtnCy4334WspVll4"></i>成长笔记</span><span class="wk-dot" data-page-node-id="TjbN5v9ekBFulT3maQMDvX"></span><span class="wk-dot" data-page-node-id="AaebA0e4jbA6SdkfVjUMAr"></span><span class="wk-dot on" data-page-node-id="Ao0ZQzsWmMebOjG0GMAB3Z"></span><span class="wk-dot" data-page-node-id="AuYy4iQLjBBekpvQpaPv0s"></span><span class="wk-dot on" data-page-node-id="JGi1sYY8B1KZou1EupZCJB"></span><span class="wk-dot" data-page-node-id="yTEfJO83qRBjlulKR0UeWo"></span><span class="wk-dot today" data-page-node-id="czEceOaK1DuLalmD0v6EV4"></span></div>
-          <div class="wk-row" data-page-node-id="2knFIFuAf4q9GBjgY3AX1W"><span class="wk-name" data-page-node-id="kPlu7OoYgQ8rMbsfZMsHIE"><i data-page-node-id="L1xozbmGGSs0zN9qBIAujB"></i>建设打卡</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);" data-page-node-id="Kx4E7rLJI2iTFjwwZRgnBE"></span><span class="wk-dot on" data-page-node-id="Ney3Sor7oNpKHuvSVckv8A"></span><span class="wk-dot on" data-page-node-id="jVMPXCkDBGuG4GqjqK3iS7"></span><span class="wk-dot on" data-page-node-id="LAWSF0Lqa20pp3b4SkHHOA"></span><span class="wk-dot on" data-page-node-id="qoHeCkwWmRdopnYqj3kVf8"></span><span class="wk-dot on" data-page-node-id="rJF6gjhMCaja5RyYju35Fk"></span><span class="wk-dot on today" data-page-node-id="yDKCrxrLFHrEG0jpy8MYoo"></span></div>
+      <div class="card c6">
+        <i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">05</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18M8 2v4M16 2v4"></path></svg>本周打卡概览</h2></div>
+        <div class="cdesc">最近 7 天各板块记录情况，实心点 = 当天有记录</div>
+        <div class="wk-table">
+          <div class="wk-head"><span>板块</span><span>周三</span><span>周四</span><span>周五</span><span>周六</span><span>周日</span><span>周一</span><span>今天</span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>今日打卡</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot on today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>今日计划</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);"></span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>学习进度</span><span class="wk-dot"></span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>开发工作</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>生活记录</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>成长笔记</span><span class="wk-dot"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot on"></span><span class="wk-dot"></span><span class="wk-dot today"></span></div>
+          <div class="wk-row"><span class="wk-name"><i></i>建设打卡</span><span class="wk-dot on" style="border-color: rgb(255, 255, 0);"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on"></span><span class="wk-dot on today"></span></div>
         </div>
       </div>
 
-      <div class="backup-tip" data-page-node-id="BTzlPH6VN6fZVC9X9R4hTp">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="4zeidrgtDsLaAidBIWylId"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" data-page-node-id="5PCwuplHNdWgBAeIUFHRH3"></path></svg>
-        <span data-page-node-id="OXuU0VXbvFGLZB1BQJ6LLs">数据已积累到一定规模，建议点击右上角「导出备份」保存一份 JSON 快照。</span>
+      <div class="backup-tip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>
+        <span>数据已积累到一定规模，建议点击右上角「导出备份」保存一份 JSON 快照。</span>
       </div>
     </div>
   </main>
 </div>
+
 
 
 
