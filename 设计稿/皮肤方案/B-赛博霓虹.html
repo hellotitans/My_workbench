@@ -10,8 +10,8 @@
 ================================================================ */
 :root{
   --bg:#030307;
-  --cyan:#22d3ee; --magenta:#f0429e; --gold:#e6ff4a; --amber:#ffd23d; --violet:#7c74d6;
-  --panel:#0a0a16; --line:rgba(34,211,238,.22); --line-hi:rgba(34,211,238,.40);
+  --cyan:#45d8ff; --magenta:#ff58b0; --gold:#d9f05e; --amber:#ffd23d; --violet:#7c74d6;
+  --panel:#0a0a16; --line:rgba(69,216,255,.22); --line-hi:rgba(69,216,255,.40);
   --t1:#d9e5f2; --t2:#8b9cb8; --t3:#607292;
   --mono:"JetBrains Mono","SF Mono",ui-monospace,Menlo,Consolas,monospace;
   --r-card:8px; --r-sm:6px;
@@ -21,18 +21,18 @@ body{
   font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   background:var(--bg); color:var(--t1); font-size:14px; min-height:100vh;
   background-image:
-    radial-gradient(820px 500px at 4% -8%, rgba(34,211,238,.058), transparent 62%),
-    radial-gradient(740px 460px at 97% 6%, rgba(240,66,158,.05), transparent 62%),
+    radial-gradient(820px 500px at 4% -8%, rgba(69,216,255,.058), transparent 62%),
+    radial-gradient(740px 460px at 97% 6%, rgba(255,88,176,.05), transparent 62%),
     radial-gradient(980px 540px at 50% 110%, rgba(124,116,214,.04), transparent 66%),
-    radial-gradient(600px 380px at 50% 46%, rgba(34,211,238,.05), transparent 70%);
+    radial-gradient(600px 380px at 50% 46%, rgba(69,216,255,.05), transparent 70%);
 }
 /* 扫描线 + 网格 */
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:8;
   background:repeating-linear-gradient(180deg, rgba(200,228,255,.032) 0 1px, transparent 1px 3px)}
 body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.58;
   background-image:
-    linear-gradient(rgba(34,211,238,.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(34,211,238,.022) 1px, transparent 1px);
+    linear-gradient(rgba(69,216,255,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(69,216,255,.022) 1px, transparent 1px);
   background-size:48px 48px;
   mask-image:radial-gradient(1000px 640px at 50% 10%, #000 18%, transparent 86%)}
 #app{display:flex;min-height:100vh;position:relative;z-index:1}
@@ -42,59 +42,59 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opac
   width:236px;flex-shrink:0;position:sticky;top:0;height:100vh;
   background:linear-gradient(180deg, rgba(14,14,30,.97), rgba(4,4,12,.97));
   border-right:1px solid var(--line-hi); display:flex;flex-direction:column;
-  box-shadow:1px 0 16px rgba(34,211,238,0.065), 3px 0 37px rgba(34,211,238,0.023);
+  box-shadow:1px 0 16px rgba(69,216,255,0.065), 3px 0 37px rgba(69,216,255,0.023);
 }
 .logo{padding:24px 20px 18px;display:flex;align-items:center;gap:11px;position:relative}
 .logo::after{content:'';position:absolute;left:20px;right:20px;bottom:0;height:1px;
   background:linear-gradient(90deg,var(--cyan),var(--magenta),transparent);
-  box-shadow:0 0 9px rgba(34,211,238,0.162)}
+  box-shadow:0 0 9px rgba(69,216,255,0.162)}
 .logo .mk svg{width:32px;height:32px;color:var(--cyan);
-  filter:drop-shadow(0 0 9px rgba(34,211,238,1)) drop-shadow(0 0 16px rgba(34,211,238,0.173))}
-.logo .t{font-size:16px;font-weight:700;letter-spacing:1.2px;text-shadow:0 0 12px rgba(34,211,238,0.196)}
+  filter:drop-shadow(0 0 9px rgba(69,216,255,1)) drop-shadow(0 0 16px rgba(69,216,255,0.173))}
+.logo .t{font-size:16px;font-weight:700;letter-spacing:1.2px;text-shadow:0 0 12px rgba(69,216,255,0.196)}
 .logo .s{font-size:10px;color:var(--magenta);margin-top:3px;font-family:var(--mono);
-  letter-spacing:2.4px;text-shadow:0 0 9px rgba(240,66,158,0.207)}
+  letter-spacing:2.4px;text-shadow:0 0 9px rgba(255,88,176,0.207)}
 nav{flex:1;padding:14px 12px;overflow-y:auto}
 .nav-label{font-family:var(--mono);font-size:9px;letter-spacing:2.4px;color:var(--t3);padding:0 10px 8px}
 .nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--r-sm);
   cursor:pointer;color:var(--t2);margin-bottom:3px;font-size:14px;
   border-left:2px solid transparent;transition:.18s}
-.nav-item:hover{background:rgba(34,211,238,.1);color:var(--t1)}
+.nav-item:hover{background:rgba(69,216,255,.1);color:var(--t1)}
 .nav-item.active{
-  background:linear-gradient(90deg, rgba(240,66,158,.17), rgba(34,211,238,.07));
+  background:linear-gradient(90deg, rgba(255,88,176,.17), rgba(69,216,255,.07));
   color:var(--cyan); border-left-color:var(--magenta); font-weight:600;
-  text-shadow:0 0 9px rgba(34,211,238,0.207);
-  box-shadow:inset 0 0 12px rgba(34,211,238,0.037), 0 0 10px rgba(34,211,238,0.028)}
+  text-shadow:0 0 9px rgba(69,216,255,0.207);
+  box-shadow:inset 0 0 12px rgba(69,216,255,0.037), 0 0 10px rgba(69,216,255,0.028)}
 .nav-item svg{width:16px;height:16px;flex:none}
 .nav-item.active svg{filter:drop-shadow(0 0 8px var(--cyan))}
 .nav-item .tag{margin-left:auto;font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;
-  background:rgba(240,66,158,.13);color:var(--magenta);border:1px solid rgba(240,66,158,.5);
-  box-shadow:0 0 9px rgba(240,66,158,0.069)}
+  background:rgba(255,88,176,.13);color:var(--magenta);border:1px solid rgba(255,88,176,.5);
+  box-shadow:0 0 9px rgba(255,88,176,0.069)}
 .side-foot{padding:14px 16px;border-top:1px solid var(--line)}
 .hud{font-family:var(--mono);font-size:10px;color:var(--t3);line-height:1.95;letter-spacing:.6px}
-.hud b{color:var(--cyan);font-weight:600;text-shadow:0 0 9px rgba(34,211,238,0.196)}
+.hud b{color:var(--cyan);font-weight:600;text-shadow:0 0 9px rgba(69,216,255,0.196)}
 .hud .row{display:flex;justify-content:space-between}
-.hud .row.warn b{color:var(--magenta);text-shadow:0 0 9px rgba(240,66,158,0.196)}
+.hud .row.warn b{color:var(--magenta);text-shadow:0 0 9px rgba(255,88,176,0.196)}
 
 /* ---------- 主区 ---------- */
 main{flex:1;min-width:0;padding:26px 30px 40px;max-width:1320px;margin:0 auto}
 .page-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;gap:16px;flex-wrap:wrap}
 .page-head h1{font-size:26px;font-weight:800;letter-spacing:1px;
-  text-shadow:0 0 14px rgba(34,211,238,0.184), 0 0 32px rgba(34,211,238,0.081)}
+  text-shadow:0 0 14px rgba(69,216,255,0.184), 0 0 32px rgba(69,216,255,0.081)}
 .page-head .sub{color:var(--t2);font-size:12.5px;margin-top:5px}
 .page-head .sub em{font-style:normal;font-family:var(--mono);color:var(--magenta);
-  text-shadow:0 0 9px rgba(240,66,158,0.207)}
+  text-shadow:0 0 9px rgba(255,88,176,0.207)}
 .head-actions{display:flex;gap:9px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r-sm);
   border:1px solid var(--line-hi);background:rgba(12,12,26,.8);color:var(--t2);cursor:pointer;
   font-size:12.5px;font-family:inherit;transition:.16s;
-  box-shadow:0 0 9px rgba(34,211,238,0.032), inset 0 0 9px rgba(34,211,238,0.011)}
+  box-shadow:0 0 9px rgba(69,216,255,0.032), inset 0 0 9px rgba(69,216,255,0.011)}
 .btn:hover{color:var(--cyan);border-color:var(--cyan);
-  box-shadow:0 0 14px rgba(34,211,238,0.115), inset 0 0 12px rgba(34,211,238,0.032)}
+  box-shadow:0 0 14px rgba(69,216,255,0.115), inset 0 0 12px rgba(69,216,255,0.032)}
 .btn svg{width:14px;height:14px}
 .btn.primary{background:linear-gradient(135deg,var(--magenta),#f79ac9);border-color:transparent;
   color:#12000a;font-weight:800;letter-spacing:.5px;
-  box-shadow:0 0 14px rgba(240,66,158,0.15), 0 0 32px rgba(240,66,158,0.065)}
-.btn.primary:hover{box-shadow:0 0 20px rgba(240,66,158,0.219), 0 0 48px rgba(240,66,158,0.092)}
+  box-shadow:0 0 14px rgba(255,88,176,0.15), 0 0 32px rgba(255,88,176,0.065)}
+.btn.primary:hover{box-shadow:0 0 20px rgba(255,88,176,0.219), 0 0 48px rgba(255,88,176,0.092)}
 
 /* ---------- 栅格 ---------- */
 .home-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;align-items:stretch}
@@ -106,159 +106,167 @@ main{flex:1;min-width:0;padding:26px 30px 40px;max-width:1320px;margin:0 auto}
   background:linear-gradient(162deg,#0b0b18 0%,#07070d 62%,#090610 100%);
   border:1px solid var(--line-hi);
   box-shadow:
-    0 0 0 1px rgba(34,211,238,0.023),
-    0 0 14px rgba(34,211,238,0.046),
-    0 0 36px rgba(34,211,238,0.021),
-    inset 0 0 20px rgba(34,211,238,0.013),
+    0 0 0 1px rgba(69,216,255,0.023),
+    0 0 14px rgba(69,216,255,0.046),
+    0 0 36px rgba(69,216,255,0.021),
+    inset 0 0 20px rgba(69,216,255,0.013),
     inset 0 1px 0 rgba(255,255,255,0.016),
     0 9px 25px rgba(0,0,0,0.126);
 }
 /* 顶部霓虹高光条 */
 .card::before{content:'';position:absolute;top:0;left:16px;right:16px;height:1px;z-index:3;
-  background:linear-gradient(90deg,transparent,rgba(34,211,238,.5) 30%,rgba(240,66,158,.42) 72%,transparent);
-  box-shadow:0 0 9px rgba(34,211,238,0.173), 0 0 16px rgba(240,66,158,0.092)}
+  background:linear-gradient(90deg,transparent,rgba(69,216,255,.5) 30%,rgba(255,88,176,.42) 72%,transparent);
+  box-shadow:0 0 9px rgba(69,216,255,0.173), 0 0 16px rgba(255,88,176,0.092)}
 /* 右下角品红余晖 */
 .card::after{content:'';position:absolute;right:-70px;bottom:-80px;width:200px;height:200px;
   border-radius:50%;z-index:0;pointer-events:none;
-  background:radial-gradient(circle,rgba(240,66,158,.016),transparent 68%)}
+  background:radial-gradient(circle,rgba(255,88,176,.016),transparent 68%)}
 .card > *{position:relative;z-index:1}
-.card.hot{border-color:rgba(240,66,158,.6);
-  box-shadow:0 0 0 1px rgba(240,66,158,0.032), 0 0 16px rgba(240,66,158,0.055),
-    0 0 37px rgba(240,66,158,0.023), inset 0 0 20px rgba(240,66,158,0.016), 0 9px 25px rgba(0,0,0,0.126)}
+.card.hot{border-color:rgba(255,88,176,.6);
+  box-shadow:0 0 0 1px rgba(255,88,176,0.032), 0 0 16px rgba(255,88,176,0.055),
+    0 0 37px rgba(255,88,176,0.023), inset 0 0 20px rgba(255,88,176,0.016), 0 9px 25px rgba(0,0,0,0.126)}
 
 /* 角标：圆角取景框（呼应声场球） */
 .corner{position:absolute;width:13px;height:13px;z-index:2;pointer-events:none;opacity:.85}
 .corner.tl{top:6px;left:6px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);
-  border-radius:6px 0 0 0;box-shadow:-2px -2px 9px rgba(34,211,238,0.104)}
+  border-radius:6px 0 0 0;box-shadow:-2px -2px 9px rgba(69,216,255,0.104)}
 .corner.br{bottom:6px;right:6px;border-bottom:2px solid var(--magenta);border-right:2px solid var(--magenta);
-  border-radius:0 0 6px 0;box-shadow:2px 2px 9px rgba(240,66,158,0.104)}
+  border-radius:0 0 6px 0;box-shadow:2px 2px 9px rgba(255,88,176,0.104)}
 
 .chead{display:flex;align-items:center;gap:9px;margin-bottom:3px}
 .chead .no{font-family:var(--mono);font-size:9.5px;color:#030307;letter-spacing:1.4px;
   background:var(--cyan);padding:2px 6px;border-radius:3px;font-weight:700;
-  box-shadow:0 0 9px rgba(34,211,238,0.162)}
+  box-shadow:0 0 9px rgba(69,216,255,0.162)}
 .chead h2{font-size:14.5px;font-weight:800;letter-spacing:.6px;display:flex;align-items:center;gap:7px}
-.chead h2 svg{width:15px;height:15px;color:var(--cyan);filter:drop-shadow(0 0 8px rgba(34,211,238,1))}
+.chead h2 svg{width:15px;height:15px;color:var(--cyan);filter:drop-shadow(0 0 8px rgba(69,216,255,1))}
 .cdesc{font-size:11.5px;color:var(--t3);margin-bottom:13px;padding-left:2px}
 .cbody{flex:1;display:flex;flex-direction:column;min-height:0}
 
 /* ---------- 日期卡 ---------- */
-.date-card{padding:19px 21px;justify-content:space-between}
+.date-card{padding:19px 21px;justify-content:space-between;
+  background:
+    radial-gradient(150% 125% at 84% -12%, rgba(69,216,255,.17), transparent 56%),
+    radial-gradient(110% 100% at 6% 112%, rgba(255,88,176,.10), transparent 58%),
+    linear-gradient(160deg, #0e1728 0%, #0a0f1f 100%);
+  box-shadow:
+    0 0 30px rgba(69,216,255,.11),
+    0 0 84px rgba(69,216,255,.05),
+    inset 0 0 46px rgba(69,216,255,.045)}
 .date-card::after{display:none}
-.date-card .glow{position:absolute;right:-80px;top:-90px;width:250px;height:250px;border-radius:50%;
-  background:radial-gradient(circle, rgba(34,211,238,.07), transparent 68%);z-index:1;pointer-events:none}
+.date-card .glow{position:absolute;right:-90px;top:-100px;width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle, rgba(69,216,255,.15), transparent 66%);z-index:1;pointer-events:none}
 .day-head{display:flex;align-items:baseline;gap:8px;position:relative}
 .day-head .d{font-family:var(--mono);font-size:29px;font-weight:800;letter-spacing:-1px;color:#fff;
-  text-shadow:0 0 12px rgba(34,211,238,1), 0 0 32px rgba(34,211,238,0.115)}
+  text-shadow:0 0 12px rgba(69,216,255,1), 0 0 32px rgba(69,216,255,0.115)}
 .day-head .w{font-size:11px;color:var(--magenta);font-family:var(--mono);letter-spacing:2px;
-  text-shadow:0 0 10px rgba(240,66,158,1)}
+  text-shadow:0 0 10px rgba(255,88,176,1)}
 .day-greet{font-size:19px;font-weight:700;line-height:1.5;margin:15px 0 17px;position:relative;letter-spacing:.3px}
-.day-greet b{color:var(--cyan);text-shadow:0 0 12px rgba(34,211,238,1), 0 0 29px rgba(34,211,238,0.115)}
+.day-greet b{color:var(--cyan);text-shadow:0 0 12px rgba(69,216,255,1), 0 0 29px rgba(69,216,255,0.115)}
 .day-foot{position:relative;display:flex;align-items:center;gap:8px;
   font-size:11.5px;color:var(--t2);font-family:var(--mono);letter-spacing:.5px}
 .day-foot b{color:#fff;font-size:18px;font-weight:800;
-  text-shadow:0 0 10px rgba(240,66,158,1), 0 0 23px rgba(240,66,158,0.126)}
+  text-shadow:0 0 10px rgba(255,88,176,1), 0 0 23px rgba(255,88,176,0.126)}
 .day-foot .bar{flex:1;height:3px;background:rgba(255,255,255,.08);overflow:hidden;border-radius:2px}
 .day-foot .bar i{display:block;height:100%;width:72%;
   background:linear-gradient(90deg,var(--cyan),var(--magenta));
-  box-shadow:0 0 9px rgba(34,211,238,1), 0 0 18px rgba(240,66,158,0.138)}
-.day-ring{position:absolute;right:-34px;bottom:-56px;width:196px;height:196px;opacity:.7;pointer-events:none;z-index:1;
-  filter:drop-shadow(0 0 8px rgba(34,211,238,0.144))}
+  box-shadow:0 0 9px rgba(69,216,255,1), 0 0 18px rgba(255,88,176,0.138)}
+.day-ring{position:absolute;right:-34px;bottom:-56px;width:196px;height:196px;opacity:.82;pointer-events:none;z-index:1;
+  filter:drop-shadow(0 0 8px rgba(69,216,255,0.144))}
 
 /* ---------- 今天要处理 ---------- */
 .focus-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:var(--r-sm);
-  background:rgba(255,255,255,.03);border-left:2px solid rgba(34,211,238,.45);margin-bottom:7px;transition:.16s}
-.focus-item:hover{background:rgba(34,211,238,.1);border-left-color:var(--cyan);
-  box-shadow:inset 0 0 12px rgba(34,211,238,0.032), 0 0 9px rgba(34,211,238,0.032)}
-.focus-item.overdue{border-left-color:var(--magenta);background:rgba(240,66,158,.07);
-  box-shadow:inset 0 0 11px rgba(240,66,158,0.028)}
+  background:rgba(255,255,255,.03);border-left:2px solid rgba(69,216,255,.45);margin-bottom:7px;transition:.16s}
+.focus-item:hover{background:rgba(69,216,255,.1);border-left-color:var(--cyan);
+  box-shadow:inset 0 0 12px rgba(69,216,255,0.032), 0 0 9px rgba(69,216,255,0.032)}
+.focus-item.overdue{border-left-color:var(--magenta);background:rgba(255,88,176,.07);
+  box-shadow:inset 0 0 11px rgba(255,88,176,0.028)}
 .mini-check{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--cyan);background:transparent;flex:none;
   display:grid;place-items:center;cursor:pointer;color:transparent;
-  box-shadow:inset 0 0 8px rgba(34,211,238,0.092), 0 0 8px rgba(34,211,238,0.042)}
+  box-shadow:inset 0 0 8px rgba(69,216,255,0.092), 0 0 8px rgba(69,216,255,0.042)}
 .mini-check.checked{background:var(--gold);border-color:var(--gold);color:#111600;
-  box-shadow:0 0 10px rgba(230,255,74,0.207), 0 0 20px rgba(230,255,74,0.081)}
+  box-shadow:0 0 8.0px rgba(217,240,94, 0.124), 0 0 16.0px rgba(217,240,94, 0.049)}
 .mini-check svg{width:11px;height:11px}
 .fi-text{flex:1;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fi-text.done{color:var(--t3);text-decoration:line-through}
 .badge{font-family:var(--mono);font-size:9.5px;padding:2px 6px;flex:none;letter-spacing:.4px;font-weight:700;border-radius:3px}
-.badge.red{background:rgba(240,66,158,.15);color:var(--magenta);border:1px solid var(--magenta);
-  box-shadow:0 0 9px rgba(240,66,158,0.104)}
-.badge.gold{background:rgba(230,255,74,.14);color:var(--gold);border:1px solid rgba(230,255,74,.6);
-  box-shadow:0 0 9px rgba(230,255,74,0.081)}
+.badge.red{background:rgba(255,88,176,.15);color:var(--magenta);border:1px solid var(--magenta);
+  box-shadow:0 0 9px rgba(255,88,176,0.104)}
+.badge.gold{background:rgba(217,240,94,.14);color:var(--gold);border:1px solid rgba(217,240,94,.6);
+  box-shadow:0 0 7.2px rgba(217,240,94, 0.049)}
 
 /* ---------- 今日打卡 ---------- */
 .checkin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;height:100%}
 .ck-card{position:relative;padding:12px;border-radius:var(--r-sm);overflow:hidden;
-  border:1px solid rgba(34,211,238,.28);background:rgba(255,255,255,.03);
+  border:1px solid rgba(69,216,255,.28);background:rgba(255,255,255,.03);
   display:flex;flex-direction:column;gap:7px;transition:.18s;
-  box-shadow:inset 0 0 10px rgba(34,211,238,0.011)}
+  box-shadow:inset 0 0 10px rgba(69,216,255,0.011)}
 .ck-card:hover{border-color:var(--cyan);
-  box-shadow:0 0 12px rgba(34,211,238,0.081), inset 0 0 14px rgba(34,211,238,0.028)}
-.ck-card.done{border-color:rgba(230,255,74,.46);
-  background:linear-gradient(150deg,rgba(230,255,74,.14),rgba(34,211,238,.05));
-  box-shadow:0 0 14px rgba(230,255,74,0.065), inset 0 0 16px rgba(230,255,74,0.023)}
+  box-shadow:0 0 12px rgba(69,216,255,0.081), inset 0 0 14px rgba(69,216,255,0.028)}
+.ck-card.done{border-color:rgba(217,240,94,.46);
+  background:linear-gradient(150deg,rgba(217,240,94,.14),rgba(69,216,255,.05));
+  box-shadow:0 0 11.2px rgba(217,240,94, 0.039), inset 0 0 12.8px rgba(217,240,94, 0.014)}
 .ck-top{display:flex;align-items:center;gap:8px}
 .ck-ic{width:26px;height:26px;border-radius:5px;display:grid;place-items:center;flex:none;
-  background:rgba(34,211,238,.12);border:1px solid rgba(34,211,238,.45);color:var(--cyan);
-  box-shadow:0 0 9px rgba(34,211,238,0.05)}
+  background:rgba(69,216,255,.12);border:1px solid rgba(69,216,255,.45);color:var(--cyan);
+  box-shadow:0 0 9px rgba(69,216,255,0.05)}
 .ck-ic svg{width:14px;height:14px}
-.ck-card.done .ck-ic{background:rgba(230,255,74,.18);border-color:rgba(230,255,74,.52);color:var(--gold);
-  box-shadow:0 0 10px rgba(230,255,74,0.126), inset 0 0 9px rgba(230,255,74,0.046)}
+.ck-card.done .ck-ic{background:rgba(217,240,94,.18);border-color:rgba(217,240,94,.52);color:var(--gold);
+  box-shadow:0 0 8.0px rgba(217,240,94, 0.076), inset 0 0 7.2px rgba(217,240,94, 0.028)}
 .ck-name{font-size:12.5px;font-weight:700;letter-spacing:.3px}
 .ck-st{font-size:10.5px;color:var(--t3);font-family:var(--mono);margin-top:auto}
-.ck-card.done .ck-st{color:var(--gold);text-shadow:0 0 8px rgba(230,255,74,0.115)}
+.ck-card.done .ck-st{color:var(--gold);text-shadow:0 0 6.4px rgba(217,240,94, 0.069)}
 .ck-stamp{position:absolute;right:8px;top:6px;font-size:16px;font-weight:800;color:var(--gold);
   transform:rotate(-12deg);font-family:var(--mono);
-  text-shadow:0 0 9px rgba(230,255,74,0.263), 0 0 17px rgba(230,255,74,0.092)}
+  text-shadow:0 0 7.2px rgba(217,240,94, 0.158), 0 0 13.6px rgba(217,240,94, 0.055)}
 .ck-card.locked{opacity:.45}
 .lock-tag{position:absolute;right:6px;top:6px;font-family:var(--mono);font-size:8.5px;font-weight:700;
-  padding:1px 4px;border-radius:3px;background:rgba(240,66,158,.13);color:var(--magenta);
-  border:1px solid rgba(240,66,158,.5)}
+  padding:1px 4px;border-radius:3px;background:rgba(255,88,176,.13);color:var(--magenta);
+  border:1px solid rgba(255,88,176,.5)}
 .ck-sum{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   border-radius:var(--r-sm);position:relative;
-  border:1px dashed rgba(230,255,74,.40);background:rgba(230,255,74,.06);
-  box-shadow:inset 0 0 12px rgba(230,255,74,0.018)}
+  border:1px dashed rgba(217,240,94,.40);background:rgba(217,240,94,.06);
+  box-shadow:inset 0 0 9.6px rgba(217,240,94, 0.011)}
 .ck-sum .ring{width:58px;height:58px;position:relative}
 .ck-sum .ring svg{width:58px;height:58px;transform:rotate(-90deg)}
 .ck-sum .ring .val{position:absolute;inset:0;display:grid;place-items:center;
   font-family:var(--mono);font-size:14px;font-weight:800;color:var(--gold);
-  text-shadow:0 0 9px rgba(230,255,74,0.207)}
+  text-shadow:0 0 7.2px rgba(217,240,94, 0.124)}
 .ck-sum .lb{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:1.4px}
 
 /* ---------- 快速备忘 ---------- */
 .memo-box textarea{
-  width:100%;min-height:66px;background:rgba(0,0,0,.5);border:1px solid rgba(34,211,238,.4);
+  width:100%;min-height:66px;background:rgba(0,0,0,.5);border:1px solid rgba(69,216,255,.4);
   border-radius:var(--r-sm);
   color:var(--t1);padding:10px 11px;font-size:13px;font-family:inherit;resize:none;line-height:1.6;
-  box-shadow:inset 0 0 9px rgba(34,211,238,0.016)}
+  box-shadow:inset 0 0 9px rgba(69,216,255,0.016)}
 .memo-box textarea:focus{outline:none;border-color:var(--cyan);
-  box-shadow:0 0 12px rgba(34,211,238,0.092), inset 0 0 11px rgba(34,211,238,0.032)}
+  box-shadow:0 0 12px rgba(69,216,255,0.092), inset 0 0 11px rgba(69,216,255,0.032)}
 .memo-box textarea::placeholder{color:var(--t3)}
 .memo-list{margin-top:8px;display:flex;flex-direction:column;gap:6px;overflow-y:auto;max-height:150px}
 .memo-item{display:flex;gap:9px;padding:8px 10px;border-radius:5px;background:rgba(255,255,255,.035);
   border-left:2px solid var(--magenta);font-size:12.5px;line-height:1.55;color:var(--t2);
-  box-shadow:inset 0 0 9px rgba(240,66,158,0.016)}
+  box-shadow:inset 0 0 9px rgba(255,88,176,0.016)}
 .memo-item time{font-family:var(--mono);font-size:9.5px;color:var(--cyan);flex:none;padding-top:2px;
-  text-shadow:0 0 8px rgba(34,211,238,0.138)}
+  text-shadow:0 0 8px rgba(69,216,255,0.138)}
 
 /* ---------- 本周概览 ---------- */
 .wk-table{display:flex;flex-direction:column;gap:1px}
 .wk-head,.wk-row{display:grid;grid-template-columns:76px repeat(7,1fr);gap:6px;align-items:center}
-.wk-head{padding-bottom:7px;border-bottom:1px solid rgba(34,211,238,.3);margin-bottom:6px;
-  box-shadow:0 1px 9px rgba(34,211,238,0.037)}
+.wk-head{padding-bottom:7px;border-bottom:1px solid rgba(69,216,255,.3);margin-bottom:6px;
+  box-shadow:0 1px 9px rgba(69,216,255,0.037)}
 .wk-head span{font-family:var(--mono);font-size:9.5px;color:var(--t3);text-align:center;letter-spacing:.6px}
 .wk-head span:first-child{text-align:left}
 .wk-row{padding:6px 0;border-radius:5px}
-.wk-row:nth-child(even){background:rgba(34,211,238,.05)}
+.wk-row:nth-child(even){background:rgba(69,216,255,.05)}
 .wk-name{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px}
 .wk-name i{width:6px;height:6px;background:var(--cyan);flex:none;box-shadow:0 0 8px var(--cyan)}
 .wk-dot{width:100%;height:20px;border-radius:4px;display:grid;place-items:center;
-  border:1px solid rgba(34,211,238,.2);background:rgba(255,255,255,.025)}
-.wk-dot.on{background:rgba(230,255,74,.16);border-color:rgba(230,255,74,.40);
-  box-shadow:inset 0 0 9px rgba(230,255,74,0.046), 0 0 8px rgba(230,255,74,0.037)}
+  border:1px solid rgba(69,216,255,.2);background:rgba(255,255,255,.025)}
+.wk-dot.on{background:rgba(217,240,94,.16);border-color:rgba(217,240,94,.40);
+  box-shadow:inset 0 0 7.2px rgba(217,240,94, 0.028), 0 0 6.4px rgba(217,240,94, 0.022)}
 .wk-dot.on::after{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);
-  box-shadow:0 0 9px rgba(230,255,74,1)}
-.wk-dot.today{border-color:var(--magenta);box-shadow:0 0 9px rgba(240,66,158,0.069)}
+  box-shadow:0 0 7.2px rgba(217,240,94, 0.600)}
+.wk-dot.today{border-color:var(--magenta);box-shadow:0 0 9px rgba(255,88,176,0.069)}
 
 /* ---------- 备份提示 ---------- */
 .backup-tip{grid-column:span 12;display:flex;align-items:center;gap:10px;padding:11px 15px;border-radius:var(--r-sm);
@@ -319,11 +327,11 @@ main{flex:1;min-width:0;padding:26px 30px 40px;max-width:1320px;margin:0 auto}
         </div>
         <div class="day-foot"><span>已陪伴你</span><b>31</b><span>天</span><span class="bar"><i></i></span></div>
         <svg class="day-ring" viewBox="0 0 240 240" aria-hidden="true">
-          <circle cx="120" cy="120" r="106" fill="none" stroke="rgba(34,211,238,.16)" stroke-width="1"/>
-          <circle cx="120" cy="120" r="84" fill="none" stroke="rgba(240,66,158,.28)" stroke-width="1"/>
-          <circle cx="120" cy="120" r="60" fill="none" stroke="rgba(34,211,238,.36)" stroke-width="1"/>
-          <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(240,66,158,.6)" stroke-width="1"/>
-          <circle cx="219" cy="156" r="4" fill="#22d3ee"/><circle cx="43" cy="92" r="2.6" fill="#f0429e"/>
+          <circle cx="120" cy="120" r="106" fill="none" stroke="rgba(69,216,255,.16)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="84" fill="none" stroke="rgba(255,88,176,.28)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="60" fill="none" stroke="rgba(69,216,255,.36)" stroke-width="1"/>
+          <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(255,88,176,.6)" stroke-width="1"/>
+          <circle cx="219" cy="156" r="4" fill="#45d8ff"/><circle cx="43" cy="92" r="2.6" fill="#ff58b0"/>
         </svg>
       </div>
 
@@ -359,7 +367,7 @@ main{flex:1;min-width:0;padding:26px 30px 40px;max-width:1320px;margin:0 auto}
           <div class="ck-card"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="ck-name">今日心得</div></div><div class="ck-st">还没有复盘记录</div></div>
           <div class="ck-card done"><div class="ck-top"><div class="ck-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div><div class="ck-name">建设打卡</div></div><div class="ck-st">连续 12 天</div><div class="ck-stamp">建</div></div>
           <div class="ck-sum">
-            <div class="ring"><svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="23" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4"/><circle cx="29" cy="29" r="23" fill="none" stroke="#e6ff4a" stroke-width="4" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="41.3" style="filter:drop-shadow(0 0 7px rgba(230,255,74,0.274))"/></svg><div class="val">5/7</div></div>
+            <div class="ring"><svg viewBox="0 0 58 58"><circle cx="29" cy="29" r="23" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="4"/><circle cx="29" cy="29" r="23" fill="none" stroke="#d9f05e" stroke-width="4" stroke-linecap="round" stroke-dasharray="144.5" stroke-dashoffset="41.3" style="filter:drop-shadow(0 0 7px rgba(217,240,94,0.274))"/></svg><div class="val">5/7</div></div>
             <div class="lb">今日完成度</div>
           </div>
         </div>
