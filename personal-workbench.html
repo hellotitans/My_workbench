@@ -224,6 +224,17 @@ body.light .card h2 svg{color:var(--accent);filter:none}
   min-height:180px;
   animation:cardHalo 6.8s ease-in-out infinite;
 }
+/* 右上角光晕层：呼吸（B 版同构）；亮核与外层同相位，融进整体发光区不形成独立亮斑 */
+.date-card .glow{position:absolute;right:-70px;top:-130px;width:330px;height:330px;border-radius:50%;
+  background:radial-gradient(circle, rgba(69,216,255,.15), transparent 66%);z-index:1;pointer-events:none;
+  animation:cardGlow 7.4s ease-in-out infinite}
+.date-card .glow::after{content:"";position:absolute;left:30%;top:12%;width:74%;height:74%;border-radius:50%;
+  background:radial-gradient(circle, rgba(122,231,255,.16), transparent 62%);
+  animation:cardGlowCore 7.4s ease-in-out infinite}
+@keyframes cardGlowCore{
+  0%,100%{opacity:.28;transform:scale(.96)}
+  50%{opacity:1;transform:scale(1.06)}}
+body.light .date-card .glow{display:none}
 body.light .date-card{
   background:linear-gradient(145deg,#eef3ff 0%,#e4ecff 100%);
   color:var(--text);border-color:var(--border);animation:none;
@@ -235,6 +246,13 @@ body.light .date-card{
   letter-spacing:.3px;
   display:flex;align-items:center;gap:4px;
 }
+.day-head #dayDate{color:#fff;font-weight:700;
+  text-shadow:0 0 12px rgba(69,216,255,.9), 0 0 30px rgba(69,216,255,.12);
+  animation:softBreath 5.2s ease-in-out infinite}
+.day-head #dayWeek{color:var(--magenta);font-family:var(--mono);letter-spacing:2px;
+  text-shadow:0 0 10px rgba(255,88,176,.9);
+  animation:magBreath 6.6s ease-in-out infinite}
+body.light .day-head #dayDate,body.light .day-head #dayWeek{text-shadow:none;animation:none}
 .day-head .dot{margin:0 4px;opacity:.55}
 .day-greet{
   position:relative;z-index:2;
@@ -247,6 +265,8 @@ body.light .date-card{
   min-height:96px;
   text-shadow:0 0 14px rgba(69,216,255,.35);
 }
+.day-greet{animation:softBreath 6.1s ease-in-out infinite -1.4s}
+body.light .day-greet{animation:none}
 .day-foot{
   position:relative;z-index:2;
   font-size:12.5px;
@@ -1420,6 +1440,7 @@ body.chat-page .chat-main,body.chat-page .chat-side{height:calc(100vh - 66px)}
       <div class="home-grid">
         <div class="focus-row">
           <div class="card date-card c4" id="dateCard">
+            <div class="glow" aria-hidden="true"></div>
             <div class="day-head">
               <span id="dayDate">8 月 29 日</span>
               <span class="dot">·</span>
