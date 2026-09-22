@@ -380,14 +380,14 @@ body.light .mini-check.checked{color:#fff}
    照搬会撑破卡片 36px，故去掉，改由卡片 min-height 控高 */
 .checkin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;align-items:stretch}
 .ck-card{position:relative;padding:12px;border-radius:6px;overflow:hidden;
-  border:1px solid rgba(69,216,255,.28);background:rgba(255,255,255,.03);
+  border:1px solid rgba(69,216,255,.42);background:rgba(255,255,255,.03);
   display:flex;flex-direction:column;gap:7px;transition:.18s;
   box-shadow:inset 0 0 10px rgba(69,216,255,.011)}
 .ck-card:hover{border-color:var(--cyan);
   box-shadow:0 0 12px rgba(69,216,255,.08), inset 0 0 14px rgba(69,216,255,.03)}
-.ck-card.done{border-color:rgba(122,231,255,.52);
+.ck-card.done{border-color:rgba(69,216,255,.78);
   background:rgba(69,216,255,.14);
-  box-shadow:0 0 11px rgba(122,231,255,.10), inset 0 0 13px rgba(69,216,255,.05);
+  box-shadow:0 0 11px rgba(69,216,255,.17), inset 0 0 13px rgba(69,216,255,.07);
   animation:doneBreath 3.8s ease-in-out infinite}
 .ck-card.done:nth-child(3n){animation-delay:-1.3s}
 .ck-card.done:nth-child(3n+2){animation-delay:-2.6s}
