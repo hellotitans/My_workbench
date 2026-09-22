@@ -186,10 +186,45 @@ body.light .btn.primary{background:var(--accent);border-color:var(--accent);colo
   padding:18px 20px;box-shadow:var(--shadow);
 }
 body.light .card{background:var(--card);border-color:var(--border)}
+/* 顶部霓虹高光条 + 右下品红余晖（B 版同构） */
+.card::before{content:"";position:absolute;top:0;left:16px;right:16px;height:1px;z-index:3;
+  background:linear-gradient(90deg,transparent,rgba(69,216,255,.5) 30%,rgba(255,88,176,.42) 72%,transparent);
+  box-shadow:0 0 9px rgba(69,216,255,.17), 0 0 16px rgba(255,88,176,.09)}
+.card::after{content:"";position:absolute;right:-70px;bottom:-80px;width:200px;height:200px;
+  border-radius:50%;z-index:0;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,88,176,.016),transparent 68%)}
+.card > *{position:relative;z-index:1}
 .card h2{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;margin-bottom:4px}
 .card h2 svg{width:17px;height:17px;color:var(--cyan);filter:drop-shadow(0 0 8px rgba(69,216,255,.55))}
 body.light .card h2 svg{color:var(--accent);filter:none}
 .card .desc{font-size:12.5px;color:var(--text2);margin-bottom:14px}
+/* B 版卡头：编号徽章 + 标题（首页各模块） */
+.chead{display:flex;align-items:center;gap:9px;margin-bottom:3px}
+.chead .no{font-family:var(--mono);font-size:9.5px;color:#030307;letter-spacing:1.4px;
+  background:var(--cyan);padding:2px 6px;border-radius:3px;font-weight:700;
+  box-shadow:0 0 9px rgba(69,216,255,.16)}
+.chead h2{font-size:14.5px;font-weight:800;letter-spacing:.6px;margin-bottom:3px}
+.chead h2 svg{width:15px;height:15px}
+.cdesc{font-size:11.5px;color:var(--text3);margin-bottom:13px;padding-left:2px}
+.cbody{flex:1;display:flex;flex-direction:column;min-height:0}
+/* 角标：圆角取景框 */
+.corner{position:absolute;width:13px;height:13px;z-index:2;pointer-events:none;opacity:.85}
+.corner.tl{top:6px;left:6px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);
+  border-radius:6px 0 0 0;box-shadow:-2px -2px 9px rgba(69,216,255,.10)}
+.corner.br{bottom:6px;right:6px;border-bottom:2px solid var(--magenta);border-right:2px solid var(--magenta);
+  border-radius:0 0 6px 0;box-shadow:2px 2px 9px rgba(255,88,176,.10)}
+body.light .chead .no{background:var(--accent);color:#fff}
+body.light .corner{opacity:.45}
+/* 打卡卡：图标+名称同行包裹（B 版 .ck-top） */
+.ck-top{display:flex;align-items:center;gap:8px}
+/* 焦点清单徽章：荧光黄已完成 / 品红逾期（B 版 .badge.gold/.red） */
+.focus-item .badge{font-family:var(--mono);font-size:9.5px;padding:2px 6px;border-radius:3px;letter-spacing:.4px;font-weight:700}
+.badge.gold{background:rgba(217,240,94,.14);color:var(--gold-hi);border:1px solid rgba(217,240,94,.52);
+  box-shadow:0 0 7.2px rgba(217,240,94,.05)}
+.focus-item .badge.red{background:rgba(255,88,176,.15);color:var(--magenta);border:1px solid var(--magenta);
+  box-shadow:0 0 9px rgba(255,88,176,.10)}
+body.light .badge.gold{background:var(--green-soft);color:#6d7a00;border-color:rgba(163,180,20,.5);box-shadow:none}
+body.light .focus-item .badge.red{background:var(--red-soft);color:var(--red);border-color:var(--red);box-shadow:none}
 .sec-title{font-size:12px;font-weight:600;color:var(--text3);letter-spacing:1px;margin:16px 0 8px;text-transform:uppercase}
 
 /* ---------- 首页 ---------- */
@@ -213,7 +248,7 @@ body.light .card h2 svg{color:var(--accent);filter:none}
 .date-card{
   position:relative;
   overflow:hidden;
-  padding:24px 26px 22px;
+  padding:19px 21px;
   background:
     radial-gradient(150% 125% at 84% -12%, rgba(69,216,255,.17), transparent 56%),
     radial-gradient(110% 100% at 6% 112%, rgba(255,88,176,.10), transparent 58%),
@@ -246,13 +281,13 @@ body.light .date-card{
   letter-spacing:.3px;
   display:flex;align-items:center;gap:4px;
 }
-.day-head #dayDate{color:#fff;font-weight:700;
+.day-head .d{font-family:var(--mono);font-size:29px;font-weight:800;letter-spacing:-1px;color:#fff;
   text-shadow:0 0 12px rgba(69,216,255,.9), 0 0 30px rgba(69,216,255,.12);
   animation:softBreath 5.2s ease-in-out infinite}
-.day-head #dayWeek{color:var(--magenta);font-family:var(--mono);letter-spacing:2px;
+.day-head .w{font-size:11px;color:var(--magenta);font-family:var(--mono);letter-spacing:2px;
   text-shadow:0 0 10px rgba(255,88,176,.9);
   animation:magBreath 6.6s ease-in-out infinite}
-body.light .day-head #dayDate,body.light .day-head #dayWeek{text-shadow:none;animation:none}
+body.light .day-head .d,body.light .day-head .w{text-shadow:none;animation:none;color:var(--text2)}
 .day-head .dot{margin:0 4px;opacity:.55}
 .day-greet{
   position:relative;z-index:2;
@@ -274,12 +309,17 @@ body.light .day-greet{animation:none}
 }
 .day-foot b{
   display:inline-block;
-  color:var(--magenta);
-  font-size:15px;
-  font-weight:800;
-  margin:0 3px;
-  text-shadow:0 0 10px rgba(255,88,176,.75);
+  color:#fff;font-size:18px;font-weight:800;margin:0 3px;
+  text-shadow:0 0 10px rgba(255,88,176,.9), 0 0 23px rgba(255,88,176,.13);
   animation:magBreath 5.8s ease-in-out infinite -2.1s}
+.day-foot .bar{flex:1;height:3px;background:rgba(255,255,255,.08);overflow:hidden;border-radius:2px}
+.day-foot .bar i{display:block;height:100%;width:0;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  box-shadow:0 0 9px rgba(69,216,255,.9), 0 0 18px rgba(255,88,176,.14);
+  animation:softBreath 4.4s ease-in-out infinite}
+body.light .day-foot b{color:var(--accent);text-shadow:none;animation:none}
+body.light .day-foot .bar{background:rgba(0,0,0,.1)}
+body.light .day-foot .bar i{animation:none;box-shadow:none}
 body.light .day-foot b{color:var(--accent);text-shadow:none;animation:none}
 .day-ring{
   position:absolute;
@@ -295,10 +335,16 @@ body.light .day-foot b{color:var(--accent);text-shadow:none;animation:none}
   to{transform:rotate(360deg)}}
 .focus-box{display:flex;flex-direction:column}
 .focus-item{
-  display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:10px;
-  background:var(--card2);margin-bottom:8px;border-left:3px solid var(--border);
+  display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:6px;
+  background:rgba(255,255,255,.03);margin-bottom:7px;border-left:2px solid rgba(69,216,255,.45);
+  transition:.16s;
 }
-.focus-item.overdue{border-left-color:var(--red)}
+.focus-item:hover{background:rgba(69,216,255,.10);border-left-color:var(--cyan);
+  box-shadow:inset 0 0 12px rgba(69,216,255,.03), 0 0 9px rgba(69,216,255,.03)}
+body.light .focus-item{background:var(--card2);border-left-color:var(--border)}
+.focus-item.overdue{border-left-color:var(--magenta);background:rgba(255,88,176,.07);
+  box-shadow:inset 0 0 11px rgba(255,88,176,.03)}
+body.light .focus-item.overdue{background:var(--red-soft);border-left-color:var(--red)}
 .focus-item .fi-text{flex:1;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .focus-item .fi-text.done{color:var(--text3);text-decoration:line-through}
 .focus-item .badge{
@@ -310,12 +356,17 @@ body.light .day-foot b{color:var(--accent);text-shadow:none;animation:none}
 .badge.gray{background:var(--card);color:var(--text3);border:1px solid var(--border)}
 .badge.orange{background:var(--orange-soft);color:var(--orange)}
 .mini-check{
-  width:26px;height:26px;border-radius:8px;border:1.5px solid var(--border);background:transparent;
-  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:0;
+  width:18px;height:18px;border-radius:4px;border:1.5px solid var(--cyan);background:transparent;
+  cursor:pointer;flex-shrink:0;display:grid;place-items:center;padding:0;color:transparent;
+  box-shadow:inset 0 0 8px rgba(69,216,255,.09), 0 0 8px rgba(69,216,255,.04);
 }
+.mini-check.checked{background:var(--gold);border-color:var(--gold);color:#0d1400;
+  box-shadow:0 0 8px rgba(217,240,94,.12), 0 0 16px rgba(217,240,94,.05)}
+body.light .mini-check{border-color:var(--border);box-shadow:none}
+body.light .mini-check.checked{color:#fff}
 .mini-check:hover{border-color:var(--green)}
 .mini-check.checked{background:var(--green);border-color:var(--green)}
-.mini-check svg{width:14px;height:14px;color:#fff}
+.mini-check svg{width:11px;height:11px}
 
 /* 今日打卡：B 版 4 列竖排小卡（设计稿 .ck-card 同构） */
 /* 今日打卡：B 版 4 列竖排小卡（设计稿 .ck-card 同构）
@@ -1440,49 +1491,52 @@ body.chat-page .chat-main,body.chat-page .chat-side{height:calc(100vh - 66px)}
       <div class="home-grid">
         <div class="focus-row">
           <div class="card date-card c4" id="dateCard">
+            <i class="corner tl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
             <div class="glow" aria-hidden="true"></div>
-            <div class="day-head">
-              <span id="dayDate">8 月 29 日</span>
-              <span class="dot">·</span>
-              <span id="dayWeek">星期六</span>
+            <div class="chead"><span class="no">01</span><h2>TODAY</h2></div>
+            <div>
+              <div class="day-head"><span class="d" id="dayDate">09.23</span><span class="w" id="dayWeek">WED</span></div>
+              <div class="day-greet" id="dayGreet">别想了，<br>先动手做 5 分钟。</div>
             </div>
-            <div class="day-greet" id="dayGreet">别想了，<br>先动手做 5 分钟。</div>
-            <div class="day-foot">已陪伴你 <b id="dayUsed">28</b> 天</div>
+            <div class="day-foot"><span>已陪伴你</span><b id="dayUsed">28</b><span>天</span><span class="bar"><i id="dayBar"></i></span></div>
             <svg class="day-ring" viewBox="0 0 240 240" aria-hidden="true">
-              <circle cx="120" cy="120" r="105" fill="none" stroke="rgba(69,216,255,.30)" stroke-width="1"/>
-              <circle cx="120" cy="120" r="82" fill="none" stroke="rgba(69,216,255,.42)" stroke-width="1"/>
-              <circle cx="120" cy="120" r="58" fill="none" stroke="rgba(122,231,255,.55)" stroke-width="1"/>
-              <circle cx="120" cy="120" r="34" fill="none" stroke="rgba(255,88,176,.60)" stroke-width="1"/>
-              <circle cx="219" cy="156" r="5" fill="#45d8ff"/>
+              <circle cx="120" cy="120" r="106" fill="none" stroke="rgba(69,216,255,.34)" stroke-width="1.1"/>
+              <circle cx="120" cy="120" r="84" fill="none" stroke="rgba(255,88,176,.52)" stroke-width="1.1"/>
+              <circle cx="120" cy="120" r="60" fill="none" stroke="rgba(69,216,255,.74)" stroke-width="1.2"/>
+              <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(255,88,176,.95)" stroke-width="1.3"/>
+              <circle cx="219" cy="156" r="4.6" fill="#45d8ff"/>
               <circle cx="43" cy="92" r="3" fill="#ff58b0"/>
-              <circle cx="149" cy="170" r="2.4" fill="#fff" fill-opacity=".75"/>
-              <circle cx="103" cy="91" r="1.8" fill="#fff" fill-opacity=".55"/>
+              <circle cx="120" cy="120" r="2.4" fill="#eaffff"/>
             </svg>
           </div>
           <div class="card focus-box c8">
-            <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>今天要处理</h2>
-            <div class="desc">逾期与顺延项标红，做完直接点右侧按钮打勾</div>
-            <div id="focusList"></div>
+            <i class="corner tl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
+            <div class="chead"><span class="no">02</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>今天要处理</h2></div>
+            <div class="cdesc">逾期与顺延项标红，做完直接点左侧方块打勾</div>
+            <div class="cbody" id="focusList"></div>
           </div>
         </div>
 
         <div class="card c12">
-          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>今日打卡</h2>
-          <div class="desc">当日各板块完成情况，板块当天有有效完成动作即打卡成功</div>
+          <i class="corner tl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
+          <div class="chead"><span class="no">03</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>今日打卡</h2></div>
+          <div class="cdesc">当日各板块完成情况，板块当天有有效完成动作即打卡成功</div>
           <div class="checkin-grid" id="checkinGrid"></div>
         </div>
 
         <div class="card memo-box c6">
-          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg>快速备忘</h2>
-          <div class="desc">随手记，不分类</div>
+          <i class="corner tl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
+          <div class="chead"><span class="no">04</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg>快速备忘</h2></div>
+          <div class="cdesc">随手记，不分类</div>
           <textarea id="memoInput" placeholder="想到什么记什么…（Ctrl+Enter 保存）"></textarea>
           <button class="btn primary" id="memoSave" style="margin-top:8px">保存备忘</button>
           <div class="memo-list" id="memoList"></div>
         </div>
 
         <div class="card c6">
-          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>本周打卡概览</h2>
-          <div class="desc">最近 7 天各板块记录情况，实心点 = 当天有记录</div>
+          <i class="corner tl" aria-hidden="true"></i><i class="corner br" aria-hidden="true"></i>
+          <div class="chead"><span class="no">05</span><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>本周打卡概览</h2></div>
+          <div class="cdesc">最近 7 天各板块记录情况，点亮格 = 当天有记录</div>
           <div class="wk-table" id="weekGrid"></div>
         </div>
 
@@ -2527,8 +2581,12 @@ function planCheckin(){
 function renderDayCard(){
   var d = new Date();
   var wdays = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
-  document.getElementById("dayDate").textContent = (d.getMonth()+1) + " 月 " + d.getDate() + " 日";
-  document.getElementById("dayWeek").textContent = wdays[d.getDay()];
+  document.getElementById("dayDate").textContent = String(d.getMonth()+1).padStart(2,"0") + "." + String(d.getDate()).padStart(2,"0");
+  var wEN = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+  document.getElementById("dayWeek").textContent = wEN[d.getDay()];
+  var dim = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+  var bar = document.getElementById("dayBar");
+  if(bar) bar.style.width = Math.round(d.getDate() / dim * 100) + "%";
   var phrases = [
     "别想了，\n先动手做 5 分钟。",
     "现在开始，\n就是最好的时机。",
@@ -2569,8 +2627,8 @@ function renderHome(){
       return '<div class="focus-item' + (overdue ? ' overdue' : '') + '">' +
         '<button class="mini-check' + (i.done ? ' checked' : '') + '" data-tid="' + i.id + '" title="完成">' + (i.done ? ICONS.check : '') + '</button>' +
         '<span class="fi-text' + (i.done ? ' done' : '') + '">' + esc(i.title) + '</span>' +
-        (overdue ? '<span class="badge red">逾期 · 顺延自' + fmtDate(i.originalDate) + '</span>' : '') +
-        (i.done ? '<span class="badge green">已完成</span>' : '') +
+        (overdue ? '<span class=\"badge red\">逾期 · ' + (i.originalDate||'').split('-')[1] + '/' + (i.originalDate||'').split('-')[2] + '</span>' : '') +
+        (i.done ? '<span class="badge gold">已完成</span>' : '') +
         '</div>';
     }).join("");
     list.querySelectorAll(".mini-check").forEach(function(btn){
@@ -2662,8 +2720,8 @@ function ckCell(key, name, state, st){
   var cls = state, tag = state === "locked" ? '<span class="lock-tag">V2</span>' : "";
   var stamp = state === "done" ? '<div class="ck-stamp">' + (STAMP_CHARS[key] || "完") + '</div>' : "";
   return '<div class="ck-card ' + cls + '">' + tag +
-    '<div class="ck-ic">' + ICONS[key] + '</div>' +
-    '<div class="ck-name">' + name + '</div>' +
+    '<div class="ck-top"><div class="ck-ic">' + ICONS[key] + '</div>' +
+    '<div class="ck-name">' + name + '</div></div>' +
     '<div class="ck-st">' + st + '</div>' + stamp + '</div>';
 }
 /* 本周打卡概览：某板块在某天是否有记录操作 */
