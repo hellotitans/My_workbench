@@ -1065,6 +1065,30 @@ body.chat-page .chat-main,body.chat-page .chat-side{height:calc(100vh - 66px)}
 .add-task-row{display:flex;gap:6px;margin-top:8px}
 .add-task-row input{font-size:14px;padding:6px 10px;width:100%}
 .add-task-row button{font-size:12px;padding:6px 12px;flex-shrink:0}
+/* 阶段层（项目 → 阶段 → 任务） */
+.stage-list{margin-top:10px;border-top:1px dashed var(--border);padding-top:8px}
+.stage-item{background:rgba(255,255,255,.022);border:1px solid rgba(69,216,255,.26);border-radius:8px;padding:9px 10px;margin-bottom:8px}
+.stage-item.cur{border-color:rgba(122,231,255,.72);box-shadow:0 0 11px rgba(69,216,255,.13)}
+.stage-item .st-top{display:flex;align-items:center;gap:8px}
+.st-toggle{width:20px;height:20px;flex-shrink:0;padding:0;border:1px solid var(--border);border-radius:5px;background:var(--card);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.st-toggle:hover{border-color:var(--cyan);color:var(--cyan)}
+.st-toggle svg{width:12px;height:12px;transform:rotate(-90deg);transition:transform .18s}
+.st-toggle.open svg{transform:rotate(0deg)}
+.stage-item .st-name{font-weight:600;font-size:13px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.stage-item .st-name:hover{color:var(--cyan)}
+.stage-item .st-prog{font-size:11px;color:var(--text3);font-family:var(--mono);flex-shrink:0}
+.stage-item .del{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px;flex-shrink:0}
+.stage-item .del:hover{color:var(--red)}
+.stage-item .del svg{width:13px;height:13px}
+.pj-goal,.st-goal{display:flex;gap:6px;align-items:baseline;font-size:12px;color:var(--text2);margin:6px 0 0;line-height:1.5}
+.pj-goal span,.st-goal span{flex-shrink:0;font-family:var(--mono);font-size:10px;color:var(--cyan-hi);border:1px solid rgba(122,231,255,.42);border-radius:3px;padding:1px 5px;text-shadow:0 0 8px rgba(122,231,255,.35)}
+.stage-item .pbar{margin-top:6px}
+.st-review-row{margin-top:7px}
+.st-review{width:100%;font-size:12.5px;padding:6px 9px;border-radius:6px;background:rgba(0,0,0,.24);border:1px solid rgba(69,216,255,.24);color:var(--text);font-family:inherit}
+.st-review:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 9px rgba(69,216,255,.14)}
+.add-stage-row{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.add-stage-row input{flex:1;min-width:120px;font-size:13px;padding:6px 10px}
+.add-stage-row button{font-size:12px;padding:6px 12px;flex-shrink:0}
 .dn-tabs{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
 .dn-tab{
   font-size:12px;padding:5px 12px;border-radius:99px;border:1px solid var(--border);
@@ -1074,9 +1098,9 @@ body.chat-page .chat-main,body.chat-page .chat-side{height:calc(100vh - 66px)}
 .dn-tab.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:600}
 .dn-item{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;border-radius:9px;background:var(--card2);margin-bottom:7px;font-size:13.5px}
 .dn-item .dn-type{font-size:10px;padding:2px 7px;border-radius:99px;flex-shrink:0;margin-top:2px}
-.dn-type.t-bug{background:var(--red-soft);color:var(--red)}
-.dn-type.t-idea{background:var(--orange-soft);color:var(--orange)}
-.dn-type.t-ver{background:var(--green-soft);color:var(--green)}
+.dn-type.t-issue{background:rgba(255,88,176,.14);color:var(--magenta);border:1px solid rgba(255,88,176,.4)}
+.dn-type.t-idea{background:rgba(69,216,255,.13);color:var(--cyan);border:1px solid rgba(69,216,255,.35)}
+.dn-type.t-insight{background:rgba(217,240,94,.12);color:var(--gold);border:1px solid rgba(217,240,94,.35)}
 .dn-item .dn-body{flex:1;min-width:0;line-height:1.5}
 .dn-item .dn-body.done{color:var(--text3);text-decoration:line-through}
 .dn-item .dn-sub{font-size:11px;color:var(--text3);margin-top:3px}
@@ -1685,9 +1709,12 @@ body.chat-page .chat-main,body.chat-page .chat-side{height:calc(100vh - 66px)}
       <div class="dev-grid">
         <div class="card">
           <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>项目</h2>
-          <div class="desc">每个项目下管理任务与状态，任务可勾选完成</div>
+          <div class="desc">项目 → 阶段 → 任务 三层管理，每层都能写下目标</div>
           <div class="form-row">
-            <input type="text" id="pjName" placeholder="项目名，如：个人工作台">
+            <input type="text" id="pjName" placeholder="项目名称，如：个人工作台">
+          </div>
+          <div class="form-row">
+            <input type="text" id="pjGoal" placeholder="总目标：这个项目做完要达成什么">
           </div>
           <div class="form-row">
             <select id="pjStatus" style="width:110px;flex-shrink:0">
@@ -1703,26 +1730,27 @@ body.chat-page .chat-main,body.chat-page .chat-side{height:calc(100vh - 66px)}
         </div>
 
         <div class="card">
-          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2H22l-6 4.4 2.3 7.2-6.3-4.5L5.7 20.8 8 13.6l-6-4.4h7.6z"/></svg>Bug · 灵感 · 版本</h2>
-          <div class="desc">随手记：Bug 可标记解决，灵感待实现，版本记里程碑</div>
+          <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.2H22l-6 4.4 2.3 7.2-6.3-4.5L5.7 20.8 8 13.6l-6-4.4h7.6z"/></svg>问题 · 灵感 · 心得</h2>
+          <div class="desc">挂到某个项目的某个阶段：问题可标记解决，灵感与心得留着回看</div>
           <div class="form-row">
             <select id="dnType" style="width:88px;flex-shrink:0">
-              <option value="bug">Bug</option>
+              <option value="issue">问题</option>
               <option value="idea">灵感</option>
-              <option value="version">版本</option>
+              <option value="insight">心得</option>
             </select>
             <select id="dnProject" style="flex:1"></select>
+            <select id="dnStage" style="flex:1"></select>
           </div>
           <div class="form-row">
-            <input type="text" id="dnText" placeholder="内容，如：首页在窄屏下按钮错位 / 想加暗色图表 / v0.3 上线学习模块">
+            <input type="text" id="dnText" placeholder="内容，如：窄屏打卡墙换行乱 / 想加暗色图表 / 先做骨架再补细节更顺">
             <button class="btn primary" id="dnAdd" style="flex-shrink:0">记录</button>
           </div>
           <div id="dnCurTip"></div>
           <div class="dn-tabs" id="dnTabs">
             <button class="dn-tab on" data-filter="all">全部</button>
-            <button class="dn-tab" data-filter="bug">Bug</button>
+            <button class="dn-tab" data-filter="issue">问题</button>
             <button class="dn-tab" data-filter="idea">灵感</button>
-            <button class="dn-tab" data-filter="version">版本</button>
+            <button class="dn-tab" data-filter="insight">心得</button>
           </div>
           <div class="plan-stat" id="dnStat"></div>
           <div id="dnList"></div>
@@ -2265,8 +2293,10 @@ var store = {
 var goals, shorts, todays, memos, settings;
 var studyItems = [], studyLogs = [];
 var devProjects = [], devNotes = [];
-var devCur = null;   // 当前选中的项目：右侧随手记只显示它关联的记录
-var devOpen = {};    // 项目任务区折叠态：{ projectId: true } 表示已折叠（默认展开）
+var devCur = null;   // 当前选中的项目：右侧记录只显示它关联的记录
+var devCurSt = null; // 当前选中的阶段：右侧记录进一步收缩到该阶段
+var devOpen = {};    // 项目展开态：{ projectId: true } 表示已折叠（默认展开）
+var devStageOpen = {}; // 阶段展开态：{ stageId: true } 表示已折叠（默认展开）
 var lifeFitness = [], lifeDiet = [], lifeFun = [];
 var lifeBody = [];
 var insightMap = {};
@@ -2362,25 +2392,36 @@ function loadSample(){
     }
   ];
   var p1 = uid(), p2 = uid();
+  var s1 = uid(), s2 = uid(), s3 = uid();
   devProjects = [
-    { id: p1, name: "个人工作台", desc: "本地生活管理应用，单文件 HTML", status: "active", createdAt: Date.now()-86400000*12,
-      tasks: [
-        { id: uid(), title: "搭好首页骨架与本地存储", status: "done", doneAt: Date.now()-86400000*10 },
-        { id: uid(), title: "今日计划模块（长短期+顺延）", status: "done", doneAt: Date.now()-86400000*6 },
-        { id: uid(), title: "学习进度模块", status: "done", doneAt: Date.now()-86400000*2 },
-        { id: uid(), title: "生活记录模块", status: "open", doneAt: null }
+    { id: p1, name: "个人工作台", goal: "做成能长期陪伴的个人生活台，数据全在本地", desc: "本地生活管理应用，单文件 HTML", status: "active", createdAt: Date.now()-86400000*12,
+      stages: [
+        { id: s1, name: "骨架与存储", goal: "跑通单文件 + localStorage，页面框架稳定", review: "先把存储层做扎实，后面加模块才不用回头改。", createdAt: Date.now()-86400000*12,
+          tasks: [
+            { id: uid(), title: "搭好首页骨架与本地存储", status: "done", doneAt: Date.now()-86400000*10 },
+            { id: uid(), title: "今日计划模块（长短期+顺延）", status: "done", doneAt: Date.now()-86400000*6 }
+          ] },
+        { id: s2, name: "模块补齐", goal: "学习 / 生活 / 心得三个模块上线", review: "", createdAt: Date.now()-86400000*5,
+          tasks: [
+            { id: uid(), title: "学习进度模块", status: "done", doneAt: Date.now()-86400000*2 },
+            { id: uid(), title: "生活记录模块", status: "open", doneAt: null }
+          ] }
       ] },
-    { id: p2, name: "配色练习小站", desc: "练习用的静态小页面", status: "paused", createdAt: Date.now()-86400000*20,
-      tasks: [
-        { id: uid(), title: "选定主色板", status: "done", doneAt: Date.now()-86400000*15 },
-        { id: uid(), title: "写三套配色方案", status: "open", doneAt: null }
+    { id: p2, name: "配色练习小站", goal: "练出手感：能一眼判断配色是否过饱和", desc: "练习用的静态小页面", status: "paused", createdAt: Date.now()-86400000*20,
+      stages: [
+        { id: s3, name: "色板实验", goal: "出三套可复用的配色方案", review: "第一套太艳，压背景层比压高光有效。", createdAt: Date.now()-86400000*20,
+          tasks: [
+            { id: uid(), title: "选定主色板", status: "done", doneAt: Date.now()-86400000*15 },
+            { id: uid(), title: "写三套配色方案", status: "open", doneAt: null }
+          ] }
       ] }
   ];
   devNotes = [
-    { id: uid(), type: "bug", projectId: p1, text: "窄屏下首页打卡墙换行有点乱", createdAt: Date.now()-86400000*3, resolved: false, resolvedAt: null },
-    { id: uid(), type: "idea", projectId: p1, text: "首页可以加一个「晨间一句话」总结当天要干的事", createdAt: Date.now()-86400000*1, resolved: false, resolvedAt: null },
-    { id: uid(), type: "version", projectId: p1, text: "v0.2 上线学习进度模块", createdAt: Date.now()-86400000*2, resolved: false, resolvedAt: null }
+    { id: uid(), type: "issue", projectId: p1, stageId: s2, text: "窄屏下首页打卡墙换行有点乱", createdAt: Date.now()-86400000*3, resolved: false, resolvedAt: null },
+    { id: uid(), type: "idea", projectId: p1, stageId: s1, text: "首页可以加一个「晨间一句话」总结当天要干的事", createdAt: Date.now()-86400000*1, resolved: false, resolvedAt: null },
+    { id: uid(), type: "insight", projectId: p1, stageId: s1, text: "先做骨架再补细节，比一上来抠样式省一半返工", createdAt: Date.now()-86400000*2, resolved: false, resolvedAt: null }
   ];
+
   lifeFitness = [
     { id: uid(), date: y, text: "快走 40 分钟 + 全身拉伸", createdAt: Date.now()-3600000*3 },
     { id: uid(), date: y, text: "睡前 20 个深蹲", createdAt: Date.now()-3600000*1 }
@@ -2517,7 +2558,7 @@ var MODULES = [
   { key: "home",  name: "首页总览", icon: "home",  locked: false, sub: "当日全貌：要处理的事、打卡墙、快速备忘" },
   { key: "plan",  name: "今日计划", icon: "plan",  locked: false, sub: "长期计划 → 短期拆分 → 今日清单 → 打卡" },
   { key: "study", name: "学习进度", icon: "study", locked: false, sub: "课程/书籍章节进度管理 · 每日学习记录" },
-  { key: "dev",   name: "开发工作", icon: "dev",   locked: false, sub: "项目任务与状态 · Bug / 灵感 / 版本进度" },
+  { key: "dev",   name: "开发工作", icon: "dev",   locked: false, sub: "项目 → 阶段 → 任务 · 问题/灵感/心得 挂到阶段" },
   { key: "life",  name: "生活记录", icon: "life",  locked: false, sub: "健身 · 饮食 · 游戏娱乐" },
   { key: "note",  name: "今日心得", icon: "note",  locked: false, sub: "复盘提炼：关键词 / 一句话 / 心法 / 行动" },
   { key: "build", name: "建设打卡", icon: "build", locked: false, sub: "习惯打卡 · 每日正反馈 · Make a difference · 神经回路自塑" },
@@ -2754,7 +2795,9 @@ function wkModuleHas(key, d){
   if(key === "dev"){
     return devNotes.some(function(n){ return dayOf(n.createdAt) === d; }) ||
       devProjects.some(function(p){
-        return p.tasks.some(function(k){ return k.status === "done" && k.doneAt && dayOf(k.doneAt) === d; });
+        return (p.stages || []).some(function(s){
+          return (s.tasks || []).some(function(k){ return k.status === "done" && k.doneAt && dayOf(k.doneAt) === d; });
+        });
       }) ||
       devNotes.some(function(n){ return n.resolved && n.resolvedAt && dayOf(n.resolvedAt) === d; });
   }
@@ -3302,83 +3345,163 @@ function addStudyBranch(parentId){
 
 /* ==================== 开发工作页 ==================== */
 var dnFilter = "all";
+/* ---------- 开发：进度统计 ---------- */
+function devTaskStat(list){
+  var total = list.length;
+  var done = list.filter(function(k){ return k.status === "done"; }).length;
+  return { total: total, done: done, pct: total ? Math.round(done / total * 100) : 0 };
+}
+function devProjStat(p){
+  var total = 0, done = 0;
+  (p.stages || []).forEach(function(s){
+    var g = devTaskStat(s.tasks || []);
+    total += g.total; done += g.done;
+  });
+  return { total: total, done: done, pct: total ? Math.round(done / total * 100) : 0 };
+}
+/* 旧结构（扁平 tasks / bug / version）一次性清空，按「项目→阶段→任务」重建 */
+function devNormalize(){
+  var legacy = false;
+  devProjects.forEach(function(p){ if(!Array.isArray(p.stages)) legacy = true; });
+  devNotes.forEach(function(n){ if(n.type === "bug" || n.type === "version") legacy = true; });
+  if(legacy){
+    devProjects = []; devNotes = [];
+    store.set("devProjects", devProjects); store.set("devNotes", devNotes);
+  }
+  devProjects.forEach(function(p){
+    if(!Array.isArray(p.stages)) p.stages = [];
+    if(p.goal === undefined) p.goal = "";
+    p.stages.forEach(function(s){
+      if(!Array.isArray(s.tasks)) s.tasks = [];
+      if(s.goal === undefined) s.goal = "";
+      if(s.review === undefined) s.review = "";
+    });
+  });
+  devNotes.forEach(function(n){
+    if(n.type !== "issue" && n.type !== "idea" && n.type !== "insight") n.type = "idea";
+    if(n.stageId === undefined) n.stageId = null;
+  });
+  if(devCur && !devProjects.some(function(p){ return p.id === devCur; })) devCur = null;
+  if(devCurSt && !devProjects.some(function(p){
+    return (p.stages || []).some(function(s){ return s.id === devCurSt; });
+  })) devCurSt = null;
+}
+
 function devCheckin(){
   var t = todayStr();
   if(!devProjects.length) return { state: "none" };
   var hasNote = devNotes.some(function(n){ return dayOf(n.createdAt) === t; });
   var hasTask = devProjects.some(function(p){
-    return p.tasks.some(function(k){ return k.status === "done" && k.doneAt && dayOf(k.doneAt) === t; });
+    return (p.stages || []).some(function(s){
+      return (s.tasks || []).some(function(k){ return k.status === "done" && k.doneAt && dayOf(k.doneAt) === t; });
+    });
   });
   var hasFix = devNotes.some(function(n){ return n.resolved && n.resolvedAt && dayOf(n.resolvedAt) === t; });
   var acts = (hasNote ? 1 : 0) + (hasTask ? 1 : 0) + (hasFix ? 1 : 0);
   if(hasNote || hasTask || hasFix) return { state: "done", txt: "今日有开发动作 ×" + acts };
   return { state: "undone" };
 }
+
 function renderDev(){
-  /* 项目统计 */
+  /* 左：项目统计 */
   var activeN = devProjects.filter(function(p){ return p.status === "active"; }).length;
-  var openBugs = devNotes.filter(function(n){ return n.type === "bug" && !n.resolved; }).length;
+  var stageN = 0, taskN = 0, taskDone = 0;
+  devProjects.forEach(function(p){
+    stageN += (p.stages || []).length;
+    var g = devProjStat(p);
+    taskN += g.total; taskDone += g.done;
+  });
+  var openIssue = devNotes.filter(function(n){ return n.type === "issue" && !n.resolved; }).length;
   document.getElementById("pjStat").innerHTML =
-    '项目 <b>' + devProjects.length + '</b>（进行中 ' + activeN + '）· 待修 Bug <b>' + openBugs + '</b>';
+    '项目 <b>' + devProjects.length + '</b>（进行中 ' + activeN + '）· 阶段 <b>' + stageN + '</b> · 任务 ' + taskDone + '/' + taskN +
+    ' · 待定问题 <b>' + openIssue + '</b>';
 
   var PJ_ST = { active: "进行中", paused: "暂停", done: "已完成" };
   var el = document.getElementById("prjList");
+
   if(!devProjects.length){
-    el.innerHTML = '<div class="empty-tip">还没有开发项目<br>先建一个项目，再把任务挂进去吧</div>';
+    el.innerHTML = '<div class="empty-tip">还没有开发项目<br>先建一个项目，写下总目标，再拆阶段</div>';
   } else {
     el.innerHTML = devProjects.map(function(p){
-      var total = p.tasks.length;
-      var doneN = p.tasks.filter(function(k){ return k.status === "done"; }).length;
-      var pct = total ? Math.round(doneN / total * 100) : 0;
+      var g = devProjStat(p);
       var open = !devOpen[p.id];
       return '<div class="prj-item ' + p.status + (devCur === p.id ? ' cur' : '') + '">' +
         '<div class="pj-top">' +
-        '<button class="pj-toggle' + (open ? ' open' : '') + '" data-pjtog="' + p.id + '" title="' + (open ? '折叠任务' : '展开任务') + '">' + ICONS.chevron + '</button>' +
-        '<span class="pj-name pj-pick" data-pjpick="' + p.id + '" title="点击查看该项目关联的记录">' + esc(p.name) + '</span>' +
-        '<span class="prj-status ' + p.status + '">' + PJ_ST[p.status] + '</span>' +
-        '<button class="del" data-pjdel="' + p.id + '" title="删除项目">' + ICONS.trash + '</button></div>' +
+          '<button class="pj-toggle' + (open ? ' open' : '') + '" data-pjtog="' + p.id + '" title="' + (open ? '折叠阶段' : '展开阶段') + '">' + ICONS.chevron + '</button>' +
+          '<span class="pj-name pj-pick" data-pjpick="' + p.id + '" title="点击查看该项目关联的记录">' + esc(p.name) + '</span>' +
+          '<span class="prj-status ' + p.status + '">' + PJ_ST[p.status] + '</span>' +
+          '<button class="del" data-pjdel="' + p.id + '" title="删除项目">' + ICONS.trash + '</button>' +
+        '</div>' +
+        (p.goal ? '<div class="pj-goal"><span>总目标</span>' + esc(p.goal) + '</div>' : '') +
         (p.desc ? '<div class="pj-desc">' + esc(p.desc) + '</div>' : '') +
         '<div class="pj-meta">' +
-        '<select class="st-sel" data-pjst="' + p.id + '">' +
-        '<option value="active"' + (p.status==="active"?" selected":"") + '>进行中</option>' +
-        '<option value="paused"' + (p.status==="paused"?" selected":"") + '>暂停</option>' +
-        '<option value="done"' + (p.status==="done"?" selected":"") + '>已完成</option></select>' +
-        '<div class="pbar"><i style="width:' + pct + '%"></i></div><span>' + doneN + '/' + total + '</span></div>' +
+          '<select class="st-sel" data-pjst="' + p.id + '">' +
+            '<option value="active"' + (p.status === "active" ? " selected" : "") + '>进行中</option>' +
+            '<option value="paused"' + (p.status === "paused" ? " selected" : "") + '>暂停</option>' +
+            '<option value="done"' + (p.status === "done" ? " selected" : "") + '>已完成</option>' +
+          '</select>' +
+          '<span>' + (p.stages || []).length + ' 阶段</span>' +
+          '<div class="pbar"><i style="width:' + g.pct + '%"></i></div><span>' + g.done + '/' + g.total + '</span>' +
+        '</div>' +
         (open ? (
-          (total ? '<div class="task-list">' + p.tasks.map(function(k){
-            return '<div class="task-item">' +
-              '<button class="mini-check' + (k.status === "done" ? ' checked' : '') + '" data-tktog="' + p.id + '" data-tkid="' + k.id + '">' + (k.status === "done" ? ICONS.check : '') + '</button>' +
-              '<span class="tk-name' + (k.status === "done" ? ' done' : '') + '">' + esc(k.title) + '</span>' +
-              (k.status === "done" && k.doneAt ? '<span class="tk-date">' + fmtDate(dayOf(k.doneAt)) + ' 完成</span>' : '') +
-              '<button class="del" data-tkdel="' + p.id + '" data-tkid2="' + k.id + '" title="删除任务">' + ICONS.trash + '</button></div>';
+          ((p.stages || []).length ? '<div class="stage-list">' + p.stages.map(function(s){
+            var sg = devTaskStat(s.tasks || []);
+            var sOpen = !devStageOpen[s.id];
+            return '<div class="stage-item' + (devCurSt === s.id ? ' cur' : '') + '">' +
+              '<div class="st-top">' +
+                '<button class="st-toggle' + (sOpen ? ' open' : '') + '" data-sttog="' + s.id + '" title="' + (sOpen ? '折叠任务' : '展开任务') + '">' + ICONS.chevron + '</button>' +
+                '<span class="st-name" data-stpick="' + s.id + '" data-stpj="' + p.id + '" title="点击查看该阶段的记录">' + esc(s.name) + '</span>' +
+                '<span class="st-prog">' + sg.done + '/' + sg.total + '</span>' +
+                '<button class="del" data-stdel="' + p.id + '" data-stid="' + s.id + '" title="删除阶段">' + ICONS.trash + '</button>' +
+              '</div>' +
+              (s.goal ? '<div class="st-goal"><span>目标</span>' + esc(s.goal) + '</div>' : '') +
+              '<div class="pbar"><i style="width:' + sg.pct + '%"></i></div>' +
+              (sOpen ? (
+                (sg.total ? '<div class="task-list">' + s.tasks.map(function(k){
+                  return '<div class="task-item">' +
+                    '<button class="mini-check' + (k.status === "done" ? ' checked' : '') + '" data-tktog="' + s.id + '" data-tkid="' + k.id + '" data-tkpj="' + p.id + '">' + (k.status === "done" ? ICONS.check : '') + '</button>' +
+                    '<span class="tk-name' + (k.status === "done" ? ' done' : '') + '">' + esc(k.title) + '</span>' +
+                    (k.status === "done" && k.doneAt ? '<span class="tk-date">' + fmtDate(dayOf(k.doneAt)) + ' 完成</span>' : '') +
+                    '<button class="del" data-tkdel="' + p.id + '" data-tkid2="' + k.id + '" data-tkstage="' + s.id + '" title="删除任务">' + ICONS.trash + '</button>' +
+                  '</div>';
+                }).join('') + '</div>' : '') +
+                '<div class="add-task-row">' +
+                  '<input type="text" data-tkinput="' + s.id + '" placeholder="任务，如：完成数据导出功能">' +
+                  '<button class="btn" data-tkadd="' + s.id + '" data-tkpj="' + p.id + '">添加任务</button>' +
+                '</div>' +
+                '<div class="st-review-row">' +
+                  '<input type="text" class="st-review" data-strev="' + s.id + '" data-strevpj="' + p.id + '" value="' + esc(s.review || '') + '" placeholder="阶段评价与总结（回车保存）">' +
+                '</div>'
+              ) : '') +
+            '</div>';
           }).join('') + '</div>' : '') +
-          '<div class="add-task-row"><input type="text" data-tkinput="' + p.id + '" placeholder="新任务，如：完成数据导出功能">' +
-          '<button class="btn" data-tkadd="' + p.id + '">添加任务</button></div>'
-        ) : '') + '</div>';
+          '<div class="add-stage-row">' +
+            '<input type="text" data-stinput="' + p.id + '" placeholder="阶段名，如：骨架搭建">' +
+            '<input type="text" data-stgoal="' + p.id + '" placeholder="阶段目标（可选）">' +
+            '<button class="btn" data-stadd="' + p.id + '">添加阶段</button>' +
+          '</div>'
+        ) : '') +
+      '</div>';
     }).join("");
 
+    /* --- 项目级事件 --- */
     el.querySelectorAll("[data-pjtog]").forEach(function(b){
-      b.addEventListener("click", function(){
-        var id = b.dataset.pjtog;
-        devOpen[id] = !devOpen[id];
-        renderDev();
-      });
+      b.addEventListener("click", function(){ devOpen[b.dataset.pjtog] = !devOpen[b.dataset.pjtog]; renderDev(); });
     });
     el.querySelectorAll("[data-pjpick]").forEach(function(s){
       s.addEventListener("click", function(){
-        var id = s.dataset.pjpick;
-        devCur = (devCur === id) ? null : id;
-        renderDev();
+        devCur = (devCur === s.dataset.pjpick) ? null : s.dataset.pjpick;
+        devCurSt = null; renderDev();
       });
     });
     el.querySelectorAll("[data-pjdel]").forEach(function(b){
       b.addEventListener("click", function(){
-        devProjects = devProjects.filter(function(x){ return x.id !== b.dataset.pjdel; });
-        devNotes.forEach(function(n){ if(n.projectId === b.dataset.pjdel) n.projectId = null; });
-        if(devCur === b.dataset.pjdel) devCur = null;
-        delete devOpen[b.dataset.pjdel];
-        store.set("devProjects", devProjects); store.set("devNotes", devNotes);
-        renderDev();
+        var id = b.dataset.pjdel;
+        devProjects = devProjects.filter(function(x){ return x.id !== id; });
+        devNotes.forEach(function(n){ if(n.projectId === id){ n.projectId = null; n.stageId = null; } });
+        if(devCur === id){ devCur = null; devCurSt = null; }
+        delete devOpen[id];
+        store.set("devProjects", devProjects); store.set("devNotes", devNotes); renderDev();
       });
     });
     el.querySelectorAll("[data-pjst]").forEach(function(sel){
@@ -3388,10 +3511,68 @@ function renderDev(){
         store.set("devProjects", devProjects); renderDev();
       });
     });
+
+    /* --- 阶段级事件 --- */
+    el.querySelectorAll("[data-sttog]").forEach(function(b){
+      b.addEventListener("click", function(){ devStageOpen[b.dataset.sttog] = !devStageOpen[b.dataset.sttog]; renderDev(); });
+    });
+    el.querySelectorAll("[data-stpick]").forEach(function(s){
+      s.addEventListener("click", function(){
+        devCur = s.dataset.stpj;
+        devCurSt = (devCurSt === s.dataset.stpick) ? null : s.dataset.stpick;
+        renderDev();
+      });
+    });
+    el.querySelectorAll("[data-stdel]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var p = devProjects.find(function(x){ return x.id === b.dataset.stdel; });
+        p.stages = (p.stages || []).filter(function(x){ return x.id !== b.dataset.stid; });
+        devNotes.forEach(function(n){ if(n.stageId === b.dataset.stid) n.stageId = null; });
+        if(devCurSt === b.dataset.stid) devCurSt = null;
+        delete devStageOpen[b.dataset.stid];
+        store.set("devProjects", devProjects); store.set("devNotes", devNotes); renderDev();
+      });
+    });
+    el.querySelectorAll("[data-stadd]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var pid = b.dataset.stadd;
+        var nameEl = el.querySelector('[data-stinput="' + pid + '"]');
+        var goalEl = el.querySelector('[data-stgoal="' + pid + '"]');
+        var v = nameEl.value.trim();
+        if(!v){ toast("请填写阶段名称"); return; }
+        var p = devProjects.find(function(x){ return x.id === pid; });
+        p.stages = p.stages || [];
+        p.stages.push({ id: uid(), name: v, goal: goalEl.value.trim(), review: "", createdAt: Date.now(), tasks: [] });
+        store.set("devProjects", devProjects); renderDev(); toast("阶段已添加");
+      });
+    });
+    el.querySelectorAll("[data-stinput]").forEach(function(inp){
+      inp.addEventListener("keydown", function(e){
+        if(e.key === "Enter"){
+          var btn = el.querySelector('[data-stadd="' + inp.dataset.stinput + '"]');
+          if(btn) btn.click();
+        }
+      });
+    });
+    el.querySelectorAll("[data-strev]").forEach(function(inp){
+      function save(){
+        var p = devProjects.find(function(x){ return x.id === inp.dataset.strevpj; });
+        var s = (p.stages || []).find(function(x){ return x.id === inp.dataset.strev; });
+        if(!s) return;
+        s.review = inp.value.trim();
+        store.set("devProjects", devProjects);
+        toast("阶段总结已保存");
+      }
+      inp.addEventListener("keydown", function(e){ if(e.key === "Enter"){ inp.blur(); } });
+      inp.addEventListener("change", save);
+    });
+
+    /* --- 任务级事件 --- */
     el.querySelectorAll("[data-tktog]").forEach(function(b){
       b.addEventListener("click", function(){
-        var p = devProjects.find(function(x){ return x.id === b.dataset.tktog; });
-        var k = p.tasks.find(function(x){ return x.id === b.dataset.tkid; });
+        var p = devProjects.find(function(x){ return x.id === b.dataset.tkpj; });
+        var s = (p.stages || []).find(function(x){ return x.id === b.dataset.tktog; });
+        var k = (s.tasks || []).find(function(x){ return x.id === b.dataset.tkid; });
         k.status = k.status === "done" ? "open" : "done";
         k.doneAt = k.status === "done" ? Date.now() : null;
         store.set("devProjects", devProjects); renderDev();
@@ -3400,17 +3581,21 @@ function renderDev(){
     el.querySelectorAll("[data-tkdel]").forEach(function(b){
       b.addEventListener("click", function(){
         var p = devProjects.find(function(x){ return x.id === b.dataset.tkdel; });
-        p.tasks = p.tasks.filter(function(x){ return x.id !== b.dataset.tkid2; });
+        var s = (p.stages || []).find(function(x){ return x.id === b.dataset.tkstage; });
+        s.tasks = (s.tasks || []).filter(function(x){ return x.id !== b.dataset.tkid2; });
         store.set("devProjects", devProjects); renderDev();
       });
     });
     el.querySelectorAll("[data-tkadd]").forEach(function(b){
       b.addEventListener("click", function(){
-        var input = el.querySelector('[data-tkinput="' + b.dataset.tkadd + '"]');
+        var sid = b.dataset.tkadd;
+        var input = el.querySelector('[data-tkinput="' + sid + '"]');
         var v = input.value.trim();
         if(!v){ toast("请填写任务内容"); return; }
-        var p = devProjects.find(function(x){ return x.id === b.dataset.tkadd; });
-        p.tasks.push({ id: uid(), title: v, status: "open", doneAt: null });
+        var p = devProjects.find(function(x){ return x.id === b.dataset.tkpj; });
+        var s = (p.stages || []).find(function(x){ return x.id === sid; });
+        s.tasks = s.tasks || [];
+        s.tasks.push({ id: uid(), title: v, status: "open", doneAt: null });
         store.set("devProjects", devProjects); renderDev(); toast("任务已添加");
       });
     });
@@ -3424,75 +3609,91 @@ function renderDev(){
     });
   }
 
-  /* 随手记 - 项目下拉（选中项目时默认挂到该项目） */
-  var sel = document.getElementById("dnProject");
-  sel.innerHTML = '<option value="">不关联项目</option>' + devProjects.map(function(p){
+  /* 右：项目 / 阶段 联动下拉 */
+  var selP = document.getElementById("dnProject");
+  selP.innerHTML = '<option value="">不关联项目</option>' + devProjects.map(function(p){
     return '<option value="' + p.id + '">' + esc(p.name) + '</option>';
   }).join("");
-  if(devCur) sel.value = devCur;
+  if(devCur) selP.value = devCur;
 
-  /* 当前查看的项目提示 */
-  var tip = document.getElementById("dnCurTip");
   var curPj = devCur ? devProjects.find(function(x){ return x.id === devCur; }) : null;
-  if(devCur && !curPj) devCur = null;
-  tip.innerHTML = curPj
-    ? '<span class="dncur-name">只显示「' + esc(curPj.name) + '」的记录</span><button class="dncur-clear" id="dnCurClear" title="取消筛选">取消</button>'
-    : '';
-  var clearBtn = document.getElementById("dnCurClear");
-  if(clearBtn){
-    clearBtn.addEventListener("click", function(){ devCur = null; renderDev(); });
+  var selS = document.getElementById("dnStage");
+  if(curPj && (curPj.stages || []).length){
+    selS.disabled = false;
+    selS.innerHTML = '<option value="">该项目全部阶段</option>' + curPj.stages.map(function(s){
+      return '<option value="' + s.id + '">' + esc(s.name) + '</option>';
+    }).join("");
+    if(devCurSt) selS.value = devCurSt;
+  } else {
+    selS.disabled = true;
+    selS.innerHTML = '<option value="">（先选项目并建阶段）</option>';
   }
 
-  /* 随手记统计（选中项目时按该项目统计） */
-  var base = devCur ? devNotes.filter(function(n){ return n.projectId === devCur; }) : devNotes;
-  var bugs = base.filter(function(n){ return n.type === "bug"; });
-  var bugOpen = bugs.filter(function(n){ return !n.resolved; }).length;
-  document.getElementById("dnStat").innerHTML =
-    'Bug <b>' + bugOpen + '</b>/' + bugs.length + ' 待修 · 灵感 ' + base.filter(function(n){ return n.type === "idea"; }).length +
-    ' · 版本 ' + base.filter(function(n){ return n.type === "version"; }).length;
+  /* 当前查看范围提示 */
+  var tip = document.getElementById("dnCurTip");
+  var curSt = curPj && devCurSt ? (curPj.stages || []).find(function(x){ return x.id === devCurSt; }) : null;
+  if(devCur && !curPj){ devCur = null; devCurSt = null; }
+  tip.innerHTML = (curPj || curSt)
+    ? '<span class="dncur-name">只看「' + esc(curPj ? curPj.name : '') + (curSt ? ' · ' + esc(curSt.name) : '') + '」的记录</span>' +
+      '<button class="dncur-clear" id="dnCurClear" title="取消筛选">取消</button>'
+    : '';
+  var clearBtn = document.getElementById("dnCurClear");
+  if(clearBtn) clearBtn.addEventListener("click", function(){ devCur = null; devCurSt = null; renderDev(); });
 
-  /* 随手记列表 */
-  var TYPE = { bug: "Bug", idea: "灵感", version: "版本" };
+  /* 记录统计 */
+  var base = devNotes.slice();
+  if(devCur) base = base.filter(function(n){ return n.projectId === devCur; });
+  if(devCurSt) base = base.filter(function(n){ return n.stageId === devCurSt; });
+  var issues = base.filter(function(n){ return n.type === "issue"; });
+  var issueOpen = issues.filter(function(n){ return !n.resolved; }).length;
+  document.getElementById("dnStat").innerHTML =
+    '问题 <b>' + issueOpen + '</b>/' + issues.length + ' 待定 · 灵感 ' + base.filter(function(n){ return n.type === "idea"; }).length +
+    ' · 心得 ' + base.filter(function(n){ return n.type === "insight"; }).length;
+
+  /* 记录列表 */
+  var TYPE = { issue: "问题", idea: "灵感", insight: "心得" };
   var list = base.slice().sort(function(a,b){ return b.createdAt - a.createdAt; });
   if(dnFilter !== "all") list = list.filter(function(n){ return n.type === dnFilter; });
   var ll = document.getElementById("dnList");
   if(!list.length){
-    ll.innerHTML = '<div class="empty-tip">' + (devCur && curPj
-      ? '「' + esc(curPj.name) + '」还没有记录<br>在上方记录时把它关联到这个项目即可'
-      : '还没有记录<br>Bug、灵感、版本里程碑都丢进来') + '</div>';
+    ll.innerHTML = '<div class="empty-tip">' + ((curPj || curSt)
+      ? '「' + esc(curPj ? curPj.name : '') + (curSt ? ' · ' + esc(curSt.name) : '') + '」还没有记录<br>在上方记录时把它关联到这里即可'
+      : '还没有记录<br>问题、灵感、心得都可以丢进来') + '</div>';
     return;
   }
-    ll.innerHTML = list.map(function(n){
-      var p = devProjects.find(function(x){ return x.id === n.projectId; });
-      var d = new Date(n.createdAt);
-      var time = (d.getMonth()+1) + "/" + d.getDate();
-      var body = esc(n.text);
-      if(n.type === "version") body = '<b>' + body + '</b>';
-      return '<div class="dn-item">' +
-        '<span class="dn-type t-' + n.type + '">' + TYPE[n.type] + '</span>' +
-        '<div class="dn-body' + (n.resolved ? ' done' : '') + '">' + body +
-        '<div class="dn-sub">' + (p ? "项目：" + esc(p.name) : "未关联") + ' · ' + time +
-        (n.type === "bug" ? (n.resolved ? ' · <span style="color:var(--green)">已解决</span>' : ' · <span style="color:var(--red)">待修复</span>') : '') +
-        '</div></div>' +
-        '<div class="dn-act">' +
-        (n.type === "bug" ? '<button class="mini-check' + (n.resolved ? ' checked' : '') + '" data-dnfix="' + n.id + '" title="' + (n.resolved ? '取消解决' : '标记解决') + '">' + (n.resolved ? ICONS.check : '') + '</button>' : '') +
-        '<button class="del" data-dndel="' + n.id + '" title="删除">' + ICONS.trash + '</button></div></div>';
-    }).join("");
-    ll.querySelectorAll("[data-dnfix]").forEach(function(b){
-      b.addEventListener("click", function(){
-        var n = devNotes.find(function(x){ return x.id === b.dataset.dnfix; });
-        n.resolved = !n.resolved;
-        n.resolvedAt = n.resolved ? Date.now() : null;
-        store.set("devNotes", devNotes); renderDev();
-        if(n.resolved) toast("Bug 已标记解决，打卡生效");
-      });
+  ll.innerHTML = list.map(function(n){
+    var p = devProjects.find(function(x){ return x.id === n.projectId; });
+    var st = p ? (p.stages || []).find(function(x){ return x.id === n.stageId; }) : null;
+    var d = new Date(n.createdAt);
+    var time = (d.getMonth()+1) + "/" + d.getDate();
+    return '<div class="dn-item">' +
+      '<span class="dn-type t-' + n.type + '">' + TYPE[n.type] + '</span>' +
+      '<div class="dn-body' + (n.resolved ? ' done' : '') + '">' + esc(n.text) +
+        '<div class="dn-sub">' + (p ? esc(p.name) : '未关联') + (st ? ' · ' + esc(st.name) : '') + ' · ' + time +
+          (n.type === "issue" ? (n.resolved ? ' · <span style="color:var(--green)">已解决</span>' : ' · <span style="color:var(--magenta)">待定</span>') : '') +
+        '</div>' +
+      '</div>' +
+      '<div class="dn-act">' +
+        (n.type === "issue" ? '<button class="mini-check' + (n.resolved ? ' checked' : '') + '" data-dnfix="' + n.id + '" title="' + (n.resolved ? '取消解决' : '标记解决') + '">' + (n.resolved ? ICONS.check : '') + '</button>' : '') +
+        '<button class="del" data-dndel="' + n.id + '" title="删除">' + ICONS.trash + '</button>' +
+      '</div>' +
+    '</div>';
+  }).join("");
+  ll.querySelectorAll("[data-dnfix]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var n = devNotes.find(function(x){ return x.id === b.dataset.dnfix; });
+      n.resolved = !n.resolved;
+      n.resolvedAt = n.resolved ? Date.now() : null;
+      store.set("devNotes", devNotes); renderDev();
+      if(n.resolved) toast("问题已标记解决，打卡生效");
     });
-    ll.querySelectorAll("[data-dndel]").forEach(function(b){
-      b.addEventListener("click", function(){
-        devNotes = devNotes.filter(function(x){ return x.id !== b.dataset.dndel; });
-        store.set("devNotes", devNotes); renderDev();
-      });
+  });
+  ll.querySelectorAll("[data-dndel]").forEach(function(b){
+    b.addEventListener("click", function(){
+      devNotes = devNotes.filter(function(x){ return x.id !== b.dataset.dndel; });
+      store.set("devNotes", devNotes); renderDev();
     });
+  });
 }
 
 /* ==================== 生活记录页 ==================== */
@@ -5456,7 +5657,7 @@ var TOOL_IMPL = {
     } else if(board === "study"){
       out = studyItems.map(function(x){ return x.title; });
     } else if(board === "dev"){
-      out = devProjects.map(function(x){ return x.title; });
+      out = devProjects.map(function(x){ return x.name; });
     } else {
       return "未知板块：" + chatStr(a.board);
     }
@@ -5653,7 +5854,7 @@ function chatParseArgs(raw){
 /* ==================== 导出 / 导入 / 清空 ==================== */
 function exportJSON(){
   var data = {
-    app: "我的生活台", version: 5, exportAt: new Date().toISOString(),
+    app: "我的生活台", version: 6, exportAt: new Date().toISOString(),
     goals: goals, shorts: shorts, todays: todays, memos: memos,
     studyItems: studyItems, studyLogs: studyLogs,
     devProjects: devProjects, devNotes: devNotes,
@@ -7816,12 +8017,14 @@ function bindEvents(){
     var nameEl = document.getElementById("pjName");
     var v = nameEl.value.trim();
     if(!v){ toast("请填写项目名称"); return; }
+    var goalEl = document.getElementById("pjGoal");
     devProjects.push({
-      id: uid(), name: v, desc: document.getElementById("pjDesc").value.trim(),
-      status: document.getElementById("pjStatus").value, createdAt: Date.now(), tasks: []
+      id: uid(), name: v, goal: goalEl.value.trim(),
+      desc: document.getElementById("pjDesc").value.trim(),
+      status: document.getElementById("pjStatus").value, createdAt: Date.now(), stages: []
     });
     store.set("devProjects", devProjects);
-    nameEl.value = ""; document.getElementById("pjDesc").value = "";
+    nameEl.value = ""; goalEl.value = ""; document.getElementById("pjDesc").value = "";
     renderDev(); toast("开发项目已添加");
   });
   document.getElementById("pjName").addEventListener("keydown", function(e){
@@ -7835,6 +8038,7 @@ function bindEvents(){
     devNotes.push({
       id: uid(), type: document.getElementById("dnType").value,
       projectId: document.getElementById("dnProject").value || null,
+      stageId: (document.getElementById("dnStage").disabled ? null : (document.getElementById("dnStage").value || null)),
       text: v, createdAt: Date.now(), resolved: false, resolvedAt: null
     });
     store.set("devNotes", devNotes);
@@ -7843,6 +8047,15 @@ function bindEvents(){
   });
   document.getElementById("dnText").addEventListener("keydown", function(e){
     if(e.key === "Enter") document.getElementById("dnAdd").click();
+  });
+  document.getElementById("pjGoal").addEventListener("keydown", function(e){
+    if(e.key === "Enter") document.getElementById("pjAdd").click();
+  });
+  document.getElementById("dnProject").addEventListener("change", function(){
+    devCur = this.value || null; devCurSt = null; renderDev();
+  });
+  document.getElementById("dnStage").addEventListener("change", function(){
+    devCurSt = this.value || null; renderDev();
   });
 
   /* --- 今日心得 --- */
@@ -8253,6 +8466,7 @@ function init(){
     studyLogs = normalizeStudyLogs(store.get("studyLogs", []));
     devProjects = store.get("devProjects", []);
     devNotes = store.get("devNotes", []);
+    devNormalize();
     lifeFitness = store.get("lifeFitness", []);
     lifeDiet = store.get("lifeDiet", []);
     lifeFun = store.get("lifeFun", []);
