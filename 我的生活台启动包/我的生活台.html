@@ -165,7 +165,10 @@ main{flex:1;min-width:0;padding:26px 32px 60px}
 .page-head h1{font-size:23px;font-weight:800;letter-spacing:1px;color:var(--gold-hi);
   text-shadow:0 0 12px rgba(236,255,119,.5), 0 0 26px rgba(217,240,94,.22)}
 body.light .page-head h1{color:var(--text);text-shadow:none}
-.page-head .sub{color:var(--text2);font-size:13px;margin-top:10px}
+.page-head .sub{color:var(--text2);font-size:12.5px;margin-top:10px}
+.page-head .sub em{font-style:normal;font-family:var(--mono);color:var(--magenta);
+  text-shadow:0 0 9px rgba(255,88,176,.21)}
+body.light .page-head .sub em{text-shadow:none}
 .head-actions{display:flex;gap:8px}
 .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:6px;
   border:1px solid var(--line-hi);background:rgba(12,12,26,.8);color:var(--text2);cursor:pointer;
@@ -2519,7 +2522,7 @@ var MODULES = [
   { key: "note",  name: "今日心得", icon: "note",  locked: false, sub: "复盘提炼：关键词 / 一句话 / 心法 / 行动" },
   { key: "build", name: "建设打卡", icon: "build", locked: false, sub: "习惯打卡 · 每日正反馈 · Make a difference · 神经回路自塑" },
   /* noCheck：对话板块不参与首页打卡墙与本周概览（它不是"打卡"型模块） */
-  { key: "chat",  name: "AI 对话", icon: "chat",  locked: false, noCheck: true, sub: "用自然语言交代它做事 · 当前为文本对话（V0.1）" },
+  { key: "chat",  name: "AI 对话", icon: "chat",  locked: false, noCheck: true, tag: "AI", sub: "用自然语言交代它做事 · 当前为文本对话（V0.1）" },
   { key: "set",   name: "数据与设置", icon: "set", locked: false, hide: true, sub: "备份恢复 · 外观 · AI 接入 · 数据管理" }
 ];
 
@@ -2532,7 +2535,7 @@ function buildNav(){
   var ext = vis.filter(function(m){ return m.key === "chat"; });
   function item(m){
     return '<button class="nav-item" data-key="' + m.key + '">' + ICONS[m.icon] +
-      '<span>' + m.name + '</span>' + (m.locked ? '<span class="tag">建设中</span>' : '') + '</button>';
+      '<span>' + m.name + '</span>' + (m.tag ? '<span class="tag">' + m.tag + '</span>' : (m.locked ? '<span class="tag">建设中</span>' : '')) + '</button>';
   }
   nav.innerHTML =
     '<div class="nav-label">MODULES // 0' + core.length + '</div>' + core.map(item).join("") +
@@ -2567,7 +2570,11 @@ function go(key){
     b.classList.toggle("active", b.dataset.key === key);
   });
   document.getElementById("pageTitle").textContent = m.name;
-  document.getElementById("pageSub").textContent = m.sub;
+  var subEl = document.getElementById("pageSub");
+  if(key === "home"){
+    var pd = todayStr().split("-");
+    subEl.innerHTML = "今日概览 · <em>" + pd[0] + " / " + pd[1] + " / " + pd[2] + "</em> · 数据本地存储";
+  } else { subEl.textContent = m.sub; }
   if(key === "home") renderHome();
   if(key === "plan") renderPlan();
   if(key === "study") renderStudy();
