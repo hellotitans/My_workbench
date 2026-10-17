@@ -1,0 +1,705 @@
+<style>
+.g12{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;align-items:start}
+.g12>.c3{grid-column:span 3}.g12>.c4{grid-column:span 4}.g12>.c6{grid-column:span 6}
+.g12>.c8{grid-column:span 8}.g12>.c12{grid-column:span 12}
+@media(max-width:1180px){.g12>.c3,.g12>.c4{grid-column:span 6}}
+@media(max-width:820px){.g12>.c3,.g12>.c4,.g12>.c6,.g12>.c8{grid-column:span 12}}
+
+.dsec{display:flex;align-items:center;gap:10px;margin:20px 0 9px}
+.dsec .k{font-family:var(--mono);font-size:9.5px;letter-spacing:1.4px;padding:2px 7px;border-radius:3px;font-weight:700;flex-shrink:0}
+.dsec .n{font-size:13px;font-weight:700;letter-spacing:.6px;color:var(--text2)}
+.dsec .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
+.dsec .cnt{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.6px}
+
+.obs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+@media(max-width:1180px){.obs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.obs{grid-template-columns:1fr}}
+.obs .card{padding:15px 16px}
+.oche{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.oche .ic{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.oche .ic svg{width:15px;height:15px}
+.oche .nm{font-size:13.5px;font-weight:700;letter-spacing:.5px}
+.onums{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:11px}
+.onums b{display:block;font-family:var(--mono);font-size:17px;line-height:1.25;font-weight:700}
+.onums span{display:block;font-size:10px;color:var(--text3);margin-top:1px}
+.ofocus{border-top:1px dashed var(--border);padding-top:9px;font-size:11.5px;color:var(--text2);line-height:1.6}
+.ofocus i{font-style:normal;color:var(--text3);font-family:var(--mono);font-size:9.5px;letter-spacing:1px;display:block;margin-bottom:3px}
+.stalehot{color:var(--amber)!important}
+
+.ctabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.ctab{font-size:11.5px;padding:5px 11px;border-radius:5px;border:1px solid var(--border);background:rgba(12,12,26,.6);color:var(--text3);cursor:pointer;font-family:inherit;transition:.15s}
+.ctab:hover{color:var(--text2);border-color:var(--line-hi)}
+.ctab.on{color:var(--cyan-hi);border-color:rgba(69,216,255,.5);background:rgba(69,216,255,.08)}
+
+.ti{display:flex;align-items:flex-start;gap:11px;padding:11px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;background:rgba(11,11,24,.5);transition:.16s}
+.ti:hover{border-color:var(--line-hi);background:rgba(14,14,30,.72)}
+.ti.done{opacity:.52}
+.ti .ck{width:17px;height:17px;border-radius:5px;border:1.6px solid var(--cyan);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.ti.done .ck{background:var(--cyan);border-color:var(--cyan)}
+.ti .ck svg{width:11px;height:11px;opacity:0}
+.ti.done .ck svg{opacity:1}
+.ti .bd{flex:1;min-width:0}
+.ti .tx{font-size:13px;line-height:1.55}
+.ti.done .tx{text-decoration:line-through;color:var(--text3)}
+.ti .mt{display:flex;align-items:center;gap:7px;margin-top:5px;flex-wrap:wrap}
+.dom{font-family:var(--mono);font-size:9.5px;letter-spacing:1px;padding:2px 7px;border-radius:3px;font-weight:700}
+.dom.dev{background:rgba(69,216,255,.15);color:var(--cyan-hi)}
+.dom.study{background:rgba(255,88,176,.14);color:#ff9ed2}
+.dom.body{background:rgba(217,240,94,.13);color:var(--gold-hi)}
+.dom.mind{background:rgba(126,231,255,.1);color:#9fe8ff}
+.to-from{font-size:10.5px;color:var(--text3)}
+.mini{font-size:11px;color:var(--text3);cursor:pointer;padding:2px 8px;border-radius:4px;border:1px solid var(--border)}
+.mini:hover{color:var(--cyan-hi);border-color:rgba(69,216,255,.45)}
+
+.oi{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;border-radius:7px;border:1px solid var(--border);background:rgba(11,11,24,.5);margin-bottom:7px}
+.oi.solving{border-color:rgba(69,216,255,.42);background:rgba(69,216,255,.055)}
+.oi.parked{opacity:.5}
+.oi .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.oi .bd{flex:1;min-width:0}
+.oi .tt{font-size:12.8px;line-height:1.5}
+.oi .mt{display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap;font-size:10.5px;color:var(--text3)}
+.age{font-family:var(--mono);font-size:10px;padding:1.5px 6px;border-radius:3px;border:1px solid var(--border)}
+.age.hot{color:var(--amber);border-color:rgba(239,159,39,.45);background:rgba(239,159,39,.08)}
+.oi .op{display:flex;gap:5px;flex-shrink:0}
+.st-pill{font-family:var(--mono);font-size:9px;letter-spacing:1px;padding:2px 6px;border-radius:3px;font-weight:700}
+
+.pl-col .card{padding:14px 15px}
+.pl-lv{font-family:var(--mono);font-size:9.5px;letter-spacing:1.3px;color:var(--text3);margin-bottom:9px;display:block}
+.pl-it{border:1px solid var(--border);border-radius:7px;padding:9px 11px;margin-bottom:7px;background:rgba(11,11,24,.45)}
+.pl-it .t{font-size:12.5px;line-height:1.5}
+.pl-it .m{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:6px}
+.pl-it .m span{font-size:10.5px;color:var(--text3);font-family:var(--mono)}
+.add-row{display:flex;gap:7px;margin-top:8px}
+.inp{flex:1;min-width:0;background:rgba(9,9,20,.8);border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-size:12px;font-family:inherit;outline:none}
+.inp:focus{border-color:rgba(69,216,255,.5)}
+.inp::placeholder{color:var(--text3)}
+
+.sv{display:grid;grid-template-columns:repeat(4,auto);gap:18px;padding:4px 0 2px}
+.sv b{display:block;font-family:var(--mono);font-size:19px;line-height:1.2}
+.sv span{display:block;font-size:10.5px;color:var(--text3);margin-top:2px}
+.hintbox{border:1px dashed var(--border);border-radius:7px;padding:11px 13px;font-size:11.5px;color:var(--text3);line-height:1.65;background:rgba(11,11,24,.35)}
+.wr{display:flex;gap:9px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border)}
+.wr:last-child{border-bottom:0}
+.wr .d{font-family:var(--mono);font-size:10px;color:var(--text3);flex-shrink:0;width:42px;padding-top:2px}
+.wr .c{flex:1;font-size:12.3px;line-height:1.6}
+.wr .c em{font-style:normal;color:var(--text3);font-size:10.5px;display:block;margin-top:2px}
+.chartbox{width:100%;overflow:hidden}
+.chartbox svg{display:block;width:100%;height:auto}
+.lg{display:flex;gap:14px;flex-wrap:wrap;margin-top:9px;font-size:10.5px;color:var(--text3)}
+.lg i{display:inline-block;width:14px;height:2.5px;border-radius:2px;margin-right:5px;vertical-align:middle}
+
+/* ===== 土星环问候卡（原版保留） ===== */
+.date-card{position:relative;overflow:hidden;padding:19px 21px;background:radial-gradient(150% 125% at 84% -12%, rgba(69,216,255,.17), transparent 56%),radial-gradient(110% 100% at 6% 112%, rgba(255,88,176,.10), transparent 58%),linear-gradient(160deg,#0e1728 0%,#0a0f1f 100%);color:#dfe8ff}
+.date-card .glow{position:absolute;right:-70px;top:-130px;width:330px;height:330px;border-radius:50%;background:radial-gradient(circle, rgba(69,216,255,.15), transparent 66%);z-index:1;pointer-events:none;animation:cardGlow 7.4s ease-in-out infinite}
+.date-card .glow::after{content:"";position:absolute;left:30%;top:12%;width:74%;height:74%;border-radius:50%;background:radial-gradient(circle, rgba(122,231,255,.16), transparent 62%);animation:cardGlowCore 7.4s ease-in-out infinite}
+.day-head{position:relative;z-index:2;font-size:13px;color:rgba(255,255,255,.68);letter-spacing:.3px;display:flex;align-items:center;gap:8px}
+.day-head .d{font-family:var(--mono);font-size:15px;color:#eaffff;letter-spacing:1px}
+.day-head .w{font-size:11px;color:#ff58b0;font-family:var(--mono);letter-spacing:2px;text-shadow:0 0 10px rgba(255,88,176,.9);animation:magBreath 6.6s ease-in-out infinite}
+.day-greet{position:relative;z-index:2;margin-top:16px;font-size:22px;line-height:1.5;font-weight:700;color:var(--text);letter-spacing:.4px;min-height:96px;text-shadow:0 0 14px rgba(69,216,255,.35)}
+.day-foot{position:relative;z-index:2;display:flex;align-items:center;gap:8px;font-size:12.5px;color:rgba(255,255,255,.62)}
+.day-foot .bar{flex:1;height:3px;background:rgba(255,255,255,.08);overflow:hidden;border-radius:2px}
+.day-foot .bar i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--cyan),#ff58b0);box-shadow:0 0 8px rgba(69,216,255,.7)}
+.day-ring{position:absolute;right:-34px;bottom:-56px;width:185px;height:185px;pointer-events:none;z-index:1;filter:drop-shadow(0 0 9px rgba(69,216,255,.62)) drop-shadow(0 0 20px rgba(255,88,176,.28));animation:ringSpin 26s linear infinite, ringBreathe 5.6s ease-in-out infinite}
+@keyframes ringSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes ringBreathe{0%,100%{opacity:.92}50%{opacity:1}}
+@keyframes cardGlow{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes cardGlowCore{0%,100%{opacity:.28;transform:scale(.96)}50%{opacity:.62;transform:scale(1.05)}}
+@keyframes magBreath{0%,100%{filter:brightness(.90) drop-shadow(0 0 3px rgba(255,88,176,.22))}50%{filter:brightness(1.12) drop-shadow(0 0 9px rgba(255,88,176,.6))}}
+
+/* ===== 开发领域：项目 / 阶段 / 条目 / 沉淀 ===== */
+.dv-pj{border:1px solid var(--border);border-radius:8px;padding:12px 13px;margin-bottom:12px;background:rgba(255,255,255,.02)}
+.dv-pj h3{font-size:14px;font-weight:700;margin:0 0 9px;display:flex;align-items:center;gap:8px;letter-spacing:.4px}
+.pj-tog{cursor:pointer;user-select:none}
+.pj-tog:hover .chev{color:var(--cyan-hi)}
+.pj-sum{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--text3);font-weight:400;letter-spacing:.6px}
+.chev{font-family:var(--mono);font-size:11px;color:var(--text3);flex:0 0 auto;transition:transform .18s ease}
+.dv-pj.collapsed .chev{transform:rotate(-90deg)}
+.dv-pj.collapsed h3{margin-bottom:6px}
+.dv-quick{display:none;font-size:11px;color:var(--text3);line-height:1.55;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dv-pj.collapsed .dv-quick{display:block}
+.dv-pj.collapsed .dv-body{display:none}
+.pill{font-family:var(--mono);font-size:9.5px;letter-spacing:1px;padding:2px 8px;border-radius:3px;border:1px solid var(--border);color:var(--text3)}
+.pill.on{background:rgba(69,216,255,.14);border-color:var(--cyan);color:var(--cyan-hi)}
+.dv-line{display:flex;gap:9px;font-size:11.5px;color:var(--text2);line-height:1.62;margin-bottom:5px}
+.dv-line i{font-style:normal;font-family:var(--mono);font-size:9px;letter-spacing:1.2px;color:var(--text3);flex:0 0 54px;padding-top:3px}
+.dv-line .ed{font-family:var(--mono);font-size:9.5px;color:var(--text3);flex:0 0 auto;margin-left:auto}
+.dv-now{margin-top:10px;padding-top:9px;border-top:1px dashed var(--border);background:rgba(255,255,255,.015);border-radius:5px;padding-left:6px;padding-right:6px;padding-bottom:4px}
+.stg{border:1px solid var(--border);border-radius:7px;padding:9px 10px;margin-top:8px;cursor:pointer;background:rgba(255,255,255,.015);transition:border-color .16s,background .16s}
+.stg:hover{border-color:rgba(69,216,255,.5)}
+.stg.on{border-color:var(--cyan);box-shadow:inset 0 0 0 1px rgba(69,216,255,.28);background:rgba(69,216,255,.07)}
+.stg .sh{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.stg .sn{font-family:var(--mono);font-size:10px;color:var(--cyan);letter-spacing:1.2px}
+.stg .nm{font-size:12.5px;font-weight:700}
+.stg .pg{margin-left:auto;font-family:var(--mono);font-size:10.5px;color:var(--text3)}
+.it-row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:6px;background:rgba(255,255,255,.02);border-left:2px solid rgba(69,216,255,.42);margin-bottom:7px}
+.it-row.done{border-left-color:var(--gold);background:rgba(217,240,94,.075)}
+.it-row .seq{font-family:var(--mono);font-size:11px;color:var(--text3);flex:0 0 16px;text-align:right}
+.it-row .tx{flex:1;font-size:12.5px;line-height:1.5}
+.it-row.done .tx{color:var(--gold-hi)}
+.ops{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.ck2{border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:5px;padding:4px 9px;font-size:11px;cursor:pointer}
+.ck2:hover{border-color:var(--gold);color:var(--gold-hi)}
+.done-pill{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:3px;background:rgba(217,240,94,.16);color:var(--gold-hi)}
+.mini{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;white-space:nowrap}
+.mini:hover{border-color:var(--cyan);color:var(--cyan-hi)}
+.mini.on{background:rgba(69,216,255,.14);border-color:var(--cyan);color:var(--cyan-hi)}
+.tgbar{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap}
+.tg{font-size:11.5px;padding:4px 13px;border-radius:14px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer}
+.tg:hover{border-color:var(--cyan);color:var(--cyan-hi)}
+.tg.on{background:rgba(69,216,255,.13);border-color:var(--cyan);color:var(--cyan-hi)}
+.sed{display:flex;gap:10px;padding:9px 2px;border-bottom:1px dashed var(--border);align-items:flex-start}
+.sed .tp{font-size:10px;font-family:var(--mono);padding:2px 8px;border-radius:3px;flex:0 0 auto}
+.sed .st{flex:1;font-size:12.5px;color:var(--text2);line-height:1.6}
+.sed .dt{font-family:var(--mono);font-size:10px;color:var(--text3);flex:0 0 auto;padding-top:3px}
+
+/* ===== 三层计划环 ===== */
+.ring-card .chartbox{max-width:100%}
+</style>
+
+<aside id="sidebar">
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="16" rx="3" stroke="#45d8ff" stroke-width="1.8"/><path d="M3 9h18" stroke="#45d8ff" stroke-width="1.8"/><path d="M8 4v5M16 4v5" stroke="#45d8ff" stroke-width="1.8"/><rect x="7" y="12.5" width="4" height="4" rx="1" fill="#ff58b0"/></svg>
+    <div><div class="t">我的生活台</div><div class="s">LIFE // WORKBENCH</div></div>
+  </div>
+  <nav id="nav">
+    <div class="nav-label">TODAY // 01</div>
+    <button class="nav-item active" data-go="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 10l9-7 9 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg><span>今日</span></button>
+    <div class="nav-label" style="margin-top:12px">DOMAINS // 04</div>
+    <button class="nav-item" data-go="dev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"/></svg><span>开发</span></button>
+    <button class="nav-item" data-go="study"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-1.5z"/><path d="M8 7h7M8 11h7"/></svg><span>学习</span></button>
+    <button class="nav-item" data-go="body"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/><circle cx="12" cy="12" r="9"/></svg><span>身体</span></button>
+    <button class="nav-item" data-go="mind"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0-6 6c0 3-2 4-2 6a4 4 0 0 0 8 0c0-1-1-2-1-3s1-2 1-3a6 6 0 0 0-6-6z"/><path d="M12 21a3 3 0 1 0 0-6"/></svg><span>心智</span></button>
+    <div class="nav-label" style="margin-top:12px">REVIEW // 01</div>
+    <button class="nav-item" data-go="review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v5h-5"/></svg><span>周复盘</span></button>
+  </nav>
+  <div class="side-foot">
+    <div class="hud">
+      <div class="row"><span>SYS</span><b>ONLINE</b></div>
+      <div class="row"><span>UPTIME</span><b>28 D</b></div>
+      <div class="row"><span>OPEN</span><b style="color:var(--amber)">7 ITEMS</b></div>
+    </div>
+    <button class="theme-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg><span>切换浅色模式</span></button>
+    <button class="theme-btn" style="margin-top:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg><span>数据与备份</span></button>
+    <span class="note">数据仅保存在本机浏览器<br>请定期导出备份</span>
+  </div>
+</aside>
+
+<main>
+  <div class="page-head">
+    <div><h1 id="pgTitle">今日</h1><div class="sub" id="pgSub">观察 → 行动。今天是你陪伴自己的第 28 天。</div></div>
+    <div class="head-actions">
+      <button class="btn" data-go="review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>周复盘</button>
+      <button class="btn primary" data-go="wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>收工</button>
+    </div>
+  </div>
+
+  <!-- ============ 首页 · 今日横切面 ============ -->
+  <section id="page-home">
+    <div class="sec-title">L1 · 观察（系统算出，无需填写）</div>
+    <div class="obs">
+      <div class="card"><i class="corner tl"></i>
+        <div class="oche"><div class="ic" style="background:rgba(69,216,255,.13);color:var(--cyan-hi)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6l-5 6 5 6M16 6l5 6-5 6"/></svg></div><div class="nm">开发</div></div>
+        <div class="onums"><div><b>3</b><span>未闭合</span></div><div><b class="stalehot">6 天</b><span>最老停滞</span></div><div><b>1</b><span>今日在解</span></div></div>
+        <div class="ofocus"><i>FOCUS</i>RAG 召回率上不去</div>
+      </div>
+      <div class="card"><i class="corner tl"></i>
+        <div class="oche"><div class="ic" style="background:rgba(255,88,176,.13);color:#ff9ed2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-1.5z"/></svg></div><div class="nm">学习</div></div>
+        <div class="onums"><div><b>2</b><span>未闭合</span></div><div><b>3 天</b><span>最老停滞</span></div><div><b>1</b><span>今日在解</span></div></div>
+        <div class="ofocus"><i>FOCUS</i>注意力机制推导未落地</div>
+      </div>
+      <div class="card"><i class="corner tl"></i>
+        <div class="oche"><div class="ic" style="background:rgba(217,240,94,.12);color:var(--gold-hi)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M6.5 6.5l11 11"/></svg></div><div class="nm">身体</div></div>
+        <div class="onums"><div><b>2</b><span>未闭合</span></div><div><b>11 天</b><span>最老停滞</span></div><div><b>0</b><span>今日在解</span></div></div>
+        <div class="ofocus"><i>FOCUS</i>深蹲膝盖不适（系统检测：训练断 3 天）</div>
+      </div>
+      <div class="card"><i class="corner tl"></i>
+        <div class="oche"><div class="ic" style="background:rgba(126,231,255,.1);color:#9fe8ff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0-6 6c0 3-2 4-2 6a4 4 0 0 0 8 0c0-1-1-2-1-3s1-2 1-3a6 6 0 0 0-6-6z"/></svg></div><div class="nm">心智</div></div>
+        <div class="onums"><div><b>2</b><span>未闭合</span></div><div><b>14 天</b><span>最老停滞</span></div><div><b>1</b><span>今日在解</span></div></div>
+        <div class="ofocus"><i>FOCUS</i>启动困难：坐下来前的那 10 分钟</div>
+      </div>
+    </div>
+
+    <div class="g12">
+      <div class="card c4 date-card" style="align-self:stretch"><i class="corner tl"></i><i class="corner br"></i>
+        <div class="glow" aria-hidden="true"></div>
+        <div class="chead"><span class="no">01</span><h2>TODAY</h2></div>
+        <div class="day-head"><span class="d">10.17</span><span class="w">SAT</span></div>
+        <div class="day-greet">别想了，<br>先动手做 5 分钟。</div>
+        <div class="day-foot"><span>已陪伴你</span><b>28</b><span>天</span><span class="bar"><i></i></span></div>
+        <svg class="day-ring" viewBox="0 0 240 240" aria-hidden="true">
+          <circle cx="120" cy="120" r="106" fill="none" stroke="rgba(69,216,255,.34)" stroke-width="1.1"/>
+          <circle cx="120" cy="120" r="84" fill="none" stroke="rgba(255,88,176,.52)" stroke-width="1.1"/>
+          <circle cx="120" cy="120" r="60" fill="none" stroke="rgba(69,216,255,.74)" stroke-width="1.2"/>
+          <circle cx="120" cy="120" r="36" fill="none" stroke="rgba(255,88,176,.95)" stroke-width="1.3"/>
+          <circle cx="219" cy="156" r="4.6" fill="#45d8ff"/>
+          <circle cx="43" cy="92" r="3" fill="#ff58b0"/>
+          <circle cx="120" cy="120" r="2.4" fill="#eaffff"/>
+        </svg>
+      </div>
+      <div class="card c8 ring-card" style="align-self:stretch"><i class="corner tl"></i><i class="corner br"></i>
+        <div class="chead"><span class="no">02</span><h2>PLAN RINGS · 计划完成度</h2></div>
+        <div class="cdesc">内环 今日清单 · 中环 短期计划 · 外环 长期计划 —— 按计划链引用自动算出，无需填写。</div>
+        <div class="ctabs">
+          <button class="ctab on" data-chart="rings">计划完成度环</button>
+          <button class="ctab" data-chart="open">卡点累积 / 解决</button>
+          <button class="ctab" data-chart="out">本周产出量</button>
+        </div>
+        <div class="chartbox" id="chartBox"></div>
+      </div>
+    </div>
+
+    <div class="sec-title">L3 · 今日行动（唯一来源：各领域的今日计划）</div>
+    <div class="card c12">
+      <div class="chead"><span class="no">02</span><h2>TODAY'S ACTION</h2></div>
+      <div class="cdesc">这里不再有任何输入框。待办全部来自四个领域的计划链，需要新增请到对应领域页。</div>
+      <div class="ti"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#04040a" stroke-width="3.4"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="bd"><div class="tx">把 RAG 分块策略改成语义切分，跑一次召回评测</div>
+          <div class="mt"><span class="dom dev">DEV</span><span class="to-from">来自短期：本月召回率 ≥ 0.7</span><span class="mini">就地记一句</span></div></div></div>
+      <div class="ti done"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#04040a" stroke-width="3.4"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="bd"><div class="tx">整理 Attention 推导笔记，手写一遍 QKV 维度变化</div>
+          <div class="mt"><span class="dom study">STUDY</span><span class="to-from">空挂（不属于任何短期计划）</span><span class="mini">已记 1 条</span></div></div></div>
+      <div class="ti"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#04040a" stroke-width="3.4"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="bd"><div class="tx">练背 45 分钟 + 记录动作感受</div>
+          <div class="mt"><span class="dom body">BODY</span><span class="to-from">来自长期：3 个月体脂 22%</span><span class="mini">就地记一句</span></div></div></div>
+      <div class="ti"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#04040a" stroke-width="3.4"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="bd"><div class="tx">习惯打卡：冥想 10 分钟 / 早睡</div>
+          <div class="mt"><span class="dom mind">MIND</span><span class="to-from">来自心智领域习惯项</span><span class="mini">就地记一句</span></div></div></div>
+      <div class="ti"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#04040a" stroke-width="3.4"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="bd"><div class="tx">看一个健身博主视频，记结论与启发</div>
+          <div class="mt"><span class="dom body">BODY</span><span class="to-from">空挂</span><span class="mini">就地记一句</span></div></div></div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:11px;border-top:1px dashed var(--border)">
+        <div style="flex:1"><div class="pbar"><i style="width:40%"></i></div></div>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">2 / 5</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 开发领域 ============ -->
+  <section id="page-dev" style="display:none">
+    <div class="dsec"><span class="k" style="background:var(--cyan);color:#030307">S1</span><span class="n">观察 · 未闭合项</span><span class="ln"></span><span class="cnt">OPEN 3 / OLDEST 6D</span></div>
+    <div class="g12">
+      <div class="card c12">
+        <div class="cdesc" style="margin-bottom:10px">卡点是<b style="color:var(--text2)">触发式</b>的 —— 没有就不建，不要每天硬找一个。</div>
+        <div class="oi solving"><div class="dot" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan)"></div>
+          <div class="bd"><div class="tt">RAG 检索召回率上不去，换成 rerank 也只到 0.43</div>
+            <div class="mt"><span class="st-pill" style="background:rgba(69,216,255,.15);color:var(--cyan-hi)">今日在解</span><span class="age hot">卡了 6 天</span><span>挡住了：评测集上线</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">今天解决</button><button class="mini" data-todayitem>加入今日</button></div></div>
+        <div class="oi"><div class="dot" style="background:var(--amber)"></div>
+          <div class="bd"><div class="tt">多轮对话上下文膨胀，token 超预算</div>
+            <div class="mt"><span class="age">卡了 3 天</span><span>引用：devNotes 问题 #12</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">今天解决</button><button class="mini" data-todayitem>加入今日</button></div></div>
+        <div class="oi"><div class="dot" style="background:var(--text3)"></div>
+          <div class="bd"><div class="tt">推理延迟超标（系统检测 · 项目停滞 1 天）</div>
+            <div class="mt"><span class="age">今天</span><span style="color:var(--violet)">系统自动生成建议</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">采纳</button><button class="mini" data-todayitem>加入今日</button></div></div>
+        <div class="add-row"><input class="inp" placeholder="记一个新卡点：到底是什么挡着？"><button class="btn primary" style="padding:7px 13px">+</button></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:var(--cyan);color:#030307">S2</span><span class="n">项目 · 阶段 · 开发条目</span><span class="ln"></span><span class="cnt">点阶段 → 右侧展开条目</span></div>
+    <div class="g12">
+      <!-- 左：项目 + 阶段 -->
+      <div class="card c5" style="grid-column:span 5">
+        <div class="chead"><span class="no">01</span><h2>PROJECTS</h2></div>
+        <div class="cdesc">按真实项目记录。项目录总目标（要做出什么功能）与总效果（用起来什么感受、质量什么标准）。</div>
+
+        <div class="dv-pj" data-pj="p1">
+          <h3 class="pj-tog" title="点击标题折叠 / 展开阶段">RAG 问答助手 <span class="pill on">进行中</span><span class="pj-sum">3 阶段 · 7/14</span><span class="chev">▾</span></h3>
+          <div class="dv-quick">当前：语义切分已跑通，rerank 只带来 0.02，瓶颈在召回 · 今日已加 2 条</div>
+          <div class="dv-body">
+          <div class="dv-line"><i>总目标</i><span>基于自有文档回答准确可溯源：召回率 ≥ 0.7，端到端延迟 &lt; 3s</span></div>
+          <div class="dv-line"><i>总效果</i><span>读起来像懂这个领域的人答的，引用可点开核对；模块边界清晰、可维护</span></div>
+
+          <div class="dv-now">
+            <div class="dv-line"><i>当前状态</i><span>语义切分已跑通；rerank 只带来 0.02，判定瓶颈在召回不在排序</span><span class="ed">10.17 改</span></div>
+            <div class="dv-line"><i>当前效果</i><span>召回 0.61（差 0.09）· 延迟 3.4s 略超 · 偶有张冠李戴</span><span class="ed">10.17 改</span></div>
+          </div>
+
+          <div class="stg" data-stage="s1">
+            <div class="sh"><span class="sn">阶段一</span><span class="nm">检索链路打通</span><span class="pg">5/5</span></div>
+            <div class="dv-line"><i>阶段目标</i><span>文档入库 → 切分 → 向量化 → 检索全链路跑通</span></div>
+            <div class="dv-line"><i>阶段效果</i><span>任意文档问得出答案，引用能定位到原文段落</span></div>
+          </div>
+          <div class="stg on" data-stage="s2">
+            <div class="sh"><span class="sn">阶段二</span><span class="nm">效果调优与评测</span><span class="pg">2/5</span></div>
+            <div class="dv-line"><i>阶段目标</i><span>建评测集 + 评测脚本，把召回率推到 0.7</span></div>
+            <div class="dv-line"><i>阶段效果</i><span>每次改动有可比的数字，不再靠感觉判断好坏</span></div>
+            <div class="ops" style="margin-top:7px"><button class="mini" data-addtoday="s2">整阶段加入今日</button></div>
+          </div>
+          <div class="stg" data-stage="s3">
+            <div class="sh"><span class="sn">阶段三</span><span class="nm">工程化与上线</span><span class="pg">0/4</span></div>
+            <div class="dv-line"><i>阶段目标</i><span>拆模块、加缓存、压延迟到 3s 内</span></div>
+            <div class="dv-line"><i>阶段效果</i><span>换模型不改业务代码；本地一条命令起服务</span></div>
+          </div>
+
+          <div class="add-row" style="margin-top:10px">
+            <input class="inp" placeholder="新增阶段（自动编号）"><button class="btn" style="padding:7px 11px">+</button>
+          </div>
+          </div>
+        </div>
+
+        <div class="dv-pj collapsed" data-pj="p2">
+          <h3 class="pj-tog" title="点击标题折叠 / 展开阶段">Agent 编排框架 <span class="pill">暂停</span><span class="pj-sum">2 阶段 · 3/9</span><span class="chev">▾</span></h3>
+          <div class="dv-quick">当前：工具调用重试策略未定，等 RAG 阶段二收尾再续</div>
+          <div class="dv-body">
+            <div class="dv-line"><i>总目标</i><span>多工具串行/并行编排，失败可重试、可回放</span></div>
+            <div class="dv-line"><i>总效果</i><span>加一个新工具不改编排代码；跑挂了能一键重放</span></div>
+            <div class="dv-now">
+              <div class="dv-line"><i>当前状态</i><span>卡在重试与超时策略的取舍</span><span class="ed">10.15 改</span></div>
+              <div class="dv-line"><i>当前效果</i><span>未跑通，暂无效果数据</span><span class="ed">10.15 改</span></div>
+            </div>
+            <div class="stg" data-stage="s4">
+              <div class="sh"><span class="sn">阶段一</span><span class="nm">工具抽象与注册</span><span class="pg">3/4</span></div>
+              <div class="dv-line"><i>阶段目标</i><span>统一工具描述格式，支持自动注册</span></div>
+              <div class="dv-line"><i>阶段效果</i><span>新增工具只写一份描述文件</span></div>
+            </div>
+            <div class="stg" data-stage="s5">
+              <div class="sh"><span class="sn">阶段二</span><span class="nm">编排与失败恢复</span><span class="pg">0/5</span></div>
+              <div class="dv-line"><i>阶段目标</i><span>串行/并行编排 + 重试 + 断点重放</span></div>
+              <div class="dv-line"><i>阶段效果</i><span>任意一步失败可定位、可单步重跑</span></div>
+              <div class="ops" style="margin-top:7px"><button class="mini" data-addtoday="s5">整阶段加入今日</button></div>
+            </div>
+            <div class="add-row" style="margin-top:10px">
+              <input class="inp" placeholder="新增阶段（自动编号）"><button class="btn" style="padding:7px 11px">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="add-row">
+          <input class="inp" placeholder="新项目：名称 / 总目标 / 总效果"><button class="btn primary" style="padding:7px 13px">+</button>
+        </div>
+      </div>
+
+      <!-- 右：选中阶段的开发条目 -->
+      <div class="card c7" style="grid-column:span 7">
+        <div class="chead"><span class="no">02</span><h2 id="devStageName">阶段二 · 效果调优与评测</h2></div>
+        <div class="cdesc">条目按序列编号逐个推进。完成后<b style="color:var(--gold-hi)">留档并变色</b>，不划线、不压暗 —— 做过的事要看得见。</div>
+        <div id="devItems"></div>
+        <div class="add-row" style="margin-top:10px">
+          <input class="inp" id="devItemIn" placeholder="新增一条开发条目"><button class="btn primary" style="padding:7px 13px" id="devItemAdd">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:var(--cyan);color:#030307">S3</span><span class="n">沉淀 · 灵感 / 心得 / 规范</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c12">
+        <div class="tgbar">
+          <button class="tg on" data-tag="all">全部</button>
+          <button class="tg" data-tag="灵感">灵感</button>
+          <button class="tg" data-tag="心得">心得</button>
+          <button class="tg" data-tag="规范">规范</button>
+        </div>
+        <div id="sedList"></div>
+        <div class="add-row" style="margin-top:11px">
+          <select class="inp" id="sedTag" style="flex:0 0 96px"><option>灵感</option><option>心得</option><option>规范</option></select>
+          <input class="inp" id="sedIn" placeholder="开发过程中想到的一句话"><button class="btn primary" style="padding:7px 13px" id="sedAdd">记</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:var(--cyan);color:#030307">S4</span><span class="n">回看</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c7" style="grid-column:span 7">
+        <div class="chead"><span class="no">01</span><h2>SOLVED</h2></div>
+        <div class="cdesc">已关闭的卡点 —— 方案与效果是这里唯一的入伙门槛。</div>
+        <div class="wr"><div class="d">10.12</div><div class="c"><b style="color:var(--gold-hi)">Embedding 模型选错导致语义错位</b><br>换成 bge-large 后相似度分布明显分离。<em>卡了 4 天 · 效果：召回 +0.18</em></div></div>
+        <div class="wr"><div class="d">10.05</div><div class="c"><b style="color:var(--gold-hi)">PDF 解析丢表格</b><br>改用 pdfplumber 按坐标还原。<em>卡了 2 天 · 效果：抽取完整率 62% → 94%</em></div></div>
+      </div>
+      <div class="card c5" style="grid-column:span 5">
+        <div class="chead"><span class="no">02</span><h2>SIGNALS</h2></div>
+        <div class="sv" style="grid-template-columns:repeat(2,auto)"><div><b>6.2 天</b><span>平均滞留</span></div><div><b>9</b><span>已关闭卡点</span></div></div>
+        <div class="hintbox" style="margin-top:12px">灵感与心得沿用现有入口，入伙门槛：必须与某条已关闭卡点挂钩。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 学习领域 ============ -->
+  <section id="page-study" style="display:none">
+    <div class="dsec"><span class="k" style="background:#ff58b0;color:#2a0012">S1</span><span class="n">观察 · 未闭合项</span><span class="ln"></span><span class="cnt">OPEN 2 / OLDEST 3D</span></div>
+    <div class="g12">
+      <div class="card c12">
+        <div class="cdesc" style="margin-bottom:10px">这里的卡点不是"学没学完"，而是<b style="color:var(--text2)">没想透、没用上</b>。</div>
+        <div class="oi solving"><div class="dot" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan)"></div>
+          <div class="bd"><div class="tt">Attention 的 QKV 维度推导能看懂，但自己推一遍就卡在第 3 步</div>
+            <div class="mt"><span class="st-pill" style="background:rgba(69,216,255,.15);color:var(--cyan-hi)">今日在解</span><span class="age">卡了 3 天</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">今天解决</button></div></div>
+        <div class="oi"><div class="dot" style="background:var(--amber)"></div>
+          <div class="bd"><div class="tt">RLHF 看完了，但没在任何一个项目里用过</div>
+            <div class="mt"><span class="age hot">学了 14 天未应用</span><span style="color:var(--violet)">系统提示</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">今天解决</button></div></div>
+        <div class="add-row"><input class="inp" placeholder="记一个新卡点：哪个概念没想透？"><button class="btn primary" style="padding:7px 13px">+</button></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:#ff58b0;color:#2a0012">S2</span><span class="n">计划链 · 长期 → 短期 → 今日</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c4 pl-col"><span class="pl-lv">LONG · 长期</span>
+        <div class="pl-it"><div class="t">把 Transformer 到 RLHF 这条线真正打通</div><div class="m"><span>持续</span><span style="color:var(--cyan-hi)">进行中</span></div></div>
+        <div class="add-row"><input class="inp" placeholder="新增长期目标"><button class="btn" style="padding:7px 11px">+</button></div>
+      </div>
+      <div class="card c4 pl-col"><span class="pl-lv">SHORT · 短期</span>
+        <div class="pl-it"><div class="t">本周手写完 Attention 全部推导</div><div class="m"><span>剩 2 天</span><span class="mini">加入今日</span></div></div>
+        <div class="add-row"><input class="inp" placeholder="新增短期计划"><button class="btn" style="padding:7px 11px">+</button></div>
+      </div>
+      <div class="card c4 pl-col"><span class="pl-lv">TODAY · 今日（可空挂）</span>
+        <div class="pl-it"><div class="t">手写一遍 QKV 维度变化</div><div class="m"><span style="color:var(--text3)">← 本周手写完推导</span></div></div>
+        <div class="add-row"><input class="inp" placeholder="今日还要做什么"><button class="btn primary" style="padding:7px 11px">+</button></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:#ff58b0;color:#2a0012">S3</span><span class="n">执行记录 · 含应用</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c8">
+        <div class="chead"><span class="no">01</span><h2>LEARN + APPLY</h2></div>
+        <div class="cdesc">第四个类目是「学习<b style="color:var(--text2)">应用</b>状态」 —— 用上了才算闭环。</div>
+        <div class="wr"><div class="d">10.17</div><div class="c">手写 QKV 推导第 3 步打通了<em>应用：当天就用它解释了 RAG 的检索打分</em></div></div>
+        <div class="wr"><div class="d">10.15</div><div class="c">看完 Position Embedding 三篇<em>未应用</em></div></div>
+        <div class="add-row"><input class="inp" placeholder="今天学了什么 / 用在哪"><button class="btn primary" style="padding:7px 13px">记</button></div>
+      </div>
+      <div class="card c4">
+        <div class="chead"><span class="no">02</span><h2>APPLY RATE</h2></div>
+        <div class="sv" style="grid-template-columns:repeat(2,auto)"><div><b style="color:var(--gold-hi)">68%</b><span>近 30 天应用率</span></div><div><b>21</b><span>知识树条目</span></div></div>
+        <div class="hintbox" style="margin-top:12px">应用率 = 有應用记录的学习条目占比。这是学习领域最重要的数字。</div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:#ff58b0;color:#2a0012">S4</span><span class="n">沉淀与回看</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c7" style="grid-column:span 7">
+        <div class="chead"><span class="no">01</span><h2>SOLVED</h2></div>
+        <div class="wr"><div class="d">10.09</div><div class="c"><b style="color:var(--gold-hi)">分不清 cross-attention 和 self-attention</b><br>用"谁查谁"一句话区分开：Q 来自 decoder 就是 cross。<em>卡了 5 天</em></div></div>
+      </div>
+      <div class="card c5" style="grid-column:span 5">
+        <div class="chead"><span class="no">02</span><h2>KNOWLEDGE TREE</h2></div>
+        <div class="hintbox">知识树（五关系）沿用现有结构，位置移到这里。<br>树枝可一键转为卡点。</div>
+      </div>
+    </div>
+  </section>
+  <!-- ============ 身体领域 ============ -->
+  <section id="page-body" style="display:none">
+    <div class="dsec"><span class="k" style="background:var(--gold);color:#1a1c00">S1</span><span class="n">观察 · 未闭合项</span><span class="ln"></span><span class="cnt">OPEN 2 / OLDEST 11D</span></div>
+    <div class="g12">
+      <div class="card c12">
+        <div class="cdesc" style="margin-bottom:10px">身体的未闭合项有两种：自己记的<b style="color:var(--text2)">健身卡点</b>，和系统按 30 日基线算出的<b style="color:var(--text2)">偏离项</b>。</div>
+        <div class="oi"><div class="dot" style="background:var(--amber)"></div>
+          <div class="bd"><div class="tt">深蹲到 90 度时右膝内侧不适</div><div class="mt"><span class="age hot">卡了 11 天</span><span>挡住了：腿部训练加重量</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">今天解决</button></div></div>
+        <div class="oi"><div class="dot" style="background:var(--amber)"></div>
+          <div class="bd"><div class="tt">硬拉重量 6 周没涨</div><div class="mt"><span class="age">平台期 42 天</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">今天解决</button></div></div>
+        <div class="oi" style="border-style:dashed"><div class="dot" style="background:var(--violet)"></div>
+          <div class="bd"><div class="tt">训练断档 3 天</div><div class="mt"><span class="age">今天</span><span style="color:var(--violet)">系统检测 · 偏离你的 30 日基线</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">忽略</button></div></div>
+        <div class="add-row"><input class="inp" placeholder="记一个健身卡点：瓶颈 / 伤痛 / 平台期"><button class="btn primary" style="padding:7px 13px">+</button></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:var(--gold);color:#1a1c00">S2</span><span class="n">计划链 · 长期 → 短期 → 今日</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c4 pl-col"><span class="pl-lv">LONG · 长期</span>
+        <div class="pl-it"><div class="t">3 个月体脂降到 22%</div><div class="m"><span>2027.01</span><span style="color:var(--cyan-hi)">进行中</span></div></div>
+        <div class="pl-it"><div class="t">硬拉突破 80kg</div><div class="m"><span>持续</span><span style="color:var(--amber)">平台期</span></div></div>
+        <div class="add-row"><input class="inp" placeholder="新增长期目标"><button class="btn" style="padding:7px 11px">+</button></div>
+      </div>
+      <div class="card c4 pl-col"><span class="pl-lv">SHORT · 短期</span>
+        <div class="pl-it"><div class="t">本月完成 12 次力量训练</div><div class="m"><span>6 / 12 · 剩 9 天</span><span class="mini">加入今日</span></div><div class="pbar" style="margin-top:6px"><i style="width:50%"></i></div></div>
+        <div class="pl-it"><div class="t">本月睡眠均值 ≥ 7h</div><div class="m"><span>当前 6.4h</span><span class="mini">加入今日</span></div><div class="pbar" style="margin-top:6px"><i style="width:76%;background:var(--amber)"></i></div></div>
+        <div class="add-row"><input class="inp" placeholder="新增短期计划"><button class="btn" style="padding:7px 11px">+</button></div>
+      </div>
+      <div class="card c4 pl-col"><span class="pl-lv">TODAY · 今日（可空挂）</span>
+        <div class="pl-it"><div class="t">练背 45 分钟</div><div class="m"><span style="color:var(--text3)">← 本月 12 次</span></div></div>
+        <div class="pl-it"><div class="t">看一个健身博主视频</div><div class="m"><span style="color:var(--text3)">空挂</span></div></div>
+        <div class="add-row"><input class="inp" placeholder="今日还要做什么"><button class="btn primary" style="padding:7px 11px">+</button></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:var(--gold);color:#1a1c00">S3</span><span class="n">执行记录 · 健身五件套</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c7" style="grid-column:span 7">
+        <div class="chead"><span class="no">01</span><h2>TRAINING LOG</h2></div>
+        <div class="cdesc">部位标签 + 内容 + 时长/量 + 一句动作感受。<b style="color:var(--text3)">不记组数重量</b> —— 那会让录入成本压过沉淀价值。</div>
+        <div class="wr"><div class="d">10.17</div><div class="c"><span class="dom body">背</span> <span class="dom body">二头</span> 高位下拉 4 组 + 划船<br><span style="color:var(--text3);font-size:11px">45min · 感觉：肩胛先收紧后拉，背部发力明显变好</span></div></div>
+        <div class="wr"><div class="d">10.14</div><div class="c"><span class="dom body">腿</span> 深蹲 + 硬拉<br><span style="color:var(--text3);font-size:11px">50min · 感觉：右膝内侧还是有点不适，改用了窄站距</span></div></div>
+        <div class="add-row">
+          <select class="inp" style="max-width:96px"><option>部位</option><option>背</option><option>腿</option><option>胸</option><option>肩</option><option>核心</option><option>有氧</option></select>
+          <input class="inp" placeholder="训练内容 + 时长"><input class="inp" placeholder="动作感受（一句话）">
+          <button class="btn primary" style="padding:7px 13px">记</button>
+        </div>
+      </div>
+      <div class="card c5" style="grid-column:span 5">
+        <div class="chead"><span class="no">02</span><h2>VIDEO INSIGHT</h2></div>
+        <div class="cdesc">每天一个健身博主视频 —— 有则记，连续天数自动算。</div>
+        <div class="wr" style="border-bottom:1px solid var(--border)"><div class="d">10.17</div><div class="c"><b>陈老师 · 硬拉启动顺序</b><br><span style="color:var(--text3);font-size:11.5px">结论：先蹬地再伸髋，不是同时。<br>启发：我一直是同时发力，难怪上背先酸。</span></div></div>
+        <div class="wr"><div class="d">10.16</div><div class="c"><b>李教练 · 深蹲膝内扣</b><br><span style="color:var(--text3);font-size:11.5px">结论：臀中肌无力代偿。<br>启发：加弹力带侧步走。</span></div></div>
+        <div class="add-row"><input class="inp" placeholder="博主 + 主题"><button class="btn" style="padding:7px 11px">+</button></div>
+      </div>
+    </div>
+    <div class="g12" style="margin-top:14px">
+      <div class="card c4">
+        <div class="chead"><span class="no">03</span><h2>BODY STATE</h2></div>
+        <div class="sv" style="grid-template-columns:repeat(2,auto)">
+          <div><b>6.2h</b><span>昨夜睡眠</span></div><div><b>61.8</b><span>体重 kg</span></div>
+          <div><b style="color:var(--amber)">−0.6h</b><span>偏离睡眠基线</span></div><div><b>+0.4</b><span>偏离体重基线</span></div>
+        </div>
+      </div>
+      <div class="card c8">
+        <div class="chead"><span class="no">04</span><h2>30 天 · 训练连续性与部位覆盖</h2></div>
+        <div class="chartbox" id="chartBody"></div>
+        <div class="lg"><span><i style="background:var(--cyan)"></i>有训练</span><span><i style="background:var(--gold)"></i>部位占比</span></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:var(--gold);color:#1a1c00">S4</span><span class="n">沉淀与回看</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c7" style="grid-column:span 7">
+        <div class="chead"><span class="no">01</span><h2>FITNESS PRINCIPLES</h2></div>
+        <div class="cdesc">身体<b style="color:var(--text2)">存知识</b>，心智<b style="color:var(--text2)">管执行</b>。想让它变成每天做的事，手动加进心智的习惯打卡。</div>
+        <div class="wr"><div class="d">10.17</div><div class="c">硬拉先蹬地再伸髋，不同时<em>来自：陈老师视频 · 10.17</em></div></div>
+        <div class="wr"><div class="d">10.14</div><div class="c">深蹲前先用弹力带激活臀中肌<em>来自：李教练视频 · 10.16</em></div></div>
+        <div class="wr"><div class="d">10.08</div><div class="c">肩胛先收紧再拉，背阔发力翻倍<em>来自：自己的训练感受 · 10.17</em></div></div>
+        <div class="add-row"><input class="inp" placeholder="沉淀一条健身心法"><button class="btn primary" style="padding:7px 13px">+</button></div>
+      </div>
+      <div class="card c5" style="grid-column:span 5">
+        <div class="chead"><span class="no">02</span><h2>WEIGHT TREND</h2></div>
+        <div style="display:flex;align-items:baseline;gap:16px;margin:2px 0 8px;flex-wrap:wrap">
+          <span><b id="wCur" style="font-family:var(--mono);font-size:20px;color:var(--gold-hi)">61.8</b><span style="font-size:10px;color:var(--text3)"> kg · 当前</span></span>
+          <span><b id="wGoalV" style="font-family:var(--mono);font-size:14px;color:var(--text2)">60.0</b><span style="font-size:10px;color:var(--text3)"> kg · 目标</span></span>
+          <span id="wGap" style="font-family:var(--mono);font-size:10.5px;color:var(--text3)">距目标 −1.8</span>
+        </div>
+        <div class="chartbox" id="chartWeight"></div>
+        <div class="add-row" style="margin-top:10px">
+          <input class="inp" id="wIn" type="number" step="0.1" placeholder="记录今日体重 kg">
+          <button class="btn primary" id="wSave" style="padding:7px 13px">记</button>
+          <button class="btn" id="wGoal" style="padding:7px 13px">目标体重</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 心智领域 ============ -->
+  <section id="page-mind" style="display:none">
+    <div class="dsec"><span class="k" style="background:#7ae7ff;color:#032027">S1</span><span class="n">观察 · 在修课题</span><span class="ln"></span><span class="cnt">OPEN 2 / OLDEST 14D</span></div>
+    <div class="g12">
+      <div class="card c12">
+        <div class="cdesc" style="margin-bottom:10px">「在修课题」复用现有的<b style="color:var(--text2)">神经回路自塑</b>条目 —— 那本来就是一条重塑中的回路。</div>
+        <div class="oi solving"><div class="dot" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan)"></div>
+          <div class="bd"><div class="tt">启动困难：坐下来之前的那 10 分钟在反复逃避</div><div class="mt"><span class="st-pill" style="background:rgba(69,216,255,.15);color:var(--cyan-hi)">今日在解</span><span class="age hot">卡了 14 天</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">今天解决</button></div></div>
+        <div class="oi"><div class="dot" style="background:var(--amber)"></div>
+          <div class="bd"><div class="tt">完美主义：没把握的事宁可不开始</div><div class="mt"><span class="age">卡了 8 天</span><span>引用：buildNeuro #3</span></div></div>
+          <div class="op"><button class="btn" style="padding:5px 10px;font-size:11.5px">今天解决</button></div></div>
+        <div class="add-row"><input class="inp" placeholder="记一个在修课题"><button class="btn primary" style="padding:7px 13px">+</button></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:#7ae7ff;color:#032027">S2</span><span class="n">计划链 · 长期 → 短期 → 今日</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c4 pl-col"><span class="pl-lv">LONG · 长期</span>
+        <div class="pl-it"><div class="t">建立起不依赖情绪的行动系统</div><div class="m"><span>持续</span><span style="color:var(--cyan-hi)">进行中</span></div></div>
+        <div class="add-row"><input class="inp" placeholder="新增长期课题"><button class="btn" style="padding:7px 11px">+</button></div>
+      </div>
+      <div class="card c4 pl-col"><span class="pl-lv">SHORT · 短期</span>
+        <div class="pl-it"><div class="t">本月习惯完成率 ≥ 80%</div><div class="m"><span>当前 74%</span><span class="mini">加入今日</span></div><div class="pbar" style="margin-top:6px"><i style="width:74%"></i></div></div>
+        <div class="add-row"><input class="inp" placeholder="新增短期计划"><button class="btn" style="padding:7px 11px">+</button></div>
+      </div>
+      <div class="card c4 pl-col"><span class="pl-lv">TODAY · 今日（可空挂）</span>
+        <div class="pl-it"><div class="t">冥想 10 分钟</div><div class="m"><span style="color:var(--text3)">习惯项</span></div></div>
+        <div class="pl-it"><div class="t">23:30 前睡</div><div class="m"><span style="color:var(--text3)">习惯项</span></div></div>
+        <div class="add-row"><input class="inp" placeholder="今日还要做什么"><button class="btn primary" style="padding:7px 11px">+</button></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:#7ae7ff;color:#032027">S3</span><span class="n">执行记录 · 习惯与自塑</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c5" style="grid-column:span 5">
+        <div class="chead"><span class="no">01</span><h2>HABIT</h2></div>
+        <div class="wr"><div class="d">今日</div><div class="c">冥想 10 分钟<em>连续 12 天</em></div></div>
+        <div class="wr"><div class="d">今日</div><div class="c">23:30 前睡<em>连续 4 天 · 昨天断了</em></div></div>
+        <div class="wr"><div class="d">今日</div><div class="c">写 100 字记录<em>连续 28 天</em></div></div>
+      </div>
+      <div class="card c7" style="grid-column:span 7">
+        <div class="chead"><span class="no">02</span><h2>30 天 · 习惯连续性</h2></div>
+        <div class="chartbox" id="chartHabit"></div>
+        <div class="lg"><span><i style="background:var(--cyan)"></i>完成度越高色越亮</span></div>
+      </div>
+    </div>
+
+    <div class="dsec"><span class="k" style="background:#7ae7ff;color:#032027">S4</span><span class="n">沉淀与回看</span><span class="ln"></span></div>
+    <div class="g12">
+      <div class="card c7" style="grid-column:span 7">
+        <div class="chead"><span class="no">01</span><h2>SOLVED</h2></div>
+        <div class="wr"><div class="d">10.02</div><div class="c"><b style="color:var(--gold-hi)">一到下午就想刷手机</b><br>改成"先做 5 分钟再说"，不跟自己讲道理。<em>卡了 21 天 · 效果：下午有效时长 +1.2h</em></div></div>
+      </div>
+      <div class="card c5" style="grid-column:span 5">
+        <div class="chead"><span class="no">02</span><h2>心法库</h2></div>
+        <div class="hintbox">心得、关键词、心法、行动提炼沿用现有结构。<br>所有非习惯类的心理内容都收在这里。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 收尾页 ============ -->
+  <section id="page-wrap" style="display:none">
+    <div class="card c12" style="margin-bottom:14px"><i class="corner tl"></i><i class="corner br"></i>
+      <div class="chead"><span class="no">01</span><h2>WRAP UP</h2></div>
+      <div class="cdesc">四个类目各一句。收尾是一个专属空间，不是顺手填的框。</div>
+      <div style="margin-bottom:11px"><div style="font-size:11.5px;color:var(--text3);margin-bottom:5px">开发 · 今天最值得记的一件事</div><input class="inp" style="width:100%" placeholder="写完回车，进入下一项"></div>
+      <div style="margin-bottom:11px"><div style="font-size:11.5px;color:var(--text3);margin-bottom:5px">学习 · 今天最值得记的一件事</div><input class="inp" style="width:100%" placeholder=""></div>
+      <div style="margin-bottom:11px"><div style="font-size:11.5px;color:var(--text3);margin-bottom:5px">身体 · 今天最值得记的一件事</div><input class="inp" style="width:100%" placeholder=""></div>
+      <div><div style="font-size:11.5px;color:var(--text3);margin-bottom:5px">心智 · 今天最值得记的一件事</div><input class="inp" style="width:100%" placeholder=""></div>
+    </div>
+
+    <div class="g12">
+      <div class="card c6">
+        <div class="chead"><span class="no">02</span><h2>正反馈 · 巩固</h2></div>
+        <div class="cdesc">候选由今日关闭的卡点自动生成，点选即可 —— 解决问题本身就是最强的肯定。</div>
+        <div class="wr"><div class="d" style="width:auto">✓</div><div class="c">今天把召回率从 0.43 拉到 0.61 —— 这是卡了 6 天的那个问题</div></div>
+        <div class="wr"><div class="d" style="width:auto">✓</div><div class="c">硬拉启动顺序改过来以后，上背不酸了</div></div>
+        <div class="wr"><div class="d" style="width:auto">✓</div><div class="c">连续第 12 天冥想</div></div>
+      </div>
+      <div class="card c6">
+        <div class="chead"><span class="no">03</span><h2>MAKE A DIFFERENCE · 变异</h2></div>
+        <div class="cdesc">跳出重复、防止认知僵化。系统只在检测到重复时才提醒。</div>
+        <div class="hintbox" style="border-color:rgba(239,159,39,.42);color:var(--amber);margin-bottom:10px">系统提示：最近 7 天你的记录相似度 0.72（偏高）。<br>今天要不要做一件不一样的？</div>
+        <input class="inp" style="width:100%" placeholder="今天做的一件不一样的事">
+        <div style="margin-top:14px"><div style="font-size:11.5px;color:var(--text3);margin-bottom:5px">明日方向 · 明天最关键的一件事</div><input class="inp" style="width:100%" placeholder=""></div>
+        <button class="btn primary" style="width:100%;justify-content:center;margin-top:14px;padding:11px">收工 · 结束今天</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 周复盘页 ============ -->
+  <section id="page-review" style="display:none">
+    <div class="card c12" style="margin-bottom:14px">
+      <div class="chead"><span class="no">01</span><h2>本周数据 · 自动汇总</h2></div>
+      <div class="cdesc">系统负责把数据摊开，不替你下判断。</div>
+      <div class="chartbox" id="chartWeek"></div>
+    </div>
+    <div class="g12">
+      <div class="card c4">
+        <div class="chead"><span class="no">02</span><h2>卡点统计</h2></div>
+        <div class="sv" style="grid-template-columns:repeat(2,auto)">
+          <div><b>3</b><span>本周新增</span></div><div><b style="color:var(--gold-hi)">4</b><span>本周解决</span></div>
+          <div><b>7</b><span>当前未闭合</span></div><div><b style="color:var(--amber)">6.2 天</b><span>平均滞留</span></div>
+        </div>
+      </div>
+      <div class="card c8">
+        <div class="chead"><span class="no">03</span><h2>系统初步判断</h2></div>
+        <div class="cdesc">只提观察，不下结论 —— 判断权在你。</div>
+        <div class="wr"><div class="d">观察</div><div class="c">开发有 2 个卡点卡了超过 5 天</div></div>
+        <div class="wr"><div class="d">观察</div><div class="c">本周关闭卡点数 4，为近四周最高</div></div>
+        <div class="wr"><div class="d">观察</div><div class="c">本周练背 1 次、腿 3 次，上肢偏少</div></div>
+        <div class="wr"><div class="d">观察</div><div class="c">睡眠均值 6.2h，低于你的 30 日基线 6.8h</div></div>
+      </div>
+    </div>
+    <div class="card c12" style="margin-top:14px">
+      <div class="chead"><span class="no">04</span><h2>总评 · 你写</h2></div>
+      <div class="g12">
+        <div class="c4"><div style="font-size:11.5px;color:var(--text3);margin-bottom:5px">进展如何</div><textarea class="inp" style="width:100%;height:74px;resize:vertical"></textarea></div>
+        <div class="c4"><div style="font-size:11.5px;color:var(--text3);margin-bottom:5px">真正卡在哪</div><textarea class="inp" style="width:100%;height:74px;resize:vertical"></textarea></div>
+        <div class="c4"><div style="font-size:11.5px;color:var(--text3);margin-bottom:5px">下周方向</div><textarea class="inp" style="width:100%;height:74px;resize:vertical"></textarea></div>
+      </div>
+      <button class="btn primary" style="margin-top:14px">保存本周复盘</button>
+    </div>
+  </section>
+</main>
